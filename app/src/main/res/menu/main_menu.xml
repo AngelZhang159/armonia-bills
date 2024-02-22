@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/baseline_home_24"
+        android:title="Home" />
+    <item
+        android:icon="@drawable/baseline_add_24"
+        android:title="Crear nuevo gasto" />
+    <item
+        android:icon="@drawable/baseline_payments_24"
+        android:title="Ver mis deudas" />
+    <item
+        android:icon="@drawable/baseline_history_24"
+        android:title="Historial" />
+
+    <group android:checkableBehavior="single">
+        <item android:title="Perfil">
+            <menu>
+                <item
+                    android:icon="@drawable/baseline_account_circle_24"
+                    android:title="Mi perfil" />
+
+                <item
+                    android:icon="@drawable/baseline_logout_24"
+                    android:title="Cerrar sesión" />
+
+            </menu>
+
+        </item>
+    </group>
+
+
+    <group android:checkableBehavior="single">
+        <item android:title="Ajustes">
+            <menu>
+                <item
+                    android:icon="@drawable/baseline_settings_24"
+                    android:title="Ajustes" />
+            </menu>
+
+        </item>
+    </group>
+
+
+</menu>
