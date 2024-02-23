@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">ArmoniaBills</string>
+    <string name="tv_bienvenida">Bienvenido a Armonia Bills</string>
+    <string name="hint_et_contra">Introduce la contraseña</string>
+    <string name="hint_et_email">Introduce tu email</string>
+    <string name="btn_login">Iniciar sesión</string>
+    <string name="btn_reg">Registrar cuenta</string>
+    <string name="tv_registro">Registro</string>
+    <string name="hint_et_nombre">Introduce tu nombre</string>
+    <string name="btn_crear_cuenta">Crear cuenta</string>
+    <string name="home">Home</string>
+    <string name="nuevo_gasto">Nuevo gasto</string>
+    <string name="mis_deudas">Mis deudas</string>
+    <string name="historial">Historial</string>
+    <string name="perfil">Perfil</string>
+    <string name="mi_perfil">Mi perfil</string>
+    <string name="cerrar_sesi_n">Cerrar sesión</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="men_hamburgesa">Menú hamburgesa</string>
+    <string name="login_con_google">Login con Google</string>
+    <string name="login_con_facebook">Login con Facebook</string>
+    <string name="login_con_x">Login con X</string>
 </resources>

@@ -3,27 +3,27 @@
 
     <item
         android:icon="@drawable/baseline_home_24"
-        android:title="Home" />
+        android:title="@string/home" />
     <item
         android:icon="@drawable/baseline_add_24"
-        android:title="Crear nuevo gasto" />
+        android:title="@string/nuevo_gasto" />
     <item
         android:icon="@drawable/baseline_payments_24"
-        android:title="Ver mis deudas" />
+        android:title="@string/mis_deudas" />
     <item
         android:icon="@drawable/baseline_history_24"
-        android:title="Historial" />
+        android:title="@string/historial" />
 
     <group android:checkableBehavior="single">
-        <item android:title="Perfil">
+        <item android:title="@string/perfil">
             <menu>
                 <item
                     android:icon="@drawable/baseline_account_circle_24"
-                    android:title="Mi perfil" />
+                    android:title="@string/mi_perfil" />
 
                 <item
                     android:icon="@drawable/baseline_logout_24"
-                    android:title="Cerrar sesión" />
+                    android:title="@string/cerrar_sesi_n" />
 
             </menu>
 
@@ -32,11 +32,11 @@
 
 
     <group android:checkableBehavior="single">
-        <item android:title="Ajustes">
+        <item android:title="@string/ajustes">
             <menu>
                 <item
                     android:icon="@drawable/baseline_settings_24"
-                    android:title="Ajustes" />
+                    android:title="@string/ajustes" />
             </menu>
 
         </item>

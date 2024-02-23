@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margen">16dp</dimen>
+    <dimen name="tam_tv_bienvenida">50sp</dimen>
 </resources>

@@ -28,7 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:src="@drawable/baseline_menu_24" />
+                android:src="@drawable/baseline_menu_24"
+                android:contentDescription="@string/men_hamburgesa" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,7 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:src="@drawable/baseline_account_circle_24" />
+                android:src="@drawable/baseline_account_circle_24"
+                android:contentDescription="@string/mi_perfil" />
 
         </LinearLayout>
 
@@ -57,7 +59,6 @@
 
     </LinearLayout>
 
-
     <!--Menu que sale de la izquierda-->
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
@@ -66,5 +67,7 @@
         android:background="@color/white"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu" />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
