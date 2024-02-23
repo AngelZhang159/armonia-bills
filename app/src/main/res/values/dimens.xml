@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margen">16dp</dimen>
     <dimen name="tam_tv_bienvenida">50sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

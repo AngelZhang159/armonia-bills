@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_bienvenida"
+            android:text="@string/registro"
             android:textSize="@dimen/tam_tv_bienvenida"
             android:textStyle="bold" />
 
@@ -30,15 +30,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:hint="@string/hint_et_email"
+            android:hint="@string/introduce_tu_nombre"
             app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/baseline_email_24">
+            app:startIconDrawable="@drawable/baseline_account_circle_24">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmailLogin"
+                android:id="@+id/etNomApeReg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:textSize="20sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -47,12 +47,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:hint="@string/hint_et_contra"
+            android:hint="@string/fecha_de_nacimiento"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/baseline_date_range_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFechReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="date"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:hint="@string/email"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/baseline_email_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmailReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:hint="@string/contrase_a"
             app:endIconMode="password_toggle"
             app:startIconDrawable="@drawable/baseline_password_24">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etContraLogin"
+                android:id="@+id/etContraReg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
@@ -61,7 +96,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btnIniciarSesionLogin"
+            android:id="@+id/btnCrearCuentaReg"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -69,59 +104,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:backgroundTint="@color/color_secundario"
-            android:text="@string/btn_login"
+            android:text="@string/btn_crear_cuenta"
             android:textSize="25sp" />
-
-        <Button
-            android:id="@+id/btnRegistroLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="80dp"
-            android:backgroundTint="@color/color_secundario"
-            android:text="@string/btn_reg"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:orientation="vertical"
-            android:padding="@dimen/margen">
-
-            <Button
-                android:id="@+id/btnGoogle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_google"
-                android:textStyle="bold"
-                app:icon="@drawable/google_logo"
-                app:iconTint="@null" />
-
-            <Button
-                android:id="@+id/btnFacebook"
-                style="Widget.Material3.Button.OutlinedButton.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_facebook"
-                android:textStyle="bold"
-                app:icon="@drawable/facebook_logo"
-                app:iconTint="@null" />
-
-            <Button
-                android:id="@+id/btnX"
-                style="Widget.Material3.Button.OutlinedButton.Icon"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_x"
-                android:textStyle="bold"
-                app:icon="@drawable/x_logo"
-                app:iconTint="@null" />
-
-        </LinearLayout>
 
 
     </LinearLayout>

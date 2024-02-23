@@ -28,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:src="@drawable/baseline_menu_24"
-                android:contentDescription="@string/men_hamburgesa" />
+                android:contentDescription="@string/men_hamburgesa"
+                android:src="@drawable/baseline_menu_24" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -46,8 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
-                android:src="@drawable/baseline_account_circle_24"
-                android:contentDescription="@string/mi_perfil" />
+                android:contentDescription="@string/mi_perfil"
+                android:src="@drawable/baseline_account_circle_24" />
 
         </LinearLayout>
 
@@ -67,7 +67,6 @@
         android:background="@color/white"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu" />
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
