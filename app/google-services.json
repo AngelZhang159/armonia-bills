@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475890340355",
+    "project_id": "armonia-bills",
+    "storage_bucket": "armonia-bills.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475890340355:android:70847e35796f15d5a1f436",
+        "android_client_info": {
+          "package_name": "com.dam.armoniabills"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbk0EUlxVG8KTt0-XjS3LlkWTekXC3VWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

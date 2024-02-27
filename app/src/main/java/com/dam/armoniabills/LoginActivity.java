@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 	EditText etEmail, etContra;
 	Button btnLogin, btnReg;
 
-	private FirebaseAuth mAuth;
+	FirebaseAuth mAuth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,35 +42,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnIniciarSesionLogin) {
-
 			String email = etEmail.getText().toString();
 			String contra = etContra.getText().toString();
 
 			if (email.isEmpty() || contra.isEmpty()) {
-				Toast.makeText(this, "Debes introducir todos los campos", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "Debe introducir todos los campos", Toast.LENGTH_SHORT).show();
 			} else {
 				mAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 					@Override
 					public void onComplete(@NonNull Task<AuthResult> task) {
 						if (task.isSuccessful()) {
-
 							Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
 
 							Intent i = new Intent(LoginActivity.this, MainActivity.class);
 							startActivity(i);
-
 						} else {
-							Toast.makeText(LoginActivity.this, "Credenciales invalidas", Toast.LENGTH_SHORT).show();
+							Toast.makeText(LoginActivity.this, "Credenciales inválidas", Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
 			}
-
 		} else if (v.getId() == R.id.btnRegistroLogin) {
-
 			Intent i = new Intent(this, RegistroActivity.class);
 			startActivity(i);
-
 		}
 	}
 }

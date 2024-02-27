@@ -12,25 +12,34 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradiente" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="32dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/registro"
+            android:textAlignment="center"
             android:textSize="@dimen/tam_tv_bienvenida"
             android:textStyle="bold" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imvPerfil"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margen"
+            android:src="@drawable/perfil"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:hint="@string/introduce_tu_nombre"
+            android:layout_marginTop="@dimen/margen"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/baseline_account_circle_24">
 
@@ -38,33 +47,13 @@
                 android:id="@+id/etNomApeReg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textSize="20sp" />
-
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:hint="@string/fecha_de_nacimiento"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/baseline_date_range_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFechReg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="date"
-                android:textSize="20sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
+            android:layout_marginTop="@dimen/margen"
             android:hint="@string/email"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/baseline_email_24">
@@ -73,25 +62,39 @@
                 android:id="@+id/etEmailReg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textSize="20sp" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:hint="@string/contrase_a"
+            android:hint="@string/contrasenia"
             app:endIconMode="password_toggle"
+            android:layout_marginTop="@dimen/margen"
             app:startIconDrawable="@drawable/baseline_password_24">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etContraReg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:textSize="20sp" />
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margen"
+            android:hint="@string/telefono"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/baseline_call_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTlfReg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,8 +110,6 @@
             android:text="@string/btn_crear_cuenta"
             android:textSize="25sp" />
 
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
