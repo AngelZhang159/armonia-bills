@@ -2,42 +2,63 @@ package com.dam.armoniabills;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import com.dam.armoniabills.fragments.DeudasFragment;
+import com.dam.armoniabills.fragments.HistorialFragment;
+import com.dam.armoniabills.fragments.HomeFragment;
+import com.dam.armoniabills.fragments.NuevoFragment;
+import com.google.android.material.navigation.NavigationBarView;
 
-	private DrawerLayout drawerLayout;
-	private ImageView ivHamburger, ivPerfil;
+public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+
+	NavigationBarView navBarView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		drawerLayout = findViewById(R.id.drawer_layout);
-		ivHamburger = findViewById(R.id.ivHamburger);
-		ivPerfil = findViewById(R.id.ivPerfil);
+		navBarView = findViewById(R.id.botNavVar);
+		navBarView.setOnItemSelectedListener(this);
 
-		ivHamburger.setOnClickListener(this);
-		ivPerfil.setOnClickListener(this);
 	}
 
 	@Override
-	public void onClick(View v) {
-		if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//			Si está abierto el menú hamburger se cierra
-			drawerLayout.closeDrawer(GravityCompat.START);
-		} else if (v.getId() == R.id.ivHamburger) {
-//			Abrir menu hamburger
-			drawerLayout.openDrawer(GravityCompat.START);
-		} else if (v.getId() == R.id.ivPerfil) {
+	public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+		if (menuItem.getItemId() == R.id.botNavVarHome) {
+			HomeFragment homeFragment = new HomeFragment();
+			transaction.replace(R.id.flPrincipal, homeFragment);
+		} else if (menuItem.getItemId() == R.id.botNavVarMisDeudas) {
+			DeudasFragment deudasFragment = new DeudasFragment();
+			transaction.replace(R.id.flPrincipal, deudasFragment);
+		} else if (menuItem.getItemId() == R.id.botNavVarNuevoGasto) {
+			NuevoFragment nuevoFragment = new NuevoFragment();
+			transaction.replace(R.id.flPrincipal, nuevoFragment);
+		} else if (menuItem.getItemId() == R.id.botNavVarHistorial) {
+			HistorialFragment historialFragment = new HistorialFragment();
+			transaction.replace(R.id.flPrincipal, historialFragment);
+		} else if (menuItem.getItemId() == R.id.botNavVarPerfil) {
 			Intent i = new Intent(this, MiPerfilActivity.class);
 			startActivity(i);
 		}
+		transaction.addToBackStack(null);
+		transaction.commit();
+		return true;
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		navBarView.setSelectedItemId(R.id.botNavVarHome);
 	}
 }

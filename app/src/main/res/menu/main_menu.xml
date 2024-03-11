@@ -2,45 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/botNavVarHome"
+        android:enabled="true"
         android:icon="@drawable/baseline_home_24"
         android:title="@string/home" />
     <item
-        android:icon="@drawable/baseline_add_24"
-        android:title="@string/nuevo_gasto" />
-    <item
+        android:id="@+id/botNavVarMisDeudas"
+        android:enabled="true"
         android:icon="@drawable/baseline_payments_24"
         android:title="@string/mis_deudas" />
     <item
+        android:id="@+id/botNavVarNuevoGasto"
+        android:enabled="true"
+        android:icon="@drawable/baseline_add_24"
+        android:title="@string/nuevo_gasto" />
+    <item
+        android:id="@+id/botNavVarHistorial"
+        android:enabled="true"
         android:icon="@drawable/baseline_history_24"
         android:title="@string/historial" />
-
-    <group android:checkableBehavior="single">
-        <item android:title="@string/perfil">
-            <menu>
-                <item
-                    android:icon="@drawable/baseline_account_circle_24"
-                    android:title="@string/mi_perfil" />
-
-                <item
-                    android:icon="@drawable/baseline_logout_24"
-                    android:title="@string/cerrar_sesi_n" />
-
-            </menu>
-
-        </item>
-    </group>
-
-
-    <group android:checkableBehavior="single">
-        <item android:title="@string/ajustes">
-            <menu>
-                <item
-                    android:icon="@drawable/baseline_settings_24"
-                    android:title="@string/ajustes" />
-            </menu>
-
-        </item>
-    </group>
-
-
+    <item
+        android:id="@+id/botNavVarPerfil"
+        android:enabled="true"
+        android:icon="@drawable/baseline_account_circle_24"
+        android:title="@string/mi_perfil" />
 </menu>

@@ -33,4 +33,6 @@
     <string name="fecha_de_nacimiento">Fecha de nacimiento</string>
     <string name="seleccionar_img">No se ha seleccionado ninguna imagen</string>
     <string name="email_incorrecto">El email introducido ya está registrado</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
