@@ -12,11 +12,6 @@
         android:icon="@drawable/baseline_payments_24"
         android:title="@string/mis_deudas" />
     <item
-        android:id="@+id/botNavVarNuevoGasto"
-        android:enabled="true"
-        android:icon="@drawable/baseline_add_24"
-        android:title="@string/nuevo_gasto" />
-    <item
         android:id="@+id/botNavVarHistorial"
         android:enabled="true"
         android:icon="@drawable/baseline_history_24"

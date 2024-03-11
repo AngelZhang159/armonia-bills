@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dam.armoniabills.fragments.DeudasFragment;
 import com.dam.armoniabills.fragments.HistorialFragment;
 import com.dam.armoniabills.fragments.HomeFragment;
-import com.dam.armoniabills.fragments.NuevoFragment;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
@@ -49,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 		} else if (menuItem.getItemId() == R.id.botNavVarMisDeudas) {
 			DeudasFragment deudasFragment = new DeudasFragment();
 			transaction.replace(R.id.flPrincipal, deudasFragment);
-		} else if (menuItem.getItemId() == R.id.botNavVarNuevoGasto) {
-			NuevoFragment nuevoFragment = new NuevoFragment();
-			transaction.replace(R.id.flPrincipal, nuevoFragment);
 		} else if (menuItem.getItemId() == R.id.botNavVarHistorial) {
 			HistorialFragment historialFragment = new HistorialFragment();
 			transaction.replace(R.id.flPrincipal, historialFragment);
