@@ -42,7 +42,6 @@
     <string name="hint_et_repcontra">Repite la contraseña</string>
     <string name="repetir_contrasenia">Repetir contraseña</string>
     <string name="cambiar_contrasenia">Cambiar contraseña</string>
-    <string name="cerrar_sesion">Cerrar sesión</string
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

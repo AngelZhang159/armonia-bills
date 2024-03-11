@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -27,6 +29,12 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 		navBarView = findViewById(R.id.botNavVar);
 		navBarView.setOnItemSelectedListener(this);
 
+		OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+		dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+			}
+		});
 	}
 
 	@Override
@@ -51,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 			Intent i = new Intent(this, MiPerfilActivity.class);
 			startActivity(i);
 		}
-		transaction.addToBackStack(null);
 		transaction.commit();
 		return true;
 	}
@@ -61,4 +68,5 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 		super.onResume();
 		navBarView.setSelectedItemId(R.id.botNavVarHome);
 	}
+
 }

@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 							Intent i = new Intent(LoginActivity.this, MainActivity.class);
 							startActivity(i);
+							finish();
 						} else {
 							Toast.makeText(LoginActivity.this, "Credenciales inválidas", Toast.LENGTH_SHORT).show();
 						}
