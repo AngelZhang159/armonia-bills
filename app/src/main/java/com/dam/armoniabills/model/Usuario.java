@@ -1,13 +1,26 @@
 package com.dam.armoniabills.model;
 
 public class Usuario {
-    private String nombre, email, tlf, imagenPerfil;
+    private String id, nombre, email, tlf, imagenPerfil;
 
-    public Usuario(String nombre, String email, String tlf, String imagenPerfil) {
+    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil) {
+        this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.tlf = tlf;
         this.imagenPerfil = imagenPerfil;
+    }
+
+    public Usuario() {
+
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {

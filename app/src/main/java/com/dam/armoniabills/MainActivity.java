@@ -1,5 +1,6 @@
 package com.dam.armoniabills;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private DrawerLayout drawerLayout;
-	private ImageView ivHamburger;
+	private ImageView ivHamburger, ivPerfil;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +21,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		drawerLayout = findViewById(R.id.drawer_layout);
 		ivHamburger = findViewById(R.id.ivHamburger);
+		ivPerfil = findViewById(R.id.ivPerfil);
 
 		ivHamburger.setOnClickListener(this);
+		ivPerfil.setOnClickListener(this);
 	}
 
 	@Override
@@ -33,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //			Abrir menu hamburger
 			drawerLayout.openDrawer(GravityCompat.START);
 		} else if (v.getId() == R.id.ivPerfil) {
-
+			Intent i = new Intent(this, MiPerfilActivity.class);
+			startActivity(i);
 		}
 	}
 }

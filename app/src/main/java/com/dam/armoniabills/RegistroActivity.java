@@ -3,6 +3,7 @@ package com.dam.armoniabills;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +23,16 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +44,8 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 	Uri imageUri;
 	String imageUrl;
+
+	ArrayList<Usuario> listaUsuarios;
 
 	ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(
 			new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -60,6 +69,8 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 		imvPerfil = findViewById(R.id.imvPerfil);
 		btnCrearCuenta = findViewById(R.id.btnCrearCuentaReg);
 
+		listaUsuarios = new ArrayList<>();
+
 		String fotoPerfil = "android.resource://"+  getPackageName() + "/" + R.drawable.perfil;
 		imageUri = Uri.parse(fotoPerfil);
 
@@ -70,10 +81,10 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnCrearCuentaReg) {
-			String nombre = etNomApe.getText().toString();
-			String email = etEmail.getText().toString();
-			String contra = etContra.getText().toString();
-			String tlf = etTlf.getText().toString();
+			String nombre = etNomApe.getText().toString().trim();
+			String email = etEmail.getText().toString().toLowerCase().trim();
+			String contra = etContra.getText().toString().trim();
+			String tlf = etTlf.getText().toString().trim();
 
 			if (nombre.isEmpty() || email.isEmpty() || contra.isEmpty()) {
 				Toast.makeText(RegistroActivity.this, "Debes introducir todos los campos obligatorios", Toast.LENGTH_SHORT).show();
@@ -87,7 +98,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 							if (task.isSuccessful()) {
 								guardarImagen();
 							} else {
-								Toast.makeText(RegistroActivity.this, "El correo introducido ya está registrado", Toast.LENGTH_SHORT).show();
+								Toast.makeText(RegistroActivity.this, "El correo electrónico introducido ya está registrado", Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
@@ -119,13 +130,16 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 	}
 
 	private void registrarUsuario() {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+		String id = user.getUid();
 		String email = etEmail.getText().toString();
 		String nombre = etNomApe.getText().toString();
 		String tlf = etTlf.getText().toString();
 
-		Usuario usuario = new Usuario(nombre, email, tlf, imageUrl);
+		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl);
 
-		FirebaseDatabase.getInstance().getReference("Usuarios").child(nombre).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+		FirebaseDatabase.getInstance().getReference("Usuarios").child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {
