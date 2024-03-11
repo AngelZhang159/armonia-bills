@@ -13,6 +13,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="@string/tv_perfil"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imvPerfilP"
@@ -25,101 +33,88 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Correo electrónico"
+            android:text="@string/email"
             android:layout_marginTop="@dimen/margen"/>
 
         <EditText
             android:id="@+id/etEmailP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Correo electrónico"
+            android:hint="@string/hint_et_email"
             android:enabled="false"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Nombre"
+            android:text="@string/introduce_tu_nombre"
             android:layout_marginTop="@dimen/margen"/>
 
         <EditText
             android:id="@+id/etNombreP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre"/>
+            android:hint="@string/hint_et_nombre"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Teléfono"
+            android:text="@string/telefono"
             android:layout_marginTop="@dimen/margen"/>
 
         <EditText
             android:id="@+id/etTelefonoP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Teléfono"
-            android:inputType="phone"/>
+            android:inputType="phone"
+            android:hint="@string/hint_et_telefono"/>
 
         <Button
             android:id="@+id/btnUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margen"
-            android:text="Actualizar datos"
+            android:text="@string/actualizar_datos"
             android:layout_gravity="center"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Contraseña"
+            android:text="@string/contrasenia"
             android:layout_marginTop="@dimen/margen"/>
 
         <EditText
             android:id="@+id/etPasswordP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Contraseña"/>
+            android:hint="@string/hint_et_contra"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=" Repetir contraseña"
+            android:text="@string/repetir_contrasenia"
             android:layout_marginTop="@dimen/margen"/>
 
         <EditText
             android:id="@+id/etRepPasswordP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Repetir contraseña"/>
+            android:hint="@string/hint_et_repcontra"/>
 
         <Button
             android:id="@+id/btnCambiar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cambiar contraseña"
+            android:text="@string/cambiar_contrasenia"
             android:layout_marginTop="@dimen/margen"
             android:layout_gravity="center"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margen">
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Cerrar sesión"
-                android:layout_weight="1"/>
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Eliminar cuenta"/>
-
-        </LinearLayout>
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnCerrarSesion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cerrar_sesion"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>
