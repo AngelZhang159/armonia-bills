@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margen"
-            android:hint="@string/telefono"
+            android:hint="@string/hint_et_telefono"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/baseline_call_24">
 

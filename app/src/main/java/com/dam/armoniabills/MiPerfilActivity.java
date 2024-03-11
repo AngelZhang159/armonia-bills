@@ -1,5 +1,7 @@
 package com.dam.armoniabills;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -32,9 +35,13 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
     ImageView ivPerfil;
     EditText etNombre, etEmail, etTlf, etPassword, etRepPassword;
-    Button btnUpdate, btnCambiar;
+    Button btnUpdate, btnCambiar, btnCerrarSesion;
 
+    FirebaseDatabase db;
+    FirebaseAuth mAuth;
     FirebaseUser user;
+    FirebaseStorage storage;
+
     String id;
 
     Uri imageUri;
@@ -62,16 +69,22 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
         etRepPassword = findViewById(R.id.etRepPasswordP);
         ivPerfil = findViewById(R.id.imvPerfilP);
 
+        db = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+
         btnCambiar = findViewById(R.id.btnCambiar);
         btnUpdate = findViewById(R.id.btnUpdate);
+        btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        user = mAuth.getCurrentUser();
         id = user.getUid();
 
         readUsuario();
 
         btnUpdate.setOnClickListener(this);
         btnCambiar.setOnClickListener(this);
+        btnCerrarSesion.setOnClickListener(this);
         ivPerfil.setOnClickListener(this);
     }
 
@@ -81,11 +94,39 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
             updatePassword();
         } else if (v.getId() == R.id.btnUpdate) {
             updateData();
+        } else if (v.getId() == R.id.btnCerrarSesion) {
+            mostrarDialog();
         } else if (v.getId() == R.id.imvPerfilP) {
             pickMedia.launch(new PickVisualMediaRequest.Builder()
                     .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                     .build());
-        }
+        } 
+    }
+
+    private void mostrarDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.tit_dialog);
+        builder.setCancelable(false);
+        builder.setMessage("¿Estás seguro de que quieres cerrar la sesión?");
+        builder.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MiPerfilActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
+        builder.setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog ad = builder.create();
+        ad.setCanceledOnTouchOutside(false);
+
+        ad.show();
     }
 
     private void updateData() {
@@ -102,12 +143,11 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void updateImagen() {
-        FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl).delete()
+        storage.getReferenceFromUrl(imageUrl).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                FirebaseStorage.getInstance().getReference().child("ProfileImages").child(imageUri.getLastPathSegment())
-                        .putFile(imageUri)
+                storage.getReference().child("ProfileImages").child(imageUri.getLastPathSegment()).putFile(imageUri)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -131,7 +171,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
         Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl);
 
-        FirebaseDatabase.getInstance().getReference("Usuarios").child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.getReference("Usuarios").child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -173,7 +213,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void readUsuario() {
-        FirebaseDatabase.getInstance().getReference("Usuarios").child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        db.getReference("Usuarios").child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (task.isSuccessful()) {
