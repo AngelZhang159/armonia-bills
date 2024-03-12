@@ -1,11 +1,11 @@
 package com.dam.armoniabills.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,7 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.dam.armoniabills.R;
-import com.dam.armoniabills.TopBarActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,36 +23,39 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class BalanceFragment extends Fragment implements View.OnClickListener {
+public class DepositoFragment extends Fragment implements View.OnClickListener {
 
-	Button btnDepositar, btnRetirar;
-	TextView tvDinero;
+	Button btnDepositar;
+	EditText etCantidad;
 	private FirebaseAuth mAuth;
 	private FirebaseDatabase mDatabase;
+	FirebaseUser currentUser;
+	TextView tvCantidad;
+	Double balanceCuenta;
 
-	public BalanceFragment() {
+	public DepositoFragment() {
+		// Required empty public constructor
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_balance, container, false);
+		View v = inflater.inflate(R.layout.fragment_deposito, container, false);
 
-		tvDinero = v.findViewById(R.id.tvDinero);
-		btnDepositar = v.findViewById(R.id.btnDepositarBalance);
-		btnRetirar = v.findViewById(R.id.btnRetirarBalance);
+		btnDepositar = v.findViewById(R.id.btnDepositarDinero);
+		etCantidad = v.findViewById(R.id.etCantidadDineroDepositar);
+		tvCantidad = v.findViewById(R.id.tvDineroDisponibleDep);
 
 		btnDepositar.setOnClickListener(this);
-		btnRetirar.setOnClickListener(this);
 
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
+		currentUser = mAuth.getCurrentUser();
 
 		rellenarDinero();
 
@@ -59,16 +63,15 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 	}
 
 	private void rellenarDinero() {
-		FirebaseUser currentUser = mAuth.getCurrentUser();
 		if (currentUser != null) {
 			String uid = currentUser.getUid();
 			DatabaseReference balanceRef = mDatabase.getReference("Usuarios").child(uid).child("balance");
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-					Double balance = dataSnapshot.getValue(Double.class);
-					if (balance != null) {
-						tvDinero.setText(String.format(getString(R.string.balance), balance));
+					balanceCuenta = dataSnapshot.getValue(Double.class);
+					if (balanceCuenta != null) {
+						tvCantidad.setText(String.format(getString(R.string.cantidad_disponible), balanceCuenta));
 					}
 				}
 
@@ -84,17 +87,25 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (v.getId() == R.id.btnDepositarBalance) {
+		if (v.getId() == R.id.btnDepositarDinero) {
+			if (!etCantidad.getText().toString().isEmpty()) {
+				Double cantidad = Double.parseDouble(etCantidad.getText().toString());
 
-			Intent i = new Intent(getContext(), TopBarActivity.class);
-			i.putExtra("rellenar", "fragmentoBalanceDepositar");
-			startActivity(i);
+				Double cantidadFinal = cantidad + balanceCuenta;
+				String uid = currentUser.getUid();
+				DatabaseReference balanceRef = mDatabase.getReference("Usuarios").child(uid).child("balance");
 
-		} else if (v.getId() == R.id.btnRetirarBalance) {
-			Intent i = new Intent(getContext(), TopBarActivity.class);
-			i.putExtra("rellenar", "fragmentoBalanceRetirar");
-			startActivity(i);
+				balanceRef.setValue(cantidadFinal).addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						etCantidad.setText("");
+						Toast.makeText(getContext(), "Dinero ingresado con éxito", Toast.LENGTH_SHORT).show();
+					}
+				});
 
+			} else {
+				Toast.makeText(getContext(), "Debes de introducir una cantidad", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 }
