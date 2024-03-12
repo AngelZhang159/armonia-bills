@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -41,7 +43,7 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 
     @Override
     public void onBindViewHolder(@NonNull GrupoVH holder, int position) {
-        holder.bindGrupo(listaGrupos.get(position), position);
+        holder.bindGrupo(listaGrupos.get(position));
 
     }
 
@@ -70,14 +72,24 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 
         }
 
-        public void bindGrupo(Grupo grupo, int position) {
+        public void bindGrupo(Grupo grupo) {
 
-            UsuarioGrupo usuarioGrupo = grupo.getUsuarios().get(position);
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+            UsuarioGrupo usuarioGrupoActual = null;
+
+            for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
+                if(usuarioGrupo.getEmail().equals(user.getEmail())){
+                    usuarioGrupoActual = usuarioGrupo;
+                }
+            }
+
             String pago = "0";
-            if(usuarioGrupo.getDeben() == 0){
-                pago = String.valueOf(usuarioGrupo.getDebes());
+            if(usuarioGrupoActual.getDeben() == 0){
+                pago = String.valueOf(usuarioGrupoActual.getDebes());
             } else {
-                pago = String.valueOf(usuarioGrupo.getDeben());
+                pago = String.valueOf(usuarioGrupoActual.getDeben());
             }
 
             tvTitulo.setText(grupo.getTitulo());

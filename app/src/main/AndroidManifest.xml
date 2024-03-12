@@ -27,7 +27,6 @@
         <activity
             android:name=".RegistroActivity"
             android:exported="false"
-            android:label="@string/title_activity_registro"
             android:theme="@style/Theme.ArmoniaBills" />
         <activity
             android:name=".LoginActivity"

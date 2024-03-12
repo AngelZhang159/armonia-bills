@@ -28,10 +28,13 @@ public class Grupo implements Parcelable {
         this.listaGastos = listaGastos;
     }
 
+
     protected Grupo(Parcel in) {
         titulo = in.readString();
         descripcion = in.readString();
+        usuarios = in.createTypedArrayList(UsuarioGrupo.CREATOR);
         total = in.readDouble();
+        listaGastos = in.createTypedArrayList(Gasto.CREATOR);
     }
 
     public static final Creator<Grupo> CREATOR = new Creator<Grupo>() {
@@ -66,6 +69,7 @@ public class Grupo implements Parcelable {
         return listaGastos;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,6 +79,8 @@ public class Grupo implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(titulo);
         dest.writeString(descripcion);
+        dest.writeTypedList(usuarios);
         dest.writeDouble(total);
+        dest.writeTypedList(listaGastos);
     }
 }

@@ -1,5 +1,6 @@
 package com.dam.armoniabills.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,9 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -20,13 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GrupoFragment extends Fragment {
-
-    TextView tvTitulo, tvDescripcion, tvDeuda, tvNumPersonas;
-    RecyclerView rv;
+public class GrupoFragment extends Fragment implements View.OnClickListener {
 
     private static final String ARG_PARAM1 = "param1";
-
+    TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal, tvNumPersonas;
+    RecyclerView rv;
+    ExtendedFloatingActionButton efab;
     private Grupo grupo;
 
     public GrupoFragment() {
@@ -57,11 +59,21 @@ public class GrupoFragment extends Fragment {
         tvTitulo = v.findViewById(R.id.tvTituloGrupoDetalle);
         tvDescripcion = v.findViewById(R.id.tvDescripcionGrupoDetalle);
         tvDeuda = v.findViewById(R.id.tvDeudaGrupoDetalle);
+        tvTotal = v.findViewById(R.id.tvTotalGrupoDetalle);
         tvNumPersonas = v.findViewById(R.id.tvNumPersonasGrupoDetalle);
         rv = v.findViewById(R.id.rvGastosGrupoDetalle);
+        efab = v.findViewById(R.id.efabNuevoGasto);
 
         cargarGrupo();
 
+        efab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), NuevoGastoActivity.class);
+                i.putExtra("grupo", grupo);
+                startActivity(i);
+            }
+        });
         return v;
     }
 
@@ -72,8 +84,6 @@ public class GrupoFragment extends Fragment {
         ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
         UsuarioGrupo usuarioGrupoActual = null;
 
-
-        //TODO aparece null por la cara
         for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
             if(usuarioGrupo.getEmail().equals(user.getEmail())){
                 usuarioGrupoActual = usuarioGrupo;
@@ -89,7 +99,14 @@ public class GrupoFragment extends Fragment {
 
         tvTitulo.setText(grupo.getTitulo());
         tvDescripcion.setText(grupo.getDescripcion());
+        tvTotal.setText(String.valueOf(grupo.getTotal()));
+        tvNumPersonas.setText(String.valueOf(listaUsuariosGrupo.size()));
         tvDeuda.setText(pago);
+
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 }

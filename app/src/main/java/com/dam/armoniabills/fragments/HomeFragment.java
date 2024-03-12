@@ -98,29 +98,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		});
 
 
-
-		/*cargar Grupos
-		UsuarioGrupo usuario1 = new UsuarioGrupo(20, 0, 20, "b@gmail.com");
-		UsuarioGrupo usuario2 = new UsuarioGrupo(0, 50, 20, "b@gmail.com");
-		ArrayList<UsuarioGrupo> listaUsuarios = new ArrayList<>();
-		listaUsuarios.add(usuario1);
-		listaUsuarios.add(usuario2);
-		listaUsuarios.add(usuario2);
-		ArrayList<UsuarioGrupo> listaUsuarios2 = new ArrayList<>();
-		listaUsuarios2.add(usuario2);
-		listaUsuarios2.add(usuario2);
-
-
-		Grupo grupo1 = new Grupo("Viaje", "Me duele el pie", listaUsuarios, 250, null);
-		Grupo grupo2 = new Grupo("Mallorca", "Hola buenas", listaUsuarios, 324, null);
-		Grupo grupo3 = new Grupo("monos", "Hola", listaUsuarios, 500, null);
-
-		lista.add(grupo1);
-		lista.add(grupo2);
-		lista.add(grupo3);*/
-
-
-
 	}
 
 	private void configurarRV() {

@@ -73,4 +73,6 @@
     <string name="user_no_registrado">El usuario introducido no está registrado en la aplicación</string>
     <string name="email_incorrecto">El email introducido es inválido</string>
     <string name="registro_correcto">Se ha registrado correctamente</string>
+    <string name="hint_et_desc_gasto">Descripción</string>
+    <string name="mi_balance">Mi balance</string>
 </resources>
