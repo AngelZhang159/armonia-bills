@@ -1,5 +1,6 @@
 package com.dam.armoniabills;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,6 +10,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dam.armoniabills.fragments.DepositoFragment;
 import com.dam.armoniabills.fragments.RetirarFragment;
+
+import com.dam.armoniabills.fragments.GrupoFragment;
+import com.dam.armoniabills.fragments.HomeFragment;
+import com.dam.armoniabills.model.Grupo;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class TopBarActivity extends AppCompatActivity {
@@ -42,6 +47,32 @@ public class TopBarActivity extends AppCompatActivity {
 			cargarRetirar();
 
 		}
+
+		String i = getIntent().getStringExtra("rellenar");
+
+		if (i.equals("fragmentoHome")){
+
+			cargarGrupo();
+
+		} else if (i.equals("fragmentoBalanceDepositar")){
+			//TODO
+		} else if (i.equals("fragmentoBalanceRetirar")){
+			//TODO
+		}
+
+	}
+
+	private void cargarGrupo() {
+
+		Grupo grupo = getIntent().getParcelableExtra(HomeFragment.GRUPO_SELECCIONADO);
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+		GrupoFragment grupoFragment = GrupoFragment.newInstance(grupo);
+		transaction.replace(R.id.flTopBar, grupoFragment);
+
+		transaction.commit();
+
 
 	}
 

@@ -47,4 +47,5 @@
     <string name="mi_balance">Mi balance</string>
     <string name="balance">%1$.2f€</string>
     <string name="cantidad_disponible">Cantidad disponible: %1$.2f€</string>
+
 </resources>
