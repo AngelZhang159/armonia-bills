@@ -1,15 +1,15 @@
 package com.dam.armoniabills.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Grupo {
 
     private String titulo, descripcion;
-    private List<UsuarioGrupo> usuarios;
+    private ArrayList<UsuarioGrupo> usuarios;
     private double total;
-    private List<Gasto> listaGastos;
+    private ArrayList<Gasto> listaGastos;
 
-    public Grupo(String titulo, String descripcion, List<UsuarioGrupo> usuarios, double total, List<Gasto> listaGastos) {
+    public Grupo(String titulo, String descripcion, ArrayList<UsuarioGrupo> usuarios, double total, ArrayList<Gasto> listaGastos) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.usuarios = usuarios;
@@ -25,7 +25,7 @@ public class Grupo {
         return descripcion;
     }
 
-    public List<UsuarioGrupo> getUsuarios() {
+    public ArrayList<UsuarioGrupo> getUsuarios() {
         return usuarios;
     }
 
@@ -33,7 +33,7 @@ public class Grupo {
         return total;
     }
 
-    public List<Gasto> getListaGastos() {
+    public ArrayList<Gasto> getListaGastos() {
         return listaGastos;
     }
 }
