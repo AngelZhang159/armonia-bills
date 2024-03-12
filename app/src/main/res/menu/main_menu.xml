@@ -7,15 +7,15 @@
         android:icon="@drawable/baseline_home_24"
         android:title="@string/home" />
     <item
-        android:id="@+id/botNavVarMisDeudas"
-        android:enabled="true"
-        android:icon="@drawable/baseline_payments_24"
-        android:title="@string/mis_deudas" />
-    <item
         android:id="@+id/botNavVarHistorial"
         android:enabled="true"
         android:icon="@drawable/baseline_history_24"
         android:title="@string/historial" />
+    <item
+        android:id="@+id/botNavVarMisDeudas"
+        android:enabled="true"
+        android:icon="@drawable/baseline_payments_24"
+        android:title="@string/mi_balance" />
     <item
         android:id="@+id/botNavVarPerfil"
         android:enabled="true"

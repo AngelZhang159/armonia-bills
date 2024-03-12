@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.dam.armoniabills.fragments.DeudasFragment;
+import com.dam.armoniabills.fragments.BalanceFragment;
 import com.dam.armoniabills.fragments.HistorialFragment;
 import com.dam.armoniabills.fragments.HomeFragment;
 import com.google.android.material.navigation.NavigationBarView;
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 			HomeFragment homeFragment = new HomeFragment();
 			transaction.replace(R.id.flPrincipal, homeFragment);
 		} else if (menuItem.getItemId() == R.id.botNavVarMisDeudas) {
-			DeudasFragment deudasFragment = new DeudasFragment();
+			BalanceFragment deudasFragment = new BalanceFragment();
 			transaction.replace(R.id.flPrincipal, deudasFragment);
 		} else if (menuItem.getItemId() == R.id.botNavVarHistorial) {
 			HistorialFragment historialFragment = new HistorialFragment();
