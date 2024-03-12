@@ -16,6 +16,10 @@ public class Grupo implements Parcelable {
     private double total;
     private ArrayList<Gasto> listaGastos;
 
+    public Grupo(){
+
+    }
+
     public Grupo(String titulo, String descripcion, ArrayList<UsuarioGrupo> usuarios, double total, ArrayList<Gasto> listaGastos) {
         this.titulo = titulo;
         this.descripcion = descripcion;

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +18,19 @@ import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGrupos;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
 	public static final String GRUPO_SELECCIONADO = "Grupo_seleccionado";
+	public static final String PATH_GRUPO = "Grupos";
 	ExtendedFloatingActionButton efab;
-
 	RecyclerView rv;
 	AdapterGrupos adapter;
 	ArrayList<Grupo> lista;
@@ -67,11 +73,35 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 	private void cargarGrupos() {
 
+		DatabaseReference reference = FirebaseDatabase.getInstance().getReference(PATH_GRUPO);
 
-		//TODO cargar Grupos
-		//TODO cargar deuda
-		UsuarioGrupo usuario1 = new UsuarioGrupo(20, 0, 20, "pepe@gmail.com");
-		UsuarioGrupo usuario2 = new UsuarioGrupo(0, 50, 20, "pepe@gmail.com");
+		reference.addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot snapshot) {
+				lista.clear();
+
+				for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+					Grupo grupo = dataSnapshot.getValue(Grupo.class);
+					lista.add(grupo);
+
+				}
+
+				configurarRV();
+
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError error) {
+				//TODO
+			}
+		});
+
+
+
+		/*cargar Grupos
+		UsuarioGrupo usuario1 = new UsuarioGrupo(20, 0, 20, "b@gmail.com");
+		UsuarioGrupo usuario2 = new UsuarioGrupo(0, 50, 20, "b@gmail.com");
 		ArrayList<UsuarioGrupo> listaUsuarios = new ArrayList<>();
 		listaUsuarios.add(usuario1);
 		listaUsuarios.add(usuario2);
@@ -81,15 +111,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		listaUsuarios2.add(usuario2);
 
 
-		Grupo grupo1 = new Grupo("Viaje", "Me duele el pie", listaUsuarios2, 250, null);
+		Grupo grupo1 = new Grupo("Viaje", "Me duele el pie", listaUsuarios, 250, null);
 		Grupo grupo2 = new Grupo("Mallorca", "Hola buenas", listaUsuarios, 324, null);
 		Grupo grupo3 = new Grupo("monos", "Hola", listaUsuarios, 500, null);
 
 		lista.add(grupo1);
 		lista.add(grupo2);
-		lista.add(grupo3);
+		lista.add(grupo3);*/
 
-		configurarRV();
 
 
 	}
