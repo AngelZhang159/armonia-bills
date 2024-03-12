@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Añadir nuevo grupo"
+            android:text="@string/tv_aniadir_grupo"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margen"
-            android:hint="Nombre del grupo"
+            android:hint="@string/hint_et_nombre_grupo"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margen"
-            android:hint="Descripción (opcional)"
+            android:hint="@string/hint_et_descripcion"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Correo electrónico"
+                android:hint="@string/hint_et_participante"
                 app:endIconMode="clear_text">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -82,14 +82,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margen"
-                android:text="Añadir" />
+                android:text="@string/btn_aniadir_participante" />
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Participantes"
+            android:text="@string/tv_personas"
             android:textSize="20sp"
             android:layout_marginTop="@dimen/margen"
             android:textStyle="bold"/>
@@ -113,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:text="Aceptar" />
+            android:text="@string/btn_aceptar_d" />
 
         <Button
             android:id="@+id/btnCancelarNuevoGrupo"
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margen"
             android:layout_weight="1"
-            android:text="Cancelar"/>
+            android:text="@string/btn_cancelar_d"/>
 
     </LinearLayout>
 

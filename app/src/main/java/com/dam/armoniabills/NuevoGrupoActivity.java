@@ -33,6 +33,9 @@ import java.util.ArrayList;
 
 public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
+	private static final String DB_PATH_GRUPOS = "Grupos";
+	private static final String DB_PATH_USERS = "Usuarios";
+
 	EditText etNombre, etDescripcion, etEmail;
 	ListView listView;
 	Button btnAniadir, btnAceptar, btnCancelar;
@@ -84,15 +87,15 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 			String descripcion = etDescripcion.getText().toString();
 
 			if (titulo.isEmpty()) {
-				Toast.makeText(this, "Debe introducir un titulo", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 			} else {
 				Grupo grupo = new Grupo(titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
 
-				FirebaseDatabase.getInstance().getReference("Grupos").push().setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
+				FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
 						if (task.isSuccessful()) {
-							Toast.makeText(NuevoGrupoActivity.this, "Grupo creado correctamente", Toast.LENGTH_SHORT).show();
+							Toast.makeText(NuevoGrupoActivity.this, getString(R.string.grupo_correcto), Toast.LENGTH_SHORT).show();
 							Intent i = new Intent(NuevoGrupoActivity.this, MainActivity.class);
 							startActivity(i);
 							finish();
@@ -110,36 +113,39 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (position == 0) {
-			Toast.makeText(NuevoGrupoActivity.this, "No puede eliminarse del grupo", Toast.LENGTH_SHORT).show();
+			Toast.makeText(NuevoGrupoActivity.this, getString(R.string.eliminar_yo), Toast.LENGTH_SHORT).show();
 		} else {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle("Eliminar participante");
-			builder.setCancelable(false);
-			builder.setMessage("¿Estás seguro de que quieres eliminar este participante?");
-			builder.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					listaUsuarioGrupo.remove(position);
-					listaNombres.remove(position);
-					adapter.notifyDataSetChanged();
-				}
-			});
-			builder.setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					dialog.cancel();
-				}
-			});
-
-			AlertDialog ad = builder.create();
-			ad.setCanceledOnTouchOutside(false);
-
-			ad.show();
+			mostrarDialog(position);
 		}
 	}
 
+	private void mostrarDialog(int position) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.tit_dialog_grupo);
+		builder.setCancelable(false);
+		builder.setMessage(R.string.dialog_msg_grupo);
+		builder.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				listaUsuarioGrupo.remove(position);
+				listaNombres.remove(position);
+				adapter.notifyDataSetChanged();
+			}
+		});
+		builder.setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+
+		AlertDialog ad = builder.create();
+		ad.setCanceledOnTouchOutside(false);
+		ad.show();
+	}
+
 	private void aniadirUsuario() {
-		FirebaseDatabase.getInstance().getReference("Usuarios").addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				for (DataSnapshot data : snapshot.getChildren()) {
@@ -177,13 +183,13 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 							adapter.notifyDataSetChanged();
 							etEmail.setText("");
 						} else {
-							Toast.makeText(NuevoGrupoActivity.this, "Este usuario ya pertenece al grupo", Toast.LENGTH_SHORT).show();
+							Toast.makeText(NuevoGrupoActivity.this, getString(R.string.usuario_grupo), Toast.LENGTH_SHORT).show();
 						}
 					} else {
-						Toast.makeText(NuevoGrupoActivity.this, "El email introducido no está registrado", Toast.LENGTH_SHORT).show();
+						Toast.makeText(NuevoGrupoActivity.this, getString(R.string.user_no_registrado), Toast.LENGTH_SHORT).show();
 					}
 				} else {
-					Toast.makeText(NuevoGrupoActivity.this, "El email introducido es inválido", Toast.LENGTH_SHORT).show();
+					Toast.makeText(NuevoGrupoActivity.this, getString(R.string.email_incorrecto), Toast.LENGTH_SHORT).show();
 				}
 			}
 

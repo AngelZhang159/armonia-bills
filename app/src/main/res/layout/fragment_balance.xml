@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/margen"
-            android:text="@string/mi_balance"
+            android:text="@string/tv_balance"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margen"
                         android:layout_weight="1"
-                        android:text="Depositar"
+                        android:text="@string/btn_depositar"
                         app:icon="@drawable/baseline_add_24" />
 
                     <Button
@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margen"
                         android:layout_weight="1"
-                        android:text="Retirar"
+                        android:text="@string/btn_retirar"
                         app:icon="@drawable/baseline_account_balance_24" />
 
                 </LinearLayout>

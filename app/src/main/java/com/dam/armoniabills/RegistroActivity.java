@@ -34,6 +34,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener {
 
+	private static final String STORAGE_PATH = "ProfileImages";
+	private static final String DB_PATH = "Usuarios";
+
 	CircleImageView imvPerfil;
 	EditText etNomApe, etEmail, etContra, etTlf;
 	Button btnCrearCuenta;
@@ -83,9 +86,9 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 			String tlf = etTlf.getText().toString().trim();
 
 			if (nombre.isEmpty() || email.isEmpty() || contra.isEmpty()) {
-				Toast.makeText(RegistroActivity.this, "Debes introducir todos los campos obligatorios", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegistroActivity.this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 			} else if (!tlf.isEmpty() && tlf.length() != 9 ) {
-				Toast.makeText(RegistroActivity.this, "El número de teléfono no es válido", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegistroActivity.this, getString(R.string.tlf_invalido), Toast.LENGTH_SHORT).show();
 			} else {
 				if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
 					FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -94,12 +97,12 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 							if (task.isSuccessful()) {
 								guardarImagen();
 							} else {
-								Toast.makeText(RegistroActivity.this, "El correo electrónico introducido ya está registrado", Toast.LENGTH_SHORT).show();
+								Toast.makeText(RegistroActivity.this, getString(R.string.email_registrado), Toast.LENGTH_SHORT).show();
 							}
 						}
 					});
 				} else {
-					Toast.makeText(this, "El correo electrónico introducido es inválido", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, getString(R.string.email_incorrecto), Toast.LENGTH_SHORT).show();
 				}
 			}
 		} else if (v.getId() == R.id.imvPerfil) {
@@ -110,7 +113,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 	}
 
 	private void guardarImagen() {
-		StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProfileImages").child(imageUri.getLastPathSegment());
+		StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(STORAGE_PATH).child(imageUri.getLastPathSegment());
 		storageReference.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -135,11 +138,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, 0);
 
-		FirebaseDatabase.getInstance().getReference("Usuarios").child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+		FirebaseDatabase.getInstance().getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {
-					Toast.makeText(RegistroActivity.this, "Se ha registrado correctamente", Toast.LENGTH_SHORT).show();
+					Toast.makeText(RegistroActivity.this, getString(R.string.registro_correcto), Toast.LENGTH_SHORT).show();
 					Intent i = new Intent(RegistroActivity.this, LoginActivity.class);
 					startActivity(i);
 				}
@@ -147,7 +150,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception e) {
-				Toast.makeText(RegistroActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegistroActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

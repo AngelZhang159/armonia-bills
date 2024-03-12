@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/margen"
-            android:text="¿Cuanto dinero quiere retirar?"
+            android:text="@string/tv_retirar"
             android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:hint="Cantidad"
+                        android:hint="@string/hint_et_cantidad"
                         android:padding="@dimen/margen"
                         app:endIconMode="clear_text">
 
@@ -62,7 +62,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="€"
+                        android:text="@string/euro"
+                        android:layout_gravity="center"
                         android:textColor="@color/black"
                         android:textSize="50sp"
                         android:textStyle="bold" />
@@ -91,12 +92,11 @@
 
                     <Button
                         android:id="@+id/btnRetirarDinero"
-                        android:layout_width="125sp"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="80dp"
                         android:layout_weight="1"
-                        android:text="Retirar" />
-
+                        android:text="@string/btn_retirar" />
 
                 </LinearLayout>
 

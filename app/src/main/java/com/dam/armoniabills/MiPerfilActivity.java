@@ -32,6 +32,9 @@ import com.google.firebase.storage.UploadTask;
 
 public class MiPerfilActivity extends AppCompatActivity implements View.OnClickListener {
 
+	private static final String STORAGE_PATH = "ProfileImages";
+	private static final String DB_PATH = "Usuarios";
+
 	ImageView ivPerfil;
 	EditText etNombre, etEmail, etTlf, etPassword, etRepPassword;
 	Button btnUpdate, btnCambiar, btnCerrarSesion;
@@ -104,9 +107,9 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
 	private void mostrarDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.tit_dialog);
+		builder.setTitle(R.string.tit_dialog_perfil);
 		builder.setCancelable(false);
-		builder.setMessage("¿Estás seguro de que quieres cerrar la sesión?");
+		builder.setMessage(R.string.dialog_msg_perfil);
 		builder.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -133,9 +136,9 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 		String tlf = etTlf.getText().toString();
 
 		if (nombre.isEmpty()) {
-			Toast.makeText(MiPerfilActivity.this, "Debes introducir todos los campos obligatorios", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MiPerfilActivity.this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 		} else if (!tlf.isEmpty() && tlf.length() != 9) {
-			Toast.makeText(MiPerfilActivity.this, "El número de teléfono no es válido", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MiPerfilActivity.this, getString(R.string.tlf_invalido), Toast.LENGTH_SHORT).show();
 		} else {
 			updateImagen();
 		}
@@ -146,7 +149,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
-						storage.getReference().child("ProfileImages").child(imageUri.getLastPathSegment()).putFile(imageUri)
+						storage.getReference().child(STORAGE_PATH).child(imageUri.getLastPathSegment()).putFile(imageUri)
 								.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 									@Override
 									public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -170,17 +173,17 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
 		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl);
 
-		db.getReference("Usuarios").child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+		db.getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {
-					Toast.makeText(MiPerfilActivity.this, "Datos actualizados correctamente", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MiPerfilActivity.this, getString(R.string.update_correcto), Toast.LENGTH_SHORT).show();
 				}
 			}
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception e) {
-				Toast.makeText(MiPerfilActivity.this, e.getMessage().toString(), Toast.LENGTH_SHORT).show();
+				Toast.makeText(MiPerfilActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -190,29 +193,29 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 		String repPassword = etRepPassword.getText().toString();
 
 		if (password.isEmpty()) {
-			Toast.makeText(this, "Debe introducir una contraseña", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.contra_obligatoria), Toast.LENGTH_SHORT).show();
 		} else if (repPassword.isEmpty()) {
-			Toast.makeText(this, "Debe repetir la contraseña", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.rep_contra_obligatoria), Toast.LENGTH_SHORT).show();
 		} else {
 			if (password.equals(repPassword)) {
 				user.updatePassword(password).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
 						if (task.isSuccessful()) {
-							Toast.makeText(MiPerfilActivity.this, "Contraseña actualizada correctamente", Toast.LENGTH_SHORT).show();
+							Toast.makeText(MiPerfilActivity.this, getString(R.string.contra_correcta), Toast.LENGTH_SHORT).show();
 						} else {
-							Toast.makeText(MiPerfilActivity.this, "No se ha podido cambiar la contraseña", Toast.LENGTH_SHORT).show();
+							Toast.makeText(MiPerfilActivity.this, getString(R.string.contra_error), Toast.LENGTH_SHORT).show();
 						}
 					}
 				});
 			} else {
-				Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.contra_no_coinciden), Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
 
 	private void readUsuario() {
-		db.getReference("Usuarios").child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+		db.getReference(DB_PATH).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
 				if (task.isSuccessful()) {
@@ -233,6 +236,4 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 			}
 		});
 	}
-
-
 }

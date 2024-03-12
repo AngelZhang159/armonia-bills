@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradiente" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_google"
+                android:text="@string/btn_google"
                 android:textStyle="bold"
                 app:icon="@drawable/google_logo"
                 app:iconTint="@null" />
@@ -105,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_facebook"
+                android:text="@string/btn_facebook"
                 android:textStyle="bold"
                 app:icon="@drawable/facebook_logo"
                 app:iconTint="@null" />
@@ -116,7 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/iniciar_sesi_n_con_x"
+                android:text="@string/btn_x"
                 android:textStyle="bold"
                 app:icon="@drawable/x_logo"
                 app:iconTint="@null" />

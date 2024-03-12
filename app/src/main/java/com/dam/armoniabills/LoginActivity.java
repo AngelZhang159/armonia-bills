@@ -46,19 +46,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 			String contra = etContra.getText().toString();
 
 			if (email.isEmpty() || contra.isEmpty()) {
-				Toast.makeText(this, "Debe introducir todos los campos", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 			} else {
 				mAuth.signInWithEmailAndPassword(email, contra).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 					@Override
 					public void onComplete(@NonNull Task<AuthResult> task) {
 						if (task.isSuccessful()) {
-							Toast.makeText(LoginActivity.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+							Toast.makeText(LoginActivity.this, getString(R.string.inicio_sesion), Toast.LENGTH_SHORT).show();
 
 							Intent i = new Intent(LoginActivity.this, MainActivity.class);
 							startActivity(i);
 							finish();
 						} else {
-							Toast.makeText(LoginActivity.this, "Credenciales inválidas", Toast.LENGTH_SHORT).show();
+							Toast.makeText(LoginActivity.this, getString(R.string.credenciales_incorrectas), Toast.LENGTH_SHORT).show();
 						}
 					}
 				});

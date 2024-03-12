@@ -20,7 +20,7 @@
                 android:id="@+id/tvTituloBienvenida"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bienvenido"
+                android:text="@string/tv_bienvenido"
                 android:textSize="50sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent" />
