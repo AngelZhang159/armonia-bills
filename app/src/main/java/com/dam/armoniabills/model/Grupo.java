@@ -1,5 +1,7 @@
 package com.dam.armoniabills.model;
 
+import java.util.ArrayList;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,11 +12,11 @@ import java.util.List;
 public class Grupo implements Parcelable {
 
     private String titulo, descripcion;
-    private List<UsuarioGrupo> usuarios;
+    private ArrayList<UsuarioGrupo> usuarios;
     private double total;
-    private List<Gasto> listaGastos;
+    private ArrayList<Gasto> listaGastos;
 
-    public Grupo(String titulo, String descripcion, List<UsuarioGrupo> usuarios, double total, List<Gasto> listaGastos) {
+    public Grupo(String titulo, String descripcion, ArrayList<UsuarioGrupo> usuarios, double total, ArrayList<Gasto> listaGastos) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.usuarios = usuarios;
@@ -48,7 +50,7 @@ public class Grupo implements Parcelable {
         return descripcion;
     }
 
-    public List<UsuarioGrupo> getUsuarios() {
+    public ArrayList<UsuarioGrupo> getUsuarios() {
         return usuarios;
     }
 
@@ -56,7 +58,7 @@ public class Grupo implements Parcelable {
         return total;
     }
 
-    public List<Gasto> getListaGastos() {
+    public ArrayList<Gasto> getListaGastos() {
         return listaGastos;
     }
 
