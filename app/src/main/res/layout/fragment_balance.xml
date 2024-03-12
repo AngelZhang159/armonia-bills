@@ -13,9 +13,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:padding="@dimen/margen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/margen"
             android:text="@string/mi_balance"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -36,10 +36,11 @@
                 android:paddingVertical="@dimen/margen">
 
                 <TextView
+                    android:id="@+id/tvDinero"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margen"
-                    android:text="%1$s€"
+                    android:text="@string/balance"
                     android:textAlignment="textEnd"
                     android:textColor="@color/black"
                     android:textSize="50sp"
@@ -82,10 +83,11 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:padding="@dimen/margen"
+            android:id="@+id/rvBalance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen" />
+            android:layout_marginTop="@dimen/margen"
+            android:padding="@dimen/margen" />
 
     </LinearLayout>
 
