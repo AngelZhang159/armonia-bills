@@ -2,7 +2,16 @@ package com.dam.armoniabills.model;
 
 public class Usuario {
     private String id, nombre, email, tlf, imagenPerfil;
+    double balance;
 
+    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil, double balance) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.tlf = tlf;
+        this.imagenPerfil = imagenPerfil;
+        this.balance = balance;
+    }
     public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil) {
         this.id = id;
         this.nombre = nombre;
@@ -12,7 +21,6 @@ public class Usuario {
     }
 
     public Usuario() {
-
     }
 
     public String getId() {
@@ -37,6 +45,14 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getTlf() {

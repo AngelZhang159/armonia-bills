@@ -24,7 +24,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/flBalance"
+        android:id="@+id/flTopBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
