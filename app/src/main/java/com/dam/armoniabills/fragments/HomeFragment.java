@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dam.armoniabills.NuevoGrupoActivity;
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.TopBarActivity;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGrupos;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment implements View.OnClickListener{
 
+	public static final String GRUPO_SELECCIONADO = "Grupo_seleccionado";
 	ExtendedFloatingActionButton efab;
 
 	RecyclerView rv;
@@ -105,6 +107,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 	@Override
 	public void onClick(View v) {
-		//TODO borrar creo
+		int pos = rv.getChildAdapterPosition(v);
+		Grupo grupo = lista.get(pos);
+
+		Intent i = new Intent(getContext(), TopBarActivity.class);
+		i.putExtra(GRUPO_SELECCIONADO, grupo);
+		i.putExtra("rellenar", "fragmentoHome");
+		startActivity(i);
 	}
 }

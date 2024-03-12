@@ -66,7 +66,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-					Integer balance = dataSnapshot.getValue(Integer.class);
+					Double balance = dataSnapshot.getValue(Double.class);
 					if (balance != null) {
 						tvDinero.setText(String.format(getString(R.string.balance), balance));
 					}
