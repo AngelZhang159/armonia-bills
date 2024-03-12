@@ -67,7 +67,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 					Double balance = dataSnapshot.getValue(Double.class);
-					if (balance != null) {
+					if (balance != null && isAdded()) {
 						tvDinero.setText(String.format(getString(R.string.balance), balance));
 					}
 				}
@@ -94,7 +94,6 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 			Intent i = new Intent(getContext(), TopBarActivity.class);
 			i.putExtra("rellenar", "fragmentoBalanceRetirar");
 			startActivity(i);
-
 		}
 	}
 }

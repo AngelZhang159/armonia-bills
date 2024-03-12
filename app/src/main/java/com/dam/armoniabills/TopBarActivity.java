@@ -47,19 +47,6 @@ public class TopBarActivity extends AppCompatActivity {
 			cargarRetirar();
 
 		}
-
-		String i = getIntent().getStringExtra("rellenar");
-
-		if (i.equals("fragmentoHome")){
-
-			cargarGrupo();
-
-		} else if (i.equals("fragmentoBalanceDepositar")){
-			//TODO
-		} else if (i.equals("fragmentoBalanceRetirar")){
-			//TODO
-		}
-
 	}
 
 	private void cargarGrupo() {
@@ -92,9 +79,5 @@ public class TopBarActivity extends AppCompatActivity {
 		fragmentTransaction.replace(R.id.flTopBar, depositoFragment);
 
 		fragmentTransaction.commit();
-	}
-
-	private void cargarGrupo() {
-
 	}
 }

@@ -70,7 +70,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 					balanceCuenta = dataSnapshot.getValue(Double.class);
-					if (balanceCuenta != null) {
+					if (balanceCuenta != null && isAdded()) {
 						tvCantidad.setText(String.format(getString(R.string.cantidad_disponible), balanceCuenta));
 					}
 				}
