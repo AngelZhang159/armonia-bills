@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,11 +20,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGasto.UsuarioVH> implements View.OnClickListener {
 
 	ArrayList<Usuario> listaUsuario;
+	public static ArrayList<String> idsPagan;
 	View.OnClickListener listener;
+
 
 
 	public AdapterUsuariosGasto(ArrayList<Usuario> listaUsuario, View.OnClickListener listener) {
@@ -35,6 +39,11 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 	public UsuarioVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
 
+		idsPagan = new ArrayList<>();
+		for(Usuario usuario : listaUsuario) {
+			idsPagan.add(usuario.getId());
+		}
+
 		v.setOnClickListener(this);
 
 		return new AdapterUsuariosGasto.UsuarioVH(v);
@@ -42,7 +51,19 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 	@Override
 	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
+
 		holder.bindUsuario(listaUsuario.get(position));
+		holder.btnCheck.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String userId = listaUsuario.get(holder.getAdapterPosition()).getId();
+				if (idsPagan.contains(userId)) {
+					idsPagan.remove(userId);
+				} else {
+					idsPagan.add(userId);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -59,7 +80,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 		ImageView iv;
 		TextView tv;
-		Button btnCheck;
+		CheckBox btnCheck;
 		FirebaseDatabase db;
 		private static final String DB_PATH = "Usuarios";
 
@@ -68,25 +89,35 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 			db = FirebaseDatabase.getInstance();
 			iv = itemView.findViewById(R.id.ivFotoPerfilUsuarioGasto);
 			tv = itemView.findViewById(R.id.tvUsuarioGasto);
-			btnCheck = itemView.findViewById(R.id.btnAniadirGasto);
+			btnCheck = itemView.findViewById(R.id.btnChk);
 		}
 
 		public void bindUsuario(Usuario usuario) {
+
 			db.getReference(DB_PATH).child(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 				@Override
 				public void onComplete(@NonNull Task<DataSnapshot> task) {
 					if (task.isSuccessful()) {
 						if (task.getResult().exists()) {
 							DataSnapshot dataSnapshot = task.getResult();
+							//TODO esto no sirve pa na pero no fufa bien sin el
 
-							String nombre = String.valueOf(dataSnapshot.child("nombre").getValue());
-							String imageUrl = (String.valueOf(dataSnapshot.child("imagenPerfil").getValue()));
+							String nombre = String.valueOf(usuario.getNombre());
+							String imageUrl = (String.valueOf(usuario.getImagenPerfil()));
 							tv.setText(nombre);
 							Glide.with(itemView.getContext()).load(imageUrl).into(iv);
+
 						}
 					}
 				}
 			});
 		}
+
 	}
+
+	public ArrayList<String> getIdsPagan (){
+		return idsPagan;
+	}
+
+
 }
