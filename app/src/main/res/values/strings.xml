@@ -76,4 +76,5 @@
     <string name="hint_et_desc_gasto">Descripción</string>
     <string name="mi_balance">Mi balance</string>
     <string name="minimo_personas">Debe haber mínimo 2 personas en el grupo</string>
+    <string name="tv_gasto_usuario">%1$s\n%2$d</string>
 </resources>

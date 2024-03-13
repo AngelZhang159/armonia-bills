@@ -5,17 +5,22 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
+import com.dam.armoniabills.recyclerutils.AdapterGastos;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -34,6 +39,8 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal, tvNumPersonas;
     RecyclerView rv;
+    AdapterGastos adapter;
+    ArrayList<Gasto> listaGastos;
     ExtendedFloatingActionButton efab;
     private Grupo grupo;
 
@@ -72,6 +79,15 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
         cargarGrupo();
 
+        listaGastos = new ArrayList<>();
+        adapter = new AdapterGastos(listaGastos);
+
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rv.setAdapter(adapter);
+        rv.setHasFixedSize(true);
+
+        rellenarListaGastos();
+
         efab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +97,24 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
             }
         });
         return v;
+    }
+
+    private void rellenarListaGastos() {
+        FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Grupo grupo = snapshot.getValue(Grupo.class);
+                        listaGastos = grupo.getListaGastos();
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void cargarGrupo() {
