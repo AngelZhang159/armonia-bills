@@ -8,24 +8,24 @@ import androidx.annotation.NonNull;
 public class UsuarioGrupo implements Parcelable {
 
     private double deben, debes, pagado;
-    String email;
+    String id;
 
     public UsuarioGrupo(){
 
     }
 
-    public UsuarioGrupo(double deben, double debes, double pagado, String email) {
+    public UsuarioGrupo(double deben, double debes, double pagado, String id) {
         this.deben = deben;
         this.debes = debes;
         this.pagado = pagado;
-        this.email = email;
+        this.id = id;
     }
 
     protected UsuarioGrupo(Parcel in) {
         deben = in.readDouble();
         debes = in.readDouble();
         pagado = in.readDouble();
-        email = in.readString();
+        id = in.readString();
     }
 
     public static final Creator<UsuarioGrupo> CREATOR = new Creator<UsuarioGrupo>() {
@@ -52,8 +52,8 @@ public class UsuarioGrupo implements Parcelable {
         return pagado;
     }
 
-    public String getEmail() {
-        return email;
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -66,6 +66,6 @@ public class UsuarioGrupo implements Parcelable {
         dest.writeDouble(deben);
         dest.writeDouble(debes);
         dest.writeDouble(pagado);
-        dest.writeString(email);
+        dest.writeString(id);
     }
 }

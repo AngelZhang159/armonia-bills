@@ -79,7 +79,7 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
             UsuarioGrupo usuarioGrupoActual = null;
 
             for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
-                if(usuarioGrupo.getEmail().equals(user.getEmail())){
+                if(usuarioGrupo.getId().equals(user.getEmail())){
                     usuarioGrupoActual = usuarioGrupo;
                 }
             }

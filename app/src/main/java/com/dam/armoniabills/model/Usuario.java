@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Usuario {
     private String id, nombre, email, tlf, imagenPerfil;
     double balance;
-    ArrayList<Grupo> grupos;
+    ArrayList<String> grupos;
 
-    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil, double balance, ArrayList<Grupo> grupos) {
+    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil, double balance, ArrayList<String> grupos) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -75,11 +75,11 @@ public class Usuario {
         this.imagenPerfil = imagenPerfil;
     }
 
-    public ArrayList<Grupo> getGrupos() {
+    public ArrayList<String> getGrupos() {
         return grupos;
     }
 
-    public void setGrupos(ArrayList<Grupo> grupos) {
+    public void setGrupos(ArrayList<String> grupos) {
         this.grupos = grupos;
     }
 }

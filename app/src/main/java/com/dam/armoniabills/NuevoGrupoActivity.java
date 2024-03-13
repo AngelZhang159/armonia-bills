@@ -47,7 +47,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	ArrayList<Gasto> listaGastos;
 	ArrayList<String> listaNombres;
 	ArrayList<String> listaId;
-	ArrayList<Grupo> listaGrupos;
+	ArrayList<String> listaIdGrupos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +68,13 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 		listaGastos = new ArrayList<>();
 		listaUsuario = new ArrayList<>();
 		listaNombres = new ArrayList<>();
-		listaGrupos = new ArrayList<>();
+		listaIdGrupos = new ArrayList<>();
 		listaId = new ArrayList<>();
 
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, user.getEmail()));
+		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, user.getUid()));
 		listaNombres.add("Yo (" + user.getEmail() + ")");
+		listaId.add(user.getUid());
 
 		adapter = new ArrayAdapter<>(NuevoGrupoActivity.this, android.R.layout.simple_list_item_1, listaNombres);
 		listView.setAdapter(adapter);
@@ -127,13 +128,13 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 
 									Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-									listaGrupos = usuario.getGrupos();
+									listaIdGrupos = usuario.getGrupos();
 
-									if (listaGrupos == null) {
-										listaGrupos = new ArrayList<>();
-										listaGrupos.add(grupo);
+									if (listaIdGrupos == null) {
+										listaIdGrupos = new ArrayList<>();
+										listaIdGrupos.add(grupo.getId());
 									} else {
-										listaGrupos.add(grupo);
+										listaIdGrupos.add(grupo.getId());
 									}
 
 									aniadirGrupoUsuario(id);
@@ -147,7 +148,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	}
 
 	private void aniadirGrupoUsuario(String id) {
-		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).child("grupos").setValue(listaGrupos)
+		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).child("grupos").setValue(listaIdGrupos)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
@@ -220,7 +221,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 
 					if (usuarioEncontrado) {
 						for (UsuarioGrupo usuarioGrupo : listaUsuarioGrupo) {
-							if (usuarioGrupo.getEmail().equals(email)) {
+							if (usuarioGrupo.getId().equals(email)) {
 								usuarioEncontrado = true;
 								break;
 							} else {
@@ -229,7 +230,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 						}
 
 						if (!usuarioEncontrado) {
-							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, email));
+							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, idUsuario));
 							listaNombres.add(nombre);
 							listaId.add(idUsuario);
 							adapter.notifyDataSetChanged();

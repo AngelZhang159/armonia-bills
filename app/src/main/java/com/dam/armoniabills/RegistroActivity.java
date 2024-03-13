@@ -136,7 +136,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 		String email = etEmail.getText().toString();
 		String nombre = etNomApe.getText().toString();
 		String tlf = etTlf.getText().toString();
-		ArrayList<Grupo> listaGrupos = new ArrayList<>();
+		ArrayList<String> listaGrupos = new ArrayList<>();
 
 		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, 0, listaGrupos);
 

@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class GrupoFragment extends Fragment implements View.OnClickListener {
@@ -85,7 +84,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
         UsuarioGrupo usuarioGrupoActual = null;
 
         for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
-            if(usuarioGrupo.getEmail().equals(user.getEmail())){
+            if(usuarioGrupo.getId().equals(user.getEmail())){
                 usuarioGrupoActual = usuarioGrupo;
             }
         }
