@@ -76,10 +76,10 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
-            UsuarioGrupo usuarioGrupoActual = null;
+            UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
 
             for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
-                if(usuarioGrupo.getId().equals(user.getEmail())){
+                if(usuarioGrupo.getId().equals(user.getUid())){
                     usuarioGrupoActual = usuarioGrupo;
                 }
             }

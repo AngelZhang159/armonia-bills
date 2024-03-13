@@ -15,9 +15,14 @@ import com.dam.armoniabills.NuevoGrupoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
 import com.dam.armoniabills.model.Grupo;
+import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGrupos;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +39,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 	RecyclerView rv;
 	AdapterGrupos adapter;
 	ArrayList<Grupo> lista;
+	ArrayList<String> listaGruposUsuario;
 
 	public HomeFragment() {
 		// Required empty public constructor
@@ -54,6 +60,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		rv = v.findViewById(R.id.rvGrupos);
 
 		lista = new ArrayList<>();
+		listaGruposUsuario = new ArrayList<>();
 
 		cargarGrupos();
 
@@ -73,29 +80,58 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
 	private void cargarGrupos() {
 
-		DatabaseReference reference = FirebaseDatabase.getInstance().getReference(PATH_GRUPO);
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-		reference.addValueEventListener(new ValueEventListener() {
+
+
+		db.getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
-			public void onDataChange(@NonNull DataSnapshot snapshot) {
-				lista.clear();
+			public void onComplete(@NonNull Task<DataSnapshot> task) {
+				if (task.isSuccessful()){
+					if (task.getResult().exists()){
+						DataSnapshot dataSnapshot = task.getResult();
 
-				for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+						Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-					Grupo grupo = dataSnapshot.getValue(Grupo.class);
-					lista.add(grupo);
+						listaGruposUsuario = usuario.getGrupos();
 
+						if(listaGruposUsuario != null){
+							db.getReference("Grupos").addValueEventListener(new ValueEventListener() {
+								@Override
+								public void onDataChange(@NonNull DataSnapshot snapshot) {
+									lista.clear();
+
+									for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+										Grupo grupo = dataSnapshot.getValue(Grupo.class);
+
+										for (int i = 0; i < listaGruposUsuario.size(); i++){
+											if(grupo.getId().equals(listaGruposUsuario.get(i))){
+												lista.add(grupo);
+											}
+										}
+
+									}
+
+									configurarRV();
+
+								}
+
+								@Override
+								public void onCancelled(@NonNull DatabaseError error) {
+									//TODO
+								}
+							});
+
+						}
+					}
 				}
-
-				configurarRV();
-
-			}
-
-			@Override
-			public void onCancelled(@NonNull DatabaseError error) {
-				//TODO
 			}
 		});
+
+
+
 
 
 	}
@@ -106,8 +142,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		rv.setHasFixedSize(true);
 		rv.setLayoutManager(new LinearLayoutManager(getContext()));
 		rv.setAdapter(adapter);
-
-
 
 	}
 

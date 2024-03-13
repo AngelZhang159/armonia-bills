@@ -3,6 +3,7 @@ package com.dam.armoniabills.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,9 +16,15 @@ import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.UsuarioGrupo;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -79,28 +86,46 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
     private void cargarGrupo() {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        
-        ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
-        UsuarioGrupo usuarioGrupoActual = null;
 
-        for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
-            if(usuarioGrupo.getId().equals(user.getEmail())){
-                usuarioGrupoActual = usuarioGrupo;
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+        db.getReference("Grupos").child(grupo.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                grupo = snapshot.getValue(Grupo.class);
+
+
+                ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+                UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
+
+                for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
+                    if(usuarioGrupo.getId().equals(user.getUid())){
+                        usuarioGrupoActual = usuarioGrupo;
+                    }
+                }
+
+                String pago = "0";
+                if(usuarioGrupoActual.getDeben() == 0){
+                    pago = String.valueOf(usuarioGrupoActual.getDebes());
+                } else {
+                    pago = String.valueOf(usuarioGrupoActual.getDeben());
+                }
+
+                tvTitulo.setText(grupo.getTitulo());
+                tvDescripcion.setText(grupo.getDescripcion());
+                tvTotal.setText(String.valueOf(grupo.getTotal()));
+                tvNumPersonas.setText(String.valueOf(listaUsuariosGrupo.size()));
+                tvDeuda.setText(pago);
+
             }
-        }
-        
-        String pago = "0";
-        if(usuarioGrupoActual.getDeben() == 0){
-            pago = String.valueOf(usuarioGrupoActual.getDebes());
-        } else {
-            pago = String.valueOf(usuarioGrupoActual.getDeben());
-        }
 
-        tvTitulo.setText(grupo.getTitulo());
-        tvDescripcion.setText(grupo.getDescripcion());
-        tvTotal.setText(String.valueOf(grupo.getTotal()));
-        tvNumPersonas.setText(String.valueOf(listaUsuariosGrupo.size()));
-        tvDeuda.setText(pago);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     @Override

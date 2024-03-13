@@ -87,6 +87,7 @@ public class Grupo implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(titulo);
         dest.writeString(descripcion);
         dest.writeTypedList(usuarios);
