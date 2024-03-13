@@ -23,13 +23,13 @@ import java.util.ArrayList;
 public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGasto.UsuarioVH> implements View.OnClickListener {
 
 	ArrayList<Usuario> listaUsuario;
+	View.OnClickListener listener;
+
 
 	public AdapterUsuariosGasto(ArrayList<Usuario> listaUsuario, View.OnClickListener listener) {
 		this.listaUsuario = listaUsuario;
 		this.listener = listener;
 	}
-
-	View.OnClickListener listener;
 	@NonNull
 	@Override
 	public UsuarioVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -81,6 +81,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 							String nombre = String.valueOf(dataSnapshot.child("nombre").getValue());
 							String imageUrl = (String.valueOf(dataSnapshot.child("imagenPerfil").getValue()));
+							tv.setText(nombre);
 							Glide.with(itemView.getContext()).load(imageUrl).into(iv);
 						}
 					}
