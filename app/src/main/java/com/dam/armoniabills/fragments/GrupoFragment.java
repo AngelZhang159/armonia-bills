@@ -102,7 +102,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
         tvTotal.setText(String.valueOf(grupo.getTotal()));
         tvNumPersonas.setText(String.valueOf(listaUsuariosGrupo.size()));
         tvDeuda.setText(pago);
-
     }
 
     @Override

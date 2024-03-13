@@ -46,6 +46,8 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	ArrayList<UsuarioGrupo> listaUsuarioGrupo;
 	ArrayList<Gasto> listaGastos;
 	ArrayList<String> listaNombres;
+	ArrayList<String> listaId;
+	ArrayList<Grupo> listaGrupos;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 		listaGastos = new ArrayList<>();
 		listaUsuario = new ArrayList<>();
 		listaNombres = new ArrayList<>();
+		listaGrupos = new ArrayList<>();
+		listaId = new ArrayList<>();
 
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, user.getEmail()));
@@ -89,25 +93,70 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 			if (titulo.isEmpty()) {
 				Toast.makeText(this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 			} else {
-				Grupo grupo = new Grupo(titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
+				String id = FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().getKey();
 
-				FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
+				Grupo grupo = new Grupo(id, titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
+
+				FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).child(id).setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
 						if (task.isSuccessful()) {
-							Toast.makeText(NuevoGrupoActivity.this, getString(R.string.grupo_correcto), Toast.LENGTH_SHORT).show();
-							Intent i = new Intent(NuevoGrupoActivity.this, MainActivity.class);
-							startActivity(i);
-							finish();
+							rellenarListaGrupos(grupo);
 						}
 					}
 				});
+
 			}
 		} else if (v.getId() == R.id.btnAniadirEmailNuevoGrupo) {
 			aniadirUsuario();
 		} else if (v.getId() == R.id.btnCancelarNuevoGrupo) {
 			finish();
 		}
+	}
+
+	private void rellenarListaGrupos(Grupo grupo) {
+		for (Usuario usuario : listaUsuario) {
+			for (String id : listaId) {
+				if (usuario.getId().equals(id)) {
+					FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+						@Override
+						public void onComplete(@NonNull Task<DataSnapshot> task) {
+							if (task.isSuccessful()) {
+								if (task.getResult().exists()) {
+									DataSnapshot dataSnapshot = task.getResult();
+
+									Usuario usuario = dataSnapshot.getValue(Usuario.class);
+
+									listaGrupos = usuario.getGrupos();
+
+									if (listaGrupos == null) {
+										listaGrupos = new ArrayList<>();
+										listaGrupos.add(grupo);
+									} else {
+										listaGrupos.add(grupo);
+									}
+
+									aniadirGrupoUsuario(id);
+								}
+							}
+						}
+					});
+				}
+			}
+		}
+	}
+
+	private void aniadirGrupoUsuario(String id) {
+		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).child("grupos").setValue(listaGrupos)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						Toast.makeText(NuevoGrupoActivity.this, getString(R.string.grupo_correcto), Toast.LENGTH_SHORT).show();
+						Intent i = new Intent(NuevoGrupoActivity.this, MainActivity.class);
+						startActivity(i);
+						finish();
+					}
+				});
 	}
 
 	@Override
@@ -155,6 +204,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 
 				String email = etEmail.getText().toString();
 				String nombre = "";
+				String idUsuario = "";
 
 				if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
 					boolean usuarioEncontrado = false;
@@ -163,6 +213,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 						if (usuario.getEmail().equals(email)) {
 							usuarioEncontrado = true;
 							nombre = usuario.getNombre();
+							idUsuario = usuario.getId();
 							break;
 						}
 					}
@@ -180,6 +231,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 						if (!usuarioEncontrado) {
 							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, email));
 							listaNombres.add(nombre);
+							listaId.add(idUsuario);
 							adapter.notifyDataSetChanged();
 							etEmail.setText("");
 						} else {

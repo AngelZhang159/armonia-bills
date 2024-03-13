@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Grupo implements Parcelable {
 
-    private String titulo, descripcion;
+    private String id, titulo, descripcion;
     private ArrayList<UsuarioGrupo> usuarios;
     private double total;
     private ArrayList<Gasto> listaGastos;
@@ -20,7 +20,8 @@ public class Grupo implements Parcelable {
 
     }
 
-    public Grupo(String titulo, String descripcion, ArrayList<UsuarioGrupo> usuarios, double total, ArrayList<Gasto> listaGastos) {
+    public Grupo(String id, String titulo, String descripcion, ArrayList<UsuarioGrupo> usuarios, double total, ArrayList<Gasto> listaGastos) {
+        this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.usuarios = usuarios;
@@ -30,6 +31,7 @@ public class Grupo implements Parcelable {
 
 
     protected Grupo(Parcel in) {
+        id = in.readString();
         titulo = in.readString();
         descripcion = in.readString();
         usuarios = in.createTypedArrayList(UsuarioGrupo.CREATOR);
@@ -48,6 +50,14 @@ public class Grupo implements Parcelable {
             return new Grupo[size];
         }
     };
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitulo() {
         return titulo;

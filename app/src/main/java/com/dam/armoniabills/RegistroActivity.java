@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -135,8 +136,9 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 		String email = etEmail.getText().toString();
 		String nombre = etNomApe.getText().toString();
 		String tlf = etTlf.getText().toString();
+		ArrayList<Grupo> listaGrupos = new ArrayList<>();
 
-		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, 0);
+		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, 0, listaGrupos);
 
 		FirebaseDatabase.getInstance().getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override

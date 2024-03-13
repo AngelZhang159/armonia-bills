@@ -1,16 +1,20 @@
 package com.dam.armoniabills.model;
 
+import java.util.ArrayList;
+
 public class Usuario {
     private String id, nombre, email, tlf, imagenPerfil;
     double balance;
+    ArrayList<Grupo> grupos;
 
-    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil, double balance) {
+    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil, double balance, ArrayList<Grupo> grupos) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.tlf = tlf;
         this.imagenPerfil = imagenPerfil;
         this.balance = balance;
+        this.grupos = grupos;
     }
     public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil) {
         this.id = id;
@@ -69,5 +73,13 @@ public class Usuario {
 
     public void setImagenPerfil(String imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
+    }
+
+    public ArrayList<Grupo> getGrupos() {
+        return grupos;
+    }
+
+    public void setGrupos(ArrayList<Grupo> grupos) {
+        this.grupos = grupos;
     }
 }
