@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		lista = new ArrayList<>();
 		listaGruposUsuario = new ArrayList<>();
 
-		//cargarGrupos();
+		cargarGrupos();
 
 		efab.setOnClickListener(new View.OnClickListener() {
 			@Override
