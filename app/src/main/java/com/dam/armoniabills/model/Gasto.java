@@ -9,7 +9,8 @@ import java.util.ArrayList;
 
 public class Gasto implements Parcelable {
 
-    private String titulo, descripcion, usuario;
+    private String titulo, descripcion, idUsuario;
+
     private double precio;
     ArrayList<String> listaUsuariosPagan;
 
@@ -20,7 +21,7 @@ public class Gasto implements Parcelable {
     protected Gasto(Parcel in) {
         titulo = in.readString();
         descripcion = in.readString();
-        usuario = in.readString();
+        idUsuario = in.readString();
         precio = in.readDouble();
         listaUsuariosPagan = in.createStringArrayList();
     }
@@ -54,11 +55,11 @@ public class Gasto implements Parcelable {
     }
 
     public String getUsuario() {
-        return usuario;
+        return idUsuario;
     }
 
     public void setUsuario(String usuario) {
-        this.usuario = usuario;
+        this.idUsuario = usuario;
     }
 
     public double getPrecio() {
@@ -80,7 +81,7 @@ public class Gasto implements Parcelable {
     public Gasto(String titulo, String descripcion, String usuario, double precio, ArrayList<String> listaUsuariosPagan) {
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.usuario = usuario;
+        this.idUsuario = usuario;
         this.precio = precio;
         this.listaUsuariosPagan = listaUsuariosPagan;
     }
@@ -94,7 +95,7 @@ public class Gasto implements Parcelable {
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(titulo);
         dest.writeString(descripcion);
-        dest.writeString(usuario);
+        dest.writeString(idUsuario);
         dest.writeDouble(precio);
         dest.writeStringList(listaUsuariosPagan);
     }
