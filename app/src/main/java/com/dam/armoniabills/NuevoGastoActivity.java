@@ -105,6 +105,8 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnAniadirGasto) {
 
+			//TODO optimizar
+
 			String titulo = etTitulo.getText().toString();
 			String descripcion = etDescripcion.getText().toString();
 			String precioString = etPrecio.getText().toString();
@@ -148,17 +150,26 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 					});
 
 
+					//Actualizar total
+
+					double total = grupo.getTotal() + precio;
+					Map<String, Object> mapaTotal = new HashMap<>();
+					mapaTotal.put("total", total);
+					databaseReference.child(grupo.getId()).updateChildren(mapaTotal);
+
+
 //					Hacer que paguen
 
 					double deuda = precio / idsPagan.size();
+					double teDeben = precio - deuda;
 
-					DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos");
+					DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios");
 
 					for (int i = 0; i < idsPagan.size(); i++) {
 
 						final int index = i;
 
-						reference.child(grupo.getId()).child("usuarios").child(String.valueOf(index)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+						reference.child(String.valueOf(index)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 							@Override
 							public void onComplete(@NonNull Task<DataSnapshot> task) {
 								if (task.isSuccessful()) {
@@ -167,13 +178,20 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										UsuarioGrupo usuarioGrupo = dataSnapshot.getValue(UsuarioGrupo.class);
 
 										double debes;
+										double deben;
 										for (int j = 0; j < idsPagan.size(); j++) {
 
-											if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
+											if(usuarioGrupo.getId().equals(user.getUid())){
+												deben = usuarioGrupo.getDeben() + teDeben;
+												Map<String, Object> mapDeben = new HashMap<>();
+												mapDeben.put("deben", deben);
+												reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+											} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
 												debes = usuarioGrupo.getDebes() + deuda;
-												Map<String, Object> map = new HashMap<>();
-												map.put("debes", debes);
-												reference.child(grupo.getId()).child("usuarios").child(String.valueOf(index)).updateChildren(map);
+												Map<String, Object> mapDebes = new HashMap<>();
+												mapDebes.put("debes", debes);
+												reference.child(String.valueOf(index)).updateChildren(mapDebes);
 											}
 										}
 									}

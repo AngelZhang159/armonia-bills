@@ -1,5 +1,6 @@
 package com.dam.armoniabills.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
@@ -161,14 +163,14 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-//		if (v.getId() == R.id.efabNuevoGasto) {
-//			Intent i = new Intent(getContext(), NuevoGastoActivity.class);
-//			i.putExtra("grupo", grupo);
-//			startActivity(i);
+		if (v.getId() == R.id.efabNuevoGasto) {
+			Intent i = new Intent(getContext(), NuevoGastoActivity.class);
+			i.putExtra("grupo", grupo);
+			startActivity(i);
 //		} else if (v.getId() == R.id.btnPersGrupo) {
 //			new MaterialAlertDialogBuilder(this)
 //					.setTitle("Personas")
 //					.setAdapter(new ArrayAdapter<Usuario>(this, ))
-//		}
+		}
 	}
 }
