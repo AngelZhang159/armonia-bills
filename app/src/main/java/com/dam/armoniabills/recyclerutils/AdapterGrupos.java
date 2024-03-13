@@ -44,7 +44,6 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
     @Override
     public void onBindViewHolder(@NonNull GrupoVH holder, int position) {
         holder.bindGrupo(listaGrupos.get(position));
-
     }
 
     @Override
