@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 public class MiPerfilActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private static final String STORAGE_PATH = "ProfileImages";
@@ -43,6 +45,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 	FirebaseAuth mAuth;
 	FirebaseUser user;
 	FirebaseStorage storage;
+	Usuario usuario;
 
 	String id;
 
@@ -81,6 +84,8 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
 		user = mAuth.getCurrentUser();
 		id = user.getUid();
+
+		imageUri = null;
 
 		readUsuario();
 
@@ -145,33 +150,39 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 	}
 
 	private void updateImagen() {
-		storage.getReferenceFromUrl(imageUrl).delete()
-				.addOnCompleteListener(new OnCompleteListener<Void>() {
-					@Override
-					public void onComplete(@NonNull Task<Void> task) {
-						storage.getReference().child(STORAGE_PATH).child(imageUri.getLastPathSegment()).putFile(imageUri)
-								.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-									@Override
-									public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-										taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-											@Override
-											public void onSuccess(Uri uri) {
-												imageUrl = uri.toString();
-												updateUsuario();
-											}
-										});
-									}
-								});
-					}
-				});
+		if (imageUri != null) {
+			storage.getReferenceFromUrl(imageUrl).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+				@Override
+				public void onComplete(@NonNull Task<Void> task) {
+					storage.getReference().child(STORAGE_PATH).child(imageUri.getLastPathSegment()).putFile(imageUri)
+							.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+								@Override
+								public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+									taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+										@Override
+										public void onSuccess(Uri uri) {
+											imageUrl = uri.toString();
+											updateUsuario();
+										}
+									});
+								}
+							});
+				}
+			});
+		} else {
+			updateUsuario();
+		}
 	}
 
 	private void updateUsuario() {
 		String email = etEmail.getText().toString();
 		String nombre = etNombre.getText().toString();
 		String tlf = etTlf.getText().toString();
+		double balance = usuario.getBalance();
+		ArrayList<String> grupos = new ArrayList<>();
+		grupos = usuario.getGrupos();
 
-		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl);
+		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, balance, grupos);
 
 		db.getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
@@ -222,14 +233,12 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 					if (task.getResult().exists()) {
 						DataSnapshot dataSnapshot = task.getResult();
 
-						String nombre = String.valueOf(dataSnapshot.child("nombre").getValue());
-						String email = String.valueOf(dataSnapshot.child("email").getValue());
-						String tlf = String.valueOf(dataSnapshot.child("tlf").getValue());
-						imageUrl = (String.valueOf(dataSnapshot.child("imagenPerfil").getValue()));
+						usuario = dataSnapshot.getValue(Usuario.class);
 
-						etNombre.setText(nombre);
-						etEmail.setText(email);
-						etTlf.setText(tlf);
+						etNombre.setText(usuario.getNombre());
+						etEmail.setText(usuario.getEmail());
+						etTlf.setText(usuario.getTlf());
+						imageUrl = usuario.getImagenPerfil();
 						Glide.with(MiPerfilActivity.this).load(imageUrl).into(ivPerfil);
 					}
 				}

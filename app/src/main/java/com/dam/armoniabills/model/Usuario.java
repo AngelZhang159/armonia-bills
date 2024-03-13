@@ -16,13 +16,6 @@ public class Usuario {
         this.balance = balance;
         this.grupos = grupos;
     }
-    public Usuario(String id, String nombre, String email, String tlf, String imagenPerfil) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
-        this.tlf = tlf;
-        this.imagenPerfil = imagenPerfil;
-    }
 
     public Usuario() {
     }
