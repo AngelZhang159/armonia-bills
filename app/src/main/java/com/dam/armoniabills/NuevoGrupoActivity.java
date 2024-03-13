@@ -94,19 +94,22 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 			if (titulo.isEmpty()) {
 				Toast.makeText(this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
 			} else {
-				String id = FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().getKey();
+				if (listaUsuarioGrupo.size() == 1) {
+					Toast.makeText(this, getString(R.string.minimo_personas), Toast.LENGTH_SHORT).show();
+				} else {
+					String id = FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().getKey();
 
-				Grupo grupo = new Grupo(id, titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
+					Grupo grupo = new Grupo(id, titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
 
-				FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).child(id).setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
-					@Override
-					public void onComplete(@NonNull Task<Void> task) {
-						if (task.isSuccessful()) {
-							rellenarListaGrupos(grupo);
+					FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).child(id).setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
+						@Override
+						public void onComplete(@NonNull Task<Void> task) {
+							if (task.isSuccessful()) {
+								rellenarListaGrupos(grupo);
+							}
 						}
-					}
-				});
-
+					});
+				}
 			}
 		} else if (v.getId() == R.id.btnAniadirEmailNuevoGrupo) {
 			aniadirUsuario();
