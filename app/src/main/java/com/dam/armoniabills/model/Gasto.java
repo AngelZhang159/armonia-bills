@@ -17,10 +17,10 @@ public class Gasto implements Parcelable {
     public Gasto(){
 
     }
-    public Gasto(String titulo, String descripcion, String usuario, double precio, ArrayList<String> listaUsuariosPagan) {
+    public Gasto(String titulo, String descripcion, String idUsuario, double precio, ArrayList<String> listaUsuariosPagan) {
         this.titulo = titulo;
         this.descripcion = descripcion;
-        this.usuario = usuario;
+        this.idUsuario = idUsuario;
         this.precio = precio;
         this.listaUsuariosPagan = listaUsuariosPagan;
     }
