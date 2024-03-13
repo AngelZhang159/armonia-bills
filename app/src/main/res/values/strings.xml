@@ -75,7 +75,10 @@
     <string name="registro_correcto">Se ha registrado correctamente</string>
     <string name="hint_et_desc_gasto">Descripción</string>
     <string name="mi_balance">Mi balance</string>
-    <string name="minimo_personas">Debe haber mínimo 2 personas en el grupo</string>
-    <string name="tv_gasto_usuario">%1$s\n%2$.2f</string>
+    <string name="minimo_personas">Debe haber mínimo 1 persona en el grupo</string>
+    <string name="tv_gasto_usuario">%1$s\n%2$.2f€</string>
     <string name="euros">%1$.2f€</string>
+    <string name="tv_grupo_tu_pagas">Deuda: %1$.2f€</string>
+    <string name="tv_grupo_total_pagar">Total: %1$.2f€</string>
+    <string name="tv_gasto_pago">%1$s pagó %2$.2f€</string>
 </resources>

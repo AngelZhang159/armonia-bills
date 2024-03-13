@@ -70,7 +70,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 									DataSnapshot dataSnapshot = task.getResult();
 									Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-									tvUsuarioPago.setText(String.format("%s pagó %s", usuario.getNombre(), gasto.getPrecio()));
+									tvUsuarioPago.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_pago), usuario.getNombre(), gasto.getPrecio()));
 								}
 							}
 						}

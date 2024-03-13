@@ -90,13 +90,24 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_marginTop="@dimen/margen"
+        android:id="@+id/tvNuevoGastoAniadir"
+        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="¿Quienes van a pagar?"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsuariosGasto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/margen"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/margen"
         app:layout_constraintBottom_toTopOf="@id/btnAniadirGasto"
-        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvNuevoGastoAniadir"
+        app:layout_constraintVertical_bias="0.476" />
 
     <Button
         android:id="@+id/btnAniadirGasto"

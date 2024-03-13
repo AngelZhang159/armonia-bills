@@ -37,7 +37,7 @@
                 android:id="@+id/tvUsuarioPago"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Ignacio pagó 15€" />
+                android:text="@string/tv_gasto_pago" />
         </LinearLayout>
 
         <TextView

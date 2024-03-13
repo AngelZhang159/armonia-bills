@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="@dimen/margen"
     tools:context=".fragments.GrupoFragment">
 
@@ -26,55 +27,84 @@
                     android:id="@+id/tvTituloGrupoDetalle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Titulo"
                     android:textSize="40sp"
+                    android:layout_weight="1"
                     android:textStyle="bold" />
 
-                <LinearLayout
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPersGrupo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    app:icon="@drawable/baseline_person_24"
+                    app:iconGravity="end"
+                    app:iconSize="28dp"
+                    android:layout_gravity="end"
+                    android:textSize="20sp"
+                    android:paddingEnd="@dimen/margen"/>
 
-                    <TextView
-                        android:id="@+id/tvNumPersonasGrupoDetalle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="12"
-                        android:textSize="25sp" />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
 
-                    <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/baseline_person_24" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/tvNumPersonasGrupoDetalle"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="12"-->
+<!--                        android:textSize="25sp" />-->
 
-                </LinearLayout>
+<!--                    <ImageView-->
+<!--                        android:layout_width="35dp"-->
+<!--                        android:layout_height="35dp"-->
+<!--                        android:src="@drawable/baseline_person_24" />-->
+
+<!--                </LinearLayout>-->
 
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/tvDescripcionGrupoDetalle"
+            <LinearLayout
+                android:layout_marginTop="@dimen/margen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Descripcion"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvDeudaGrupoDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Deuda"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/tvDescripcionGrupoDetalle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Descripcion"
+                    android:layout_weight="1"
+                    android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tvTotalGrupoDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total"
-                android:textSize="20sp" />
+                <LinearLayout
+                    android:gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvDeudaGrupoDetalle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_grupo_tu_pagas"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalGrupoDetalle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_grupo_total_pagar"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="@dimen/margen"
                 android:id="@+id/rvGastosGrupoDetalle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

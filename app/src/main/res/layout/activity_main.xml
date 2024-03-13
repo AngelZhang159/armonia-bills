@@ -30,6 +30,11 @@
 
     </LinearLayout>
 
+    <com.google.android.material.divider.MaterialDivider
+        app:layout_constraintTop_toBottomOf="@id/llHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <!--Layout principal-->
     <FrameLayout
         android:id="@+id/flPrincipal"
@@ -38,6 +43,10 @@
         app:layout_constraintBottom_toTopOf="@id/botNavVar"
         app:layout_constraintTop_toBottomOf="@id/llHeader" />
 
+    <com.google.android.material.divider.MaterialDivider
+        app:layout_constraintBottom_toTopOf="@id/botNavVar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <!--Menu botones abajo-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/botNavVar"

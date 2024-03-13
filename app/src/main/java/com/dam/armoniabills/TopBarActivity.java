@@ -16,12 +16,13 @@ import com.google.android.material.appbar.MaterialToolbar;
 
 public class TopBarActivity extends AppCompatActivity {
 
+	MaterialToolbar toolbar;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_top_bar);
 
-		MaterialToolbar toolbar = findViewById(R.id.topAppBar);
+		toolbar = findViewById(R.id.topAppBar);
 
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
@@ -50,6 +51,7 @@ public class TopBarActivity extends AppCompatActivity {
 	private void cargarGrupo() {
 
 		Grupo grupo = getIntent().getParcelableExtra(HomeFragment.GRUPO_SELECCIONADO);
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
 
