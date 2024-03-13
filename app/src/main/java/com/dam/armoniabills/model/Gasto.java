@@ -5,28 +5,24 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+
 public class Gasto implements Parcelable {
 
     private String titulo, descripcion, usuario;
     private double precio;
+    ArrayList<String> listaUsuariosPagan;
 
     public Gasto(){
 
     }
-
-    public Gasto(String titulo, String descripcion, String usuario, double precio) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.usuario = usuario;
-        this.precio = precio;
-    }
-
 
     protected Gasto(Parcel in) {
         titulo = in.readString();
         descripcion = in.readString();
         usuario = in.readString();
         precio = in.readDouble();
+        listaUsuariosPagan = in.createStringArrayList();
     }
 
     public static final Creator<Gasto> CREATOR = new Creator<Gasto>() {
@@ -41,6 +37,54 @@ public class Gasto implements Parcelable {
         }
     };
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public ArrayList<String> getListaUsuariosPagan() {
+        return listaUsuariosPagan;
+    }
+
+    public void setListaUsuariosPagan(ArrayList<String> listaUsuariosPagan) {
+        this.listaUsuariosPagan = listaUsuariosPagan;
+    }
+
+    public Gasto(String titulo, String descripcion, String usuario, double precio, ArrayList<String> listaUsuariosPagan) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.usuario = usuario;
+        this.precio = precio;
+        this.listaUsuariosPagan = listaUsuariosPagan;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -52,5 +96,6 @@ public class Gasto implements Parcelable {
         dest.writeString(descripcion);
         dest.writeString(usuario);
         dest.writeDouble(precio);
+        dest.writeStringList(listaUsuariosPagan);
     }
 }

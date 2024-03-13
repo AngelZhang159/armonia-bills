@@ -1,8 +1,13 @@
 package com.dam.armoniabills.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
-public class Usuario {
+public class Usuario implements Parcelable {
     private String id, nombre, email, tlf, imagenPerfil;
     double balance;
     ArrayList<String> grupos;
@@ -26,6 +31,28 @@ public class Usuario {
 
     public Usuario() {
     }
+
+    protected Usuario(Parcel in) {
+        id = in.readString();
+        nombre = in.readString();
+        email = in.readString();
+        tlf = in.readString();
+        imagenPerfil = in.readString();
+        balance = in.readDouble();
+        grupos = in.createStringArrayList();
+    }
+
+    public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
+        @Override
+        public Usuario createFromParcel(Parcel in) {
+            return new Usuario(in);
+        }
+
+        @Override
+        public Usuario[] newArray(int size) {
+            return new Usuario[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -81,5 +108,21 @@ public class Usuario {
 
     public void setGrupos(ArrayList<String> grupos) {
         this.grupos = grupos;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(nombre);
+        dest.writeString(email);
+        dest.writeString(tlf);
+        dest.writeString(imagenPerfil);
+        dest.writeDouble(balance);
+        dest.writeStringList(grupos);
     }
 }
