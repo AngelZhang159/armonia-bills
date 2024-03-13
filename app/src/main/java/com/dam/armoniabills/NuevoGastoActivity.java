@@ -1,6 +1,7 @@
 package com.dam.armoniabills;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
+import com.dam.armoniabills.recyclerutils.AdapterGrupos;
 import com.dam.armoniabills.recyclerutils.AdapterUsuariosGasto;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,10 +24,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NuevoGastoActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,7 +62,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 	private void consultaUsuarios() {
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
-		db.getReference("Grupos").child(grupo.getId()).addValueEventListener(new ValueEventListener() {
+		db.getReference("Grupos").child(grupo.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaUsuarios.clear();
@@ -71,14 +77,16 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 								if (task.getResult().exists()) {
 									DataSnapshot dataSnapshot = task.getResult();
 									listaUsuarios.add(dataSnapshot.getValue(Usuario.class));
-									configurarRv();
+
+									if(listaGrupoUsuarios.size() == listaUsuarios.size()){
+										configurarRv();
+									}
 								}
 							}
 						}
 					});
 				}
 
-				configurarRv();
 			}
 
 			@Override
@@ -105,10 +113,58 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 			if (titulo.isEmpty() || precioString.isEmpty()) {
 				Toast.makeText(NuevoGastoActivity.this, "Debes rellenar los campos necesarios", Toast.LENGTH_SHORT).show();
 			} else {
+
+				ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
 				FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-				double precio = Double.parseDouble(etPrecio.getText().toString());
-//				Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio);
-//				DatabaseReference reference = FirebaseDatabase.getInstance().getReference(HomeFragment.PATH_GRUPO);
+
+				if(idsPagan.isEmpty()){
+					Toast.makeText(this, "Debes seleccionar al menos 1 personas", Toast.LENGTH_SHORT).show();
+				} else if(idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())){
+
+					Toast.makeText(this, "No puedes pagarlo solo tu", Toast.LENGTH_SHORT).show();
+
+				} else {
+					double precio = Double.parseDouble(etPrecio.getText().toString());
+
+					Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio, idsPagan);
+
+					double deuda = precio / idsPagan.size();
+
+					DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos");
+
+					for (int i = 0; i < idsPagan.size(); i++){
+
+						final int index = i;
+
+						reference.child(grupo.getId()).child("usuarios").child(String.valueOf(index)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+							@Override
+							public void onComplete(@NonNull Task<DataSnapshot> task) {
+								if(task.isSuccessful()){
+									if(task.getResult().exists()){
+										DataSnapshot dataSnapshot = task.getResult();
+										UsuarioGrupo usuarioGrupo = dataSnapshot.getValue(UsuarioGrupo.class);
+
+										double debes;
+										for (int j = 0; j < idsPagan.size(); j++) {
+
+											if(usuarioGrupo.getId().equals(idsPagan.get(j))){
+												debes = usuarioGrupo.getDebes() + deuda;
+												Map<String, Object> map = new HashMap<>();
+												map.put("debes", debes);
+												reference.child(grupo.getId()).child("usuarios").child(String.valueOf(index)).updateChildren(map);
+											}
+										}
+									}
+								}
+							}
+						});
+
+
+					}
+
+
+				}
+
 			}
 		}
 	}

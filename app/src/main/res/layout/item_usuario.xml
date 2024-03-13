@@ -28,7 +28,7 @@
 
     </LinearLayout>
 
-    <com.google.android.material.checkbox.MaterialCheckBox
+    <CheckBox
         android:id="@+id/btnChk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

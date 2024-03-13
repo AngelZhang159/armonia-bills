@@ -17,6 +17,13 @@ public class Gasto implements Parcelable {
     public Gasto(){
 
     }
+    public Gasto(String titulo, String descripcion, String usuario, double precio, ArrayList<String> listaUsuariosPagan) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.usuario = usuario;
+        this.precio = precio;
+        this.listaUsuariosPagan = listaUsuariosPagan;
+    }
 
     protected Gasto(Parcel in) {
         titulo = in.readString();
@@ -75,14 +82,6 @@ public class Gasto implements Parcelable {
     }
 
     public void setListaUsuariosPagan(ArrayList<String> listaUsuariosPagan) {
-        this.listaUsuariosPagan = listaUsuariosPagan;
-    }
-
-    public Gasto(String titulo, String descripcion, String usuario, double precio, ArrayList<String> listaUsuariosPagan) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        this.idUsuario = usuario;
-        this.precio = precio;
         this.listaUsuariosPagan = listaUsuariosPagan;
     }
 
