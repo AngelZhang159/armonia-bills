@@ -7,65 +7,64 @@ import androidx.annotation.NonNull;
 
 public class UsuarioGrupo implements Parcelable {
 
-    private double deben, debes, pagado;
-    String id;
+	public static final Creator<UsuarioGrupo> CREATOR = new Creator<UsuarioGrupo>() {
+		@Override
+		public UsuarioGrupo createFromParcel(Parcel in) {
+			return new UsuarioGrupo(in);
+		}
 
-    public UsuarioGrupo(){
+		@Override
+		public UsuarioGrupo[] newArray(int size) {
+			return new UsuarioGrupo[size];
+		}
+	};
+	String id;
+	private double deben, debes, pagado;
 
-    }
+	public UsuarioGrupo() {
 
-    public UsuarioGrupo(double deben, double debes, double pagado, String id) {
-        this.deben = deben;
-        this.debes = debes;
-        this.pagado = pagado;
-        this.id = id;
-    }
+	}
 
-    protected UsuarioGrupo(Parcel in) {
-        deben = in.readDouble();
-        debes = in.readDouble();
-        pagado = in.readDouble();
-        id = in.readString();
-    }
+	public UsuarioGrupo(double deben, double debes, double pagado, String id) {
+		this.deben = deben;
+		this.debes = debes;
+		this.pagado = pagado;
+		this.id = id;
+	}
 
-    public static final Creator<UsuarioGrupo> CREATOR = new Creator<UsuarioGrupo>() {
-        @Override
-        public UsuarioGrupo createFromParcel(Parcel in) {
-            return new UsuarioGrupo(in);
-        }
+	protected UsuarioGrupo(Parcel in) {
+		deben = in.readDouble();
+		debes = in.readDouble();
+		pagado = in.readDouble();
+		id = in.readString();
+	}
 
-        @Override
-        public UsuarioGrupo[] newArray(int size) {
-            return new UsuarioGrupo[size];
-        }
-    };
+	public double getDeben() {
+		return deben;
+	}
 
-    public double getDeben() {
-        return deben;
-    }
+	public double getDebes() {
+		return debes;
+	}
 
-    public double getDebes() {
-        return debes;
-    }
+	public double getPagado() {
+		return pagado;
+	}
 
-    public double getPagado() {
-        return pagado;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public String getId() {
-        return id;
-    }
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeDouble(deben);
-        dest.writeDouble(debes);
-        dest.writeDouble(pagado);
-        dest.writeString(id);
-    }
+	@Override
+	public void writeToParcel(@NonNull Parcel dest, int flags) {
+		dest.writeDouble(deben);
+		dest.writeDouble(debes);
+		dest.writeDouble(pagado);
+		dest.writeString(id);
+	}
 }

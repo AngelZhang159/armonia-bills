@@ -1,6 +1,5 @@
 package com.dam.armoniabills;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,10 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.dam.armoniabills.fragments.DepositoFragment;
-import com.dam.armoniabills.fragments.RetirarFragment;
-
 import com.dam.armoniabills.fragments.GrupoFragment;
 import com.dam.armoniabills.fragments.HomeFragment;
+import com.dam.armoniabills.fragments.RetirarFragment;
 import com.dam.armoniabills.model.Grupo;
 import com.google.android.material.appbar.MaterialToolbar;
 

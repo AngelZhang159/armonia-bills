@@ -27,11 +27,11 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 
 	Button btnRetirar;
 	TextView tvCantidad;
-	private FirebaseAuth mAuth;
-	private FirebaseDatabase mDatabase;
 	EditText etCantidadRetirar;
 	Double balanceCuenta;
 	FirebaseUser currentUser;
+	private FirebaseAuth mAuth;
+	private FirebaseDatabase mDatabase;
 
 	public RetirarFragment() {
 	}

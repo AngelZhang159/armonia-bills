@@ -1,7 +1,6 @@
 package com.dam.armoniabills;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,9 +15,9 @@ import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
-import com.dam.armoniabills.recyclerutils.AdapterGrupos;
 import com.dam.armoniabills.recyclerutils.AdapterUsuariosGasto;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -78,7 +77,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 									DataSnapshot dataSnapshot = task.getResult();
 									listaUsuarios.add(dataSnapshot.getValue(Usuario.class));
 
-									if(listaGrupoUsuarios.size() == listaUsuarios.size()){
+									if (listaGrupoUsuarios.size() == listaUsuarios.size()) {
 										configurarRv();
 									}
 								}
@@ -117,9 +116,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 				ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
 				FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-				if(idsPagan.isEmpty()){
+				if (idsPagan.isEmpty()) {
 					Toast.makeText(this, "Debes seleccionar al menos 1 personas", Toast.LENGTH_SHORT).show();
-				} else if(idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())){
+				} else if (idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())) {
 
 					Toast.makeText(this, "No puedes pagarlo solo tu", Toast.LENGTH_SHORT).show();
 
@@ -128,26 +127,49 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 					Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio, idsPagan);
 
+//					Introducir datos en grupos/grupo/gastos
+
+					DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Grupos");
+
+					String id = databaseReference.push().getKey();
+					databaseReference.child(grupo.getId()).child("gastos").child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
+						@Override
+						public void onComplete(@NonNull Task<Void> task) {
+							if (task.isSuccessful()) {
+								Toast.makeText(NuevoGastoActivity.this, "Gasto añadido con éxito", Toast.LENGTH_SHORT).show();
+								finish();
+							}
+						}
+					}).addOnFailureListener(new OnFailureListener() {
+						@Override
+						public void onFailure(@NonNull Exception e) {
+							Toast.makeText(NuevoGastoActivity.this, "Error al añadir el gasto", Toast.LENGTH_SHORT).show();
+						}
+					});
+
+
+//					Hacer que paguen
+
 					double deuda = precio / idsPagan.size();
 
 					DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos");
 
-					for (int i = 0; i < idsPagan.size(); i++){
+					for (int i = 0; i < idsPagan.size(); i++) {
 
 						final int index = i;
 
 						reference.child(grupo.getId()).child("usuarios").child(String.valueOf(index)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 							@Override
 							public void onComplete(@NonNull Task<DataSnapshot> task) {
-								if(task.isSuccessful()){
-									if(task.getResult().exists()){
+								if (task.isSuccessful()) {
+									if (task.getResult().exists()) {
 										DataSnapshot dataSnapshot = task.getResult();
 										UsuarioGrupo usuarioGrupo = dataSnapshot.getValue(UsuarioGrupo.class);
 
 										double debes;
 										for (int j = 0; j < idsPagan.size(); j++) {
 
-											if(usuarioGrupo.getId().equals(idsPagan.get(j))){
+											if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
 												debes = usuarioGrupo.getDebes() + deuda;
 												Map<String, Object> map = new HashMap<>();
 												map.put("debes", debes);
@@ -161,6 +183,8 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 
 					}
+
+//					Fin hacer que paguen
 
 
 				}

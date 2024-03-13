@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="@dimen/margen"
-    tools:context=".MiPerfilActivity"
-    android:background="@color/white">
+    tools:context=".MiPerfilActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,97 +16,96 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
             android:text="@string/tv_perfil"
+            android:textAlignment="center"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imvPerfilP"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margen"
-            android:src="@drawable/perfil"/>
+            android:src="@drawable/perfil" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_email"
-            android:layout_marginTop="@dimen/margen"/>
+            android:layout_marginTop="@dimen/margen"
+            android:text="@string/tv_email" />
 
         <EditText
             android:id="@+id/etEmailP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_et_email"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:hint="@string/hint_et_email" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_nombre"
-            android:layout_marginTop="@dimen/margen"/>
+            android:layout_marginTop="@dimen/margen"
+            android:text="@string/tv_nombre" />
 
         <EditText
             android:id="@+id/etNombreP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_et_nombre"/>
+            android:hint="@string/hint_et_nombre" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_telefono"
-            android:layout_marginTop="@dimen/margen"/>
+            android:layout_marginTop="@dimen/margen"
+            android:text="@string/tv_telefono" />
 
         <EditText
             android:id="@+id/etTelefonoP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:hint="@string/hint_et_telefono"/>
+            android:hint="@string/hint_et_telefono"
+            android:inputType="phone" />
 
         <Button
             android:id="@+id/btnUpdate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/margen"
-            android:text="@string/btn_actualizar_datos"
-            android:layout_gravity="center"/>
+            android:text="@string/btn_actualizar_datos" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_contrasenia"
-            android:layout_marginTop="@dimen/margen"/>
+            android:layout_marginTop="@dimen/margen"
+            android:text="@string/tv_contrasenia" />
 
         <EditText
             android:id="@+id/etPasswordP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_et_contra"/>
+            android:hint="@string/hint_et_contra" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tv_repetir_contrasenia"
-            android:layout_marginTop="@dimen/margen"/>
+            android:layout_marginTop="@dimen/margen"
+            android:text="@string/tv_repetir_contrasenia" />
 
         <EditText
             android:id="@+id/etRepPasswordP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_et_repcontra"/>
+            android:hint="@string/hint_et_repcontra" />
 
         <Button
             android:id="@+id/btnCambiar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_cambiar_contrasenia"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/margen"
-            android:layout_gravity="center"/>
+            android:text="@string/btn_cambiar_contrasenia" />
 
     </LinearLayout>
 
@@ -115,7 +113,7 @@
         android:id="@+id/btnCerrarSesion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_cerrar_sesion"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:text="@string/btn_cerrar_sesion" />
 
 </RelativeLayout>

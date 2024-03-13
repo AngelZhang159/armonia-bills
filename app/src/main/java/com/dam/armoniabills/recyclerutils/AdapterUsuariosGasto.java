@@ -3,7 +3,6 @@ package com.dam.armoniabills.recyclerutils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,27 +19,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGasto.UsuarioVH> implements View.OnClickListener {
 
-	ArrayList<Usuario> listaUsuario;
 	public static ArrayList<String> idsPagan;
+	ArrayList<Usuario> listaUsuario;
 	View.OnClickListener listener;
-
 
 
 	public AdapterUsuariosGasto(ArrayList<Usuario> listaUsuario, View.OnClickListener listener) {
 		this.listaUsuario = listaUsuario;
 		this.listener = listener;
 	}
+
 	@NonNull
 	@Override
 	public UsuarioVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
 
 		idsPagan = new ArrayList<>();
-		for(Usuario usuario : listaUsuario) {
+		for (Usuario usuario : listaUsuario) {
 			idsPagan.add(usuario.getId());
 		}
 
@@ -76,13 +74,17 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 		listener.onClick(v);
 	}
 
+	public ArrayList<String> getIdsPagan() {
+		return idsPagan;
+	}
+
 	public class UsuarioVH extends RecyclerView.ViewHolder {
 
+		private static final String DB_PATH = "Usuarios";
 		ImageView iv;
 		TextView tv;
 		CheckBox btnCheck;
 		FirebaseDatabase db;
-		private static final String DB_PATH = "Usuarios";
 
 		public UsuarioVH(@NonNull View itemView) {
 			super(itemView);
@@ -113,10 +115,6 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 			});
 		}
 
-	}
-
-	public ArrayList<String> getIdsPagan (){
-		return idsPagan;
 	}
 
 

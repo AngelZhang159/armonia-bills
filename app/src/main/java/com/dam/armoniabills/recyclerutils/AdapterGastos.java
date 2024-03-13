@@ -22,71 +22,70 @@ import java.util.ArrayList;
 
 public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHolder> {
 
-    private ArrayList<Gasto> listaGastos;
+	private ArrayList<Gasto> listaGastos;
 
-    public AdapterGastos(ArrayList<Gasto> listaGastos) {
-        this.listaGastos = listaGastos;
-    }
+	public AdapterGastos(ArrayList<Gasto> listaGastos) {
+		this.listaGastos = listaGastos;
+	}
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gasto, parent, false);
+	@NonNull
+	@Override
+	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gasto, parent, false);
 
-        MyViewHolder mvh = new MyViewHolder(v);
-        return mvh;
-    }
+		MyViewHolder mvh = new MyViewHolder(v);
+		return mvh;
+	}
 
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.bindIncidencia(listaGastos.get(position));
-    }
+	@Override
+	public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+		holder.bindIncidencia(listaGastos.get(position));
+	}
 
-    @Override
-    public int getItemCount() {
-        return listaGastos.size();
-    }
+	@Override
+	public int getItemCount() {
+		return listaGastos.size();
+	}
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+	public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitulo, tvUsuarioPago, tvGastoUsuario;
+		TextView tvTitulo, tvUsuarioPago, tvGastoUsuario;
 
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
+		public MyViewHolder(@NonNull View itemView) {
+			super(itemView);
 
-            tvTitulo = itemView.findViewById(R.id.tvTituloGasto);
-            tvUsuarioPago = itemView.findViewById(R.id.tvUsuarioPago);
-            tvGastoUsuario = itemView.findViewById(R.id.tvGastoUsuario);
-        }
+			tvTitulo = itemView.findViewById(R.id.tvTituloGasto);
+			tvUsuarioPago = itemView.findViewById(R.id.tvUsuarioPago);
+			tvGastoUsuario = itemView.findViewById(R.id.tvGastoUsuario);
+		}
 
-        public void bindIncidencia(Gasto gasto) {
-            tvTitulo.setText(gasto.getTitulo());
-            FirebaseDatabase.getInstance().getReference("Usuarios").child(gasto.getUsuario()).get()
-                            .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if (task.getResult().exists()) {
-                                            DataSnapshot dataSnapshot = task.getResult();
-                                            Usuario usuario = dataSnapshot.getValue(Usuario.class);
+		public void bindIncidencia(Gasto gasto) {
+			tvTitulo.setText(gasto.getTitulo());
+			FirebaseDatabase.getInstance().getReference("Usuarios").child(gasto.getUsuario()).get()
+					.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+						@Override
+						public void onComplete(@NonNull Task<DataSnapshot> task) {
+							if (task.isSuccessful()) {
+								if (task.getResult().exists()) {
+									DataSnapshot dataSnapshot = task.getResult();
+									Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-                                            tvUsuarioPago.setText(usuario.getNombre() + " pagó " + gasto.getPrecio());
-                                        }
-                                    }
-                                }
-                            });
+									tvUsuarioPago.setText(String.format("%s pagó %s", usuario.getNombre(), gasto.getPrecio()));
+								}
+							}
+						}
+					});
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            double deuda = 0;
-            if (user.getUid().equals(gasto.getUsuario())) {
-                deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
-                tvGastoUsuario.setText(String.format(String.valueOf(R.string.tv_gasto_usuario), "prestaste", deuda));
-            } else {
-                deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
-                tvGastoUsuario.setText(String.format(String.valueOf(R.string.tv_gasto_usuario), "pediste", deuda));
-            }
-        }
-    }
+			double deuda = 0;
+			if (user.getUid().equals(gasto.getUsuario())) {
+				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
+				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Prestaste", deuda));
+			} else {
+				deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
+				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Pediste", deuda));
+			}
+		}
+	}
 }

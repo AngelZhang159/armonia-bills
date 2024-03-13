@@ -5,9 +5,9 @@
     android:layout_margin="@dimen/margen">
 
     <LinearLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -17,36 +17,37 @@
             android:layout_height="55dp"
             android:src="@drawable/gasto" />
 
-    <LinearLayout
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginStart="@dimen/margen"
-        android:layout_weight="1">
-
-        <TextView
-            android:id="@+id/tvTituloGasto"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Titulo"/>
+            android:layout_marginStart="@dimen/margen"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTituloGasto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Titulo"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvUsuarioPago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ignacio pagó 15€" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvUsuarioPago"
+            android:id="@+id/tvGastoUsuario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ignacio pagó 15€"/>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tvGastoUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_gasto_usuario"
-        android:textAlignment="textEnd"
-        android:layout_weight="2.5"/>
+            android:layout_weight="2.5"
+            android:text="@string/tv_gasto_usuario"
+            android:textAlignment="textEnd"
+            android:textSize="10sp" />
 
     </LinearLayout>
 

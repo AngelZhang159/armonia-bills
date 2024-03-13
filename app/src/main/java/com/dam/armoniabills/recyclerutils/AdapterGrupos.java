@@ -19,83 +19,83 @@ import java.util.ArrayList;
 
 public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> implements View.OnClickListener {
 
-    Context context;
-    ArrayList<Grupo> listaGrupos;
-    View.OnClickListener listener;
+	Context context;
+	ArrayList<Grupo> listaGrupos;
+	View.OnClickListener listener;
 
 
-    public AdapterGrupos(Context context, ArrayList<Grupo> listaGrupos, View.OnClickListener listener) {
-        this.context = context;
-        this.listaGrupos = listaGrupos;
-        this.listener = listener;
-    }
+	public AdapterGrupos(Context context, ArrayList<Grupo> listaGrupos, View.OnClickListener listener) {
+		this.context = context;
+		this.listaGrupos = listaGrupos;
+		this.listener = listener;
+	}
 
-    @NonNull
-    @Override
-    public GrupoVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+	@NonNull
+	@Override
+	public GrupoVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(context).inflate(R.layout.item_grupo, parent, false);
+		View v = LayoutInflater.from(context).inflate(R.layout.item_grupo, parent, false);
 
-        v.setOnClickListener(this);
+		v.setOnClickListener(this);
 
-        return new GrupoVH(v);
-    }
+		return new GrupoVH(v);
+	}
 
-    @Override
-    public void onBindViewHolder(@NonNull GrupoVH holder, int position) {
-        holder.bindGrupo(listaGrupos.get(position));
-    }
+	@Override
+	public void onBindViewHolder(@NonNull GrupoVH holder, int position) {
+		holder.bindGrupo(listaGrupos.get(position));
+	}
 
-    @Override
-    public int getItemCount() {
-        return listaGrupos.size();
-    }
+	@Override
+	public int getItemCount() {
+		return listaGrupos.size();
+	}
 
-    @Override
-    public void onClick(View v) {
-        listener.onClick(v);
-    }
-
-
-    public class GrupoVH extends RecyclerView.ViewHolder{
-
-        TextView tvTitulo, tvPagoUsuario, tvTotal, tvNumPersonas;
-
-        public GrupoVH(@NonNull View itemView) {
-            super(itemView);
-            tvTitulo = itemView.findViewById(R.id.tvTituloGrupo);
-            tvPagoUsuario = itemView.findViewById(R.id.tvPagoUsuarioGrupo);
-            tvTotal = itemView.findViewById(R.id.tvTotalGrupo);
-            tvNumPersonas = itemView.findViewById(R.id.tvNumPersonasGrupo);
+	@Override
+	public void onClick(View v) {
+		listener.onClick(v);
+	}
 
 
-        }
+	public class GrupoVH extends RecyclerView.ViewHolder {
 
-        public void bindGrupo(Grupo grupo) {
+		TextView tvTitulo, tvPagoUsuario, tvTotal, tvNumPersonas;
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		public GrupoVH(@NonNull View itemView) {
+			super(itemView);
+			tvTitulo = itemView.findViewById(R.id.tvTituloGrupo);
+			tvPagoUsuario = itemView.findViewById(R.id.tvPagoUsuarioGrupo);
+			tvTotal = itemView.findViewById(R.id.tvTotalGrupo);
+			tvNumPersonas = itemView.findViewById(R.id.tvNumPersonasGrupo);
 
-            ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
-            UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
 
-            for(UsuarioGrupo usuarioGrupo : listaUsuariosGrupo){
-                if(usuarioGrupo.getId().equals(user.getUid())){
-                    usuarioGrupoActual = usuarioGrupo;
-                }
-            }
+		}
 
-            String pago = "0";
-            if(usuarioGrupoActual.getDeben() == 0){
-                pago = String.valueOf(usuarioGrupoActual.getDebes());
-            } else {
-                pago = String.valueOf(usuarioGrupoActual.getDeben());
-            }
+		public void bindGrupo(Grupo grupo) {
 
-            tvTitulo.setText(grupo.getTitulo());
-            tvPagoUsuario.setText(pago);
-            tvTotal.setText(String.valueOf(grupo.getTotal()));
-            tvNumPersonas.setText(String.valueOf(grupo.getUsuarios().size()));
+			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        }
-    }
+			ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+			UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
+
+			for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
+				if (usuarioGrupo.getId().equals(user.getUid())) {
+					usuarioGrupoActual = usuarioGrupo;
+				}
+			}
+
+			double pago = 0;
+			if (usuarioGrupoActual.getDeben() == 0) {
+				pago = usuarioGrupoActual.getDebes();
+			} else {
+				pago = usuarioGrupoActual.getDeben();
+			}
+
+			tvTitulo.setText(grupo.getTitulo());
+			tvPagoUsuario.setText(String.format(itemView.getContext().getString(R.string.euros), pago));
+			tvTotal.setText(String.format(itemView.getContext().getString(R.string.euros), grupo.getTotal()));
+			tvNumPersonas.setText(String.valueOf(grupo.getUsuarios().size()));
+
+		}
+	}
 }

@@ -15,7 +15,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -71,7 +70,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 		listaUsuarios = new ArrayList<>();
 
-		String fotoPerfil = "android.resource://"+  getPackageName() + "/" + R.drawable.perfil;
+		String fotoPerfil = "android.resource://" + getPackageName() + "/" + R.drawable.perfil;
 		imageUri = Uri.parse(fotoPerfil);
 
 		imvPerfil.setOnClickListener(this);
@@ -88,7 +87,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 			if (nombre.isEmpty() || email.isEmpty() || contra.isEmpty()) {
 				Toast.makeText(RegistroActivity.this, getString(R.string.campos_obligatorios), Toast.LENGTH_SHORT).show();
-			} else if (!tlf.isEmpty() && tlf.length() != 9 ) {
+			} else if (!tlf.isEmpty() && tlf.length() != 9) {
 				Toast.makeText(RegistroActivity.this, getString(R.string.tlf_invalido), Toast.LENGTH_SHORT).show();
 			} else {
 				if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

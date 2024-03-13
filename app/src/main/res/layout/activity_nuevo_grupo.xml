@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:padding="@dimen/margen"
-    tools:context=".NuevoGrupoActivity"
-    android:background="@color/white">
+    tools:context=".NuevoGrupoActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -89,24 +89,24 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margen"
             android:text="@string/tv_personas"
             android:textSize="20sp"
-            android:layout_marginTop="@dimen/margen"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/lvUsuarios"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:scrollbars="vertical"/>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp">
 
         <Button
             android:id="@+id/btnCrearNuevoGrupo"
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margen"
             android:layout_weight="1"
-            android:text="@string/btn_cancelar_d"/>
+            android:text="@string/btn_cancelar_d" />
 
     </LinearLayout>
 

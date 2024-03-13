@@ -26,20 +26,19 @@
             android:textSize="@dimen/tam_tv_bienvenida"
             android:textStyle="bold" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imvPerfil"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margen"
-            android:src="@drawable/perfil"/>
+            android:src="@drawable/perfil" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_et_nombre"
             android:layout_marginTop="@dimen/margen"
+            android:hint="@string/hint_et_nombre"
             app:endIconMode="clear_text"
             app:startIconDrawable="@drawable/baseline_account_circle_24">
 
@@ -69,9 +68,9 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margen"
             android:hint="@string/hint_et_contra"
             app:endIconMode="password_toggle"
-            android:layout_marginTop="@dimen/margen"
             app:startIconDrawable="@drawable/baseline_password_24">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="@dimen/margen"
-    app:cardCornerRadius="@dimen/margen"
+    android:layout_margin="@dimen/margen"
     android:padding="@dimen/margen"
-    android:layout_margin="@dimen/margen">
+    app:cardCornerRadius="@dimen/margen"
+    app:cardElevation="@dimen/margen">
 
-    
+
     <LinearLayout
-        android:padding="@dimen/margen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margen">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tvTituloGrupo"
-                android:textSize="50sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="50sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -34,14 +34,14 @@
 
                 <TextView
                     android:id="@+id/tvNumPersonasGrupo"
-                    android:textSize="25sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp" />
 
                 <ImageView
-                    android:src="@drawable/baseline_person_24"
                     android:layout_width="35dp"
-                    android:layout_height="35dp"/>
+                    android:layout_height="35dp"
+                    android:src="@drawable/baseline_person_24" />
 
             </LinearLayout>
 
@@ -49,17 +49,17 @@
 
         <TextView
             android:id="@+id/tvPagoUsuarioGrupo"
-            android:textSize="30sp"
-            android:textColor="#36C60E"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="#36C60E"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/tvTotalGrupo"
-            android:textSize="30sp"
-            android:text="@string/tv_total"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="@string/tv_total"
+            android:textSize="30sp" />
 
     </LinearLayout>
 

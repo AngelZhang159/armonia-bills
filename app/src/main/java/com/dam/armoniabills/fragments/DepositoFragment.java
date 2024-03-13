@@ -27,11 +27,11 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 	Button btnDepositar;
 	EditText etCantidad;
-	private FirebaseAuth mAuth;
-	private FirebaseDatabase mDatabase;
 	FirebaseUser currentUser;
 	TextView tvCantidad;
 	Double balanceCuenta;
+	private FirebaseAuth mAuth;
+	private FirebaseDatabase mDatabase;
 
 	public DepositoFragment() {
 		// Required empty public constructor

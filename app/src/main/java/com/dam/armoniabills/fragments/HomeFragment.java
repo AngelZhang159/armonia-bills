@@ -29,7 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	public static final String GRUPO_SELECCIONADO = "Grupo_seleccionado";
 	public static final String PATH_GRUPO = "Grupos";
@@ -72,7 +72,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		return v;
 
 
-
 	}
 
 	private void cargarGrupos() {
@@ -83,26 +82,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 		db.getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
-				if (task.isSuccessful()){
-					if (task.getResult().exists()){
+				if (task.isSuccessful()) {
+					if (task.getResult().exists()) {
 						DataSnapshot dataSnapshot = task.getResult();
 
 						Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
 						listaGruposUsuario = usuario.getGrupos();
 
-						if(listaGruposUsuario != null){
+						if (listaGruposUsuario != null) {
 							db.getReference("Grupos").addValueEventListener(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot snapshot) {
 									lista.clear();
 
-									for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+									for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
 										Grupo grupo = dataSnapshot.getValue(Grupo.class);
 
-										for (int i = 0; i < listaGruposUsuario.size(); i++){
-											if(grupo.getId().equals(listaGruposUsuario.get(i))){
+										for (int i = 0; i < listaGruposUsuario.size(); i++) {
+											if (grupo.getId().equals(listaGruposUsuario.get(i))) {
 												lista.add(grupo);
 											}
 										}
@@ -124,9 +123,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 				}
 			}
 		});
-
-
-
 
 
 	}
