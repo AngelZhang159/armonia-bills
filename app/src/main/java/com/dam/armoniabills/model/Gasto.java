@@ -9,6 +9,34 @@ import java.util.ArrayList;
 
 public class Gasto implements Parcelable {
 
+
+	private String titulo, descripcion, idUsuario;
+	private double precio;
+	ArrayList<String> listaUsuariosPagan;
+	private String id;
+
+	public Gasto() {
+
+	}
+
+	public Gasto(String titulo, String descripcion, String idUsuario, double precio, ArrayList<String> listaUsuariosPagan, String id) {
+		this.titulo = titulo;
+		this.descripcion = descripcion;
+		this.idUsuario = idUsuario;
+		this.precio = precio;
+		this.listaUsuariosPagan = listaUsuariosPagan;
+		this.id = id;
+	}
+
+	protected Gasto(Parcel in) {
+		titulo = in.readString();
+		descripcion = in.readString();
+		idUsuario = in.readString();
+		precio = in.readDouble();
+		listaUsuariosPagan = in.createStringArrayList();
+		id = in.readString();
+	}
+
 	public static final Creator<Gasto> CREATOR = new Creator<Gasto>() {
 		@Override
 		public Gasto createFromParcel(Parcel in) {
@@ -20,29 +48,6 @@ public class Gasto implements Parcelable {
 			return new Gasto[size];
 		}
 	};
-	ArrayList<String> listaUsuariosPagan;
-	private String titulo, descripcion, idUsuario;
-	private double precio;
-
-	public Gasto() {
-
-	}
-
-	public Gasto(String titulo, String descripcion, String idUsuario, double precio, ArrayList<String> listaUsuariosPagan) {
-		this.titulo = titulo;
-		this.descripcion = descripcion;
-		this.idUsuario = idUsuario;
-		this.precio = precio;
-		this.listaUsuariosPagan = listaUsuariosPagan;
-	}
-
-	protected Gasto(Parcel in) {
-		titulo = in.readString();
-		descripcion = in.readString();
-		idUsuario = in.readString();
-		precio = in.readDouble();
-		listaUsuariosPagan = in.createStringArrayList();
-	}
 
 	public String getTitulo() {
 		return titulo;
@@ -60,12 +65,12 @@ public class Gasto implements Parcelable {
 		this.descripcion = descripcion;
 	}
 
-	public String getUsuario() {
+	public String getIdUsuario() {
 		return idUsuario;
 	}
 
-	public void setUsuario(String usuario) {
-		this.idUsuario = usuario;
+	public void setIdUsuario(String idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public double getPrecio() {
@@ -84,6 +89,14 @@ public class Gasto implements Parcelable {
 		this.listaUsuariosPagan = listaUsuariosPagan;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
@@ -96,5 +109,6 @@ public class Gasto implements Parcelable {
 		dest.writeString(idUsuario);
 		dest.writeDouble(precio);
 		dest.writeStringList(listaUsuariosPagan);
+		dest.writeString(id);
 	}
 }
