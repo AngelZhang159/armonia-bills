@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,7 +81,6 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 	public class UsuarioVH extends RecyclerView.ViewHolder {
 
-		private static final String DB_PATH = "Usuarios";
 		ImageView iv;
 		TextView tv;
 		CheckBox btnCheck;
@@ -96,7 +96,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 		public void bindUsuario(Usuario usuario) {
 
-			db.getReference(DB_PATH).child(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+			db.getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 				@Override
 				public void onComplete(@NonNull Task<DataSnapshot> task) {
 					if (task.isSuccessful()) {

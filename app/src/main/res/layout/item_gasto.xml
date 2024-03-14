@@ -29,7 +29,6 @@
                 android:id="@+id/tvTituloGasto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Titulo"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -46,8 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:text="@string/tv_gasto_usuario"
-            android:textAlignment="textEnd"
-            android:textSize="10sp" />
+            android:textAlignment="textEnd"/>
 
     </LinearLayout>
 

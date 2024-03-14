@@ -61,7 +61,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 	private void consultaUsuarios() {
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
-		db.getReference("Grupos").child(grupo.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+		db.getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaUsuarios.clear();
@@ -69,7 +69,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 				listaGrupoUsuarios = snapshot.getValue(Grupo.class).getUsuarios();
 
 				for (UsuarioGrupo usuarioGrupo : listaGrupoUsuarios) {
-					db.getReference("Usuarios").child(usuarioGrupo.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+					db.getReference(MainActivity.DB_PATH_USUARIOS).child(usuarioGrupo.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 						@Override
 						public void onComplete(@NonNull Task<DataSnapshot> task) {
 							if (task.isSuccessful()) {
@@ -112,17 +112,17 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 			String precioString = etPrecio.getText().toString();
 
 			if (titulo.isEmpty() || precioString.isEmpty()) {
-				Toast.makeText(NuevoGastoActivity.this, "Debes rellenar los campos necesarios", Toast.LENGTH_SHORT).show();
+				Toast.makeText(NuevoGastoActivity.this, R.string.campos_obligatorios, Toast.LENGTH_SHORT).show();
 			} else {
 
 				ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
 				FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 				if (idsPagan.isEmpty()) {
-					Toast.makeText(this, "Debes seleccionar al menos 1 personas", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, R.string.una_persona, Toast.LENGTH_SHORT).show();
 				} else if (idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())) {
 
-					Toast.makeText(this, "No puedes pagarlo solo tu", Toast.LENGTH_SHORT).show();
+					Toast.makeText(this, R.string.pagar_solo, Toast.LENGTH_SHORT).show();
 
 				} else {
 					double precio = Double.parseDouble(etPrecio.getText().toString());
@@ -131,14 +131,14 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 //					Introducir datos en grupos/grupo/gastos
 
-					DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Grupos");
+					DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS);
 
 					String id = databaseReference.push().getKey();
 					databaseReference.child(grupo.getId()).child("gastos").child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
 						@Override
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
-								Toast.makeText(NuevoGastoActivity.this, "Gasto añadido con éxito", Toast.LENGTH_SHORT).show();
+								Toast.makeText(NuevoGastoActivity.this, R.string.gasto_correcto, Toast.LENGTH_SHORT).show();
 								finish();
 							}
 						}
@@ -163,7 +163,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 					double deuda = precio / idsPagan.size();
 					double teDeben = precio - deuda;
 
-					DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios");
+					DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("usuarios");
 
 					for (int i = 0; i < idsPagan.size(); i++) {
 

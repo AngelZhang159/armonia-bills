@@ -18,6 +18,9 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
+	public static final String DB_PATH_USUARIOS = "Usuarios";
+	public static final String DB_PATH_GRUPOS = "Grupos";
+
 	NavigationBarView navBarView;
 
 	@Override

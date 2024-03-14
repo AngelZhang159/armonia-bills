@@ -33,9 +33,6 @@ import java.util.ArrayList;
 
 public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-	private static final String DB_PATH_GRUPOS = "Grupos";
-	private static final String DB_PATH_USERS = "Usuarios";
-
 	EditText etNombre, etDescripcion, etEmail;
 	ListView listView;
 	Button btnAniadir, btnAceptar, btnCancelar;
@@ -97,11 +94,11 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 				if (listaUsuarioGrupo.size() == 1) {
 					Toast.makeText(this, getString(R.string.minimo_personas), Toast.LENGTH_SHORT).show();
 				} else {
-					String id = FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).push().getKey();
+					String id = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).push().getKey();
 
 					Grupo grupo = new Grupo(id, titulo, descripcion, listaUsuarioGrupo, 0, listaGastos);
 
-					FirebaseDatabase.getInstance().getReference(DB_PATH_GRUPOS).child(id).setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
+					FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(id).setValue(grupo).addOnCompleteListener(new OnCompleteListener<Void>() {
 						@Override
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
@@ -122,7 +119,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 		for (Usuario usuario : listaUsuario) {
 			for (String id : listaId) {
 				if (usuario.getId().equals(id)) {
-					FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+					FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 						@Override
 						public void onComplete(@NonNull Task<DataSnapshot> task) {
 							if (task.isSuccessful()) {
@@ -151,7 +148,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	}
 
 	private void aniadirGrupoUsuario(String id) {
-		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).child(id).child("grupos").setValue(listaIdGrupos)
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(id).child("grupos").setValue(listaIdGrupos)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
@@ -198,7 +195,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	}
 
 	private void aniadirUsuario() {
-		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).addListenerForSingleValueEvent(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				for (DataSnapshot data : snapshot.getChildren()) {

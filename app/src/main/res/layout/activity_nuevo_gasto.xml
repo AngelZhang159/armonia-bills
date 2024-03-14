@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="@string/hint_et_desc_gasto"
+            android:hint="@string/hint_et_descripcion"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -95,8 +95,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margen"
-        android:text="¿Quienes van a pagar?"
-        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto" />
+        android:text="@string/tv_participantes_gasto"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsuariosGasto"

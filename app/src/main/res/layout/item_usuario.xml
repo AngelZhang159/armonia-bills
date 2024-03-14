@@ -24,11 +24,10 @@
 
         <TextView
             android:id="@+id/tvUsuarioGasto"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingHorizontal="@dimen/margen"
-            android:text="usuario" />
+            android:layout_marginStart="@dimen/margen" />
 
     </LinearLayout>
 
@@ -38,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
         android:background="@color/white"
-        android:checked="true"
-        android:paddingEnd="@dimen/margen" />
+        android:checked="true"/>
 
 </com.google.android.material.card.MaterialCardView>
