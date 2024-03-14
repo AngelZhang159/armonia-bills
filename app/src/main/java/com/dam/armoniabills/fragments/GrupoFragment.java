@@ -1,14 +1,17 @@
 package com.dam.armoniabills.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,14 +20,18 @@ import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
+import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGastos;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -34,12 +41,15 @@ import java.util.ArrayList;
 public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 	private static final String ARG_PARAM1 = "param1";
-	TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal, tvNumPersonas;
+	TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal;
+	Button btnPagar;
 	MaterialButton btnPers;
 	RecyclerView rv;
 	AdapterGastos adapter;
 	ArrayList<Gasto> listaGastos;
 	ExtendedFloatingActionButton efab;
+	Usuario usuarioActual;
+	UsuarioGrupo usuarioGrupoActual;
 	private Grupo grupo;
 
 	public GrupoFragment() {
@@ -73,7 +83,9 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		rv = v.findViewById(R.id.rvGastosGrupoDetalle);
 		efab = v.findViewById(R.id.efabNuevoGasto);
 		btnPers = v.findViewById(R.id.btnPersGrupo);
+		btnPagar = v.findViewById(R.id.btnPagarDeudas);
 
+		btnPagar.setOnClickListener(this);
 		btnPers.setOnClickListener(this);
 
 		cargarGrupo();
@@ -128,7 +140,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 				grupo = snapshot.getValue(Grupo.class);
 
-
 				ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
 				UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
 
@@ -138,18 +149,34 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 					}
 				}
 
+
 				double pago;
-				if (usuarioGrupoActual.getDeben() == 0) {
-					pago = usuarioGrupoActual.getDebes();
-				} else {
-					pago = usuarioGrupoActual.getDeben();
+				String deudaStr = "";
+
+				if(isAdded()){
+					Context context = getContext();
+					if(context != null){
+
+						tvTitulo.setText(grupo.getTitulo());
+						tvDescripcion.setText(grupo.getDescripcion());
+						tvTotal.setText(String.format(getString(R.string.tv_grupo_total_pagar), grupo.getTotal()));
+						btnPers.setText(String.valueOf(listaUsuariosGrupo.size()));
+
+						if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
+
+							pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
+							deudaStr = String.format("Te deben: %.2f€", pago);
+							tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.verde));
+						} else {
+
+							pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
+							deudaStr = String.format("Debes: %.2f€", pago);
+							tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.rojo));
+						}
+						tvDeuda.setText(deudaStr);
+					}
 				}
 
-				tvTitulo.setText(grupo.getTitulo());
-				tvDescripcion.setText(grupo.getDescripcion());
-				tvTotal.setText(String.format(getString(R.string.tv_grupo_total_pagar), grupo.getTotal()));
-				btnPers.setText(String.valueOf(listaUsuariosGrupo.size()));
-				tvDeuda.setText(String.format(getString(R.string.tv_grupo_tu_pagas), pago));
 
 			}
 
@@ -167,10 +194,58 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 			Intent i = new Intent(getContext(), NuevoGastoActivity.class);
 			i.putExtra("grupo", grupo);
 			startActivity(i);
-//		} else if (v.getId() == R.id.btnPersGrupo) {
+		} else if (v.getId() == R.id.btnPagarDeudas){
+			pagarDeudas();
+
+//		else if (v.getId() == R.id.btnPersGrupo) {
 //			new MaterialAlertDialogBuilder(this)
 //					.setTitle("Personas")
 //					.setAdapter(new ArrayAdapter<Usuario>(this, ))
 		}
+	}
+
+	private void pagarDeudas() {
+
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+		FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+			@Override
+			public void onComplete(@NonNull Task<DataSnapshot> task) {
+				if(task.isSuccessful()){
+					if(task.getResult().exists()){
+
+						DataSnapshot dataSnapshot = task.getResult();
+						usuarioActual = dataSnapshot.getValue(Usuario.class);
+
+						ArrayList<UsuarioGrupo> listausuariosGrupo = grupo.getUsuarios();
+						for(UsuarioGrupo usuarioGrupo : listausuariosGrupo){
+							if(usuarioGrupo.getId().equals(user.getUid())){
+								usuarioGrupoActual = usuarioGrupo;
+							}
+						}
+
+						double balance = usuarioActual.getBalance();
+						if(balance > 0){
+							if(usuarioGrupoActual.getDebes() > 0){
+
+								//pillar la lista de gastos
+								//ver en que gastos estoy
+								//coger cuanto tengo que pagar de cada gasto : total / size()
+								//pagar esa deuda restando de tu balance la deuda y añadiendosela al balance del usuario que la ha pagado
+								//asi con toda la lista hasta que se acabe la lista
+
+
+
+
+
+							}
+						}
+
+					}
+				}
+
+			}
+		});
+
 	}
 }

@@ -60,6 +60,9 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 		}
 
 		public void bindIncidencia(Gasto gasto) {
+
+			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 			tvTitulo.setText(gasto.getTitulo());
 			FirebaseDatabase.getInstance().getReference("Usuarios").child(gasto.getUsuario()).get()
 					.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -70,21 +73,27 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 									DataSnapshot dataSnapshot = task.getResult();
 									Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-									tvUsuarioPago.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_pago), usuario.getNombre(), gasto.getPrecio()));
+									if(usuario.getId().equals(user.getUid())){
+										tvUsuarioPago.setText("Pagaste " + gasto.getPrecio());
+
+									} else {
+										tvUsuarioPago.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_pago), usuario.getNombre(), gasto.getPrecio()));
+
+									}
+
 								}
 							}
 						}
 					});
 
-			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 			double deuda = 0;
 			if (user.getUid().equals(gasto.getUsuario())) {
 				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
-				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Prestaste", deuda));
+				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Te deben", deuda));
 			} else {
 				deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
-				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Pediste", deuda));
+				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Debes", deuda));
 			}
 		}
 	}

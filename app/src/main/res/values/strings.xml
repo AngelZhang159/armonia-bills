@@ -53,7 +53,7 @@
     <string name="hint_et_cantidad">Cantidad</string>
     <string name="tv_bienvenido">Bienvenido</string>
     <string name="tv_retirar">¿Cuanto dinero quiere retirar?</string>
-    <string name="tv_total">Total: %1$s</string>
+    <string name="tv_total">Total: %1$.2f</string>
     <string name="campos_obligatorios">Debe introducir todos los campos obligatorios (*)</string>
     <string name="inicio_sesion">Sesión iniciada correctamente</string>
     <string name="credenciales_incorrectas">Credenciales incorrectas</string>

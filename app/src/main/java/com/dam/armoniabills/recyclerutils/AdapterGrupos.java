@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dam.armoniabills.R;
@@ -92,9 +93,22 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 			}
 
 			tvTitulo.setText(grupo.getTitulo());
-			tvPagoUsuario.setText(String.format(itemView.getContext().getString(R.string.euros), pago));
-			tvTotal.setText(String.format(itemView.getContext().getString(R.string.euros), grupo.getTotal()));
+			tvTotal.setText(String.format(itemView.getContext().getString(R.string.tv_total), grupo.getTotal()));
 			tvNumPersonas.setText(String.valueOf(grupo.getUsuarios().size()));
+
+			String pagoUsuarioStr = "";
+			if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
+
+				pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
+				pagoUsuarioStr = String.format("Te deben: %.2f€", pago);
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.verde));
+			} else {
+
+				pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
+				pagoUsuarioStr = String.format("Debes: %.2f€", pago);
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.rojo));
+			}
+			tvPagoUsuario.setText(pagoUsuarioStr);
 
 		}
 	}
