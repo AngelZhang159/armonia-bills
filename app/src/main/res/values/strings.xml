@@ -107,4 +107,7 @@
     <string name="una_persona">Debes seleccionar al menos 1 persona</string>
     <string name="pagar_solo">No puede pagarlo solo</string>
     <string name="gasto_correcto">Gasto añadido con éxito</string>
+    <string name="historial_retiro">Ha retirado %1$.2f€</string>
+    <string name="historial_ingreso">Ha ingresado %1$.2f</string>
+    <string name="historial_pagado">Ha pagado %1$.2f</string>
 </resources>
