@@ -129,7 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	private void configurarRV() {
 
-		adapter = new AdapterGrupos(getContext(), lista, this);
+		adapter = new AdapterGrupos(lista, this);
 		rv.setHasFixedSize(true);
 		rv.setLayoutManager(new LinearLayoutManager(getContext()));
 		rv.setAdapter(adapter);
