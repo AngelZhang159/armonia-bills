@@ -1,6 +1,10 @@
 package com.dam.armoniabills.fragments;
 
+
 import android.content.Context;
+
+import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,9 +27,14 @@ import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGastos;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import com.dam.armoniabills.recyclerutils.AdapterUsuariosGrupo;
+
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +60,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 	Usuario usuarioActual;
 	UsuarioGrupo usuarioGrupoActual;
 	private Grupo grupo;
+	ArrayList<Usuario> listaUsuario;
 
 	public GrupoFragment() {
 		// Required empty public constructor
@@ -87,6 +97,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 		btnPagar.setOnClickListener(this);
 		btnPers.setOnClickListener(this);
+		listaUsuario = new ArrayList<>();
 
 		cargarGrupo();
 
@@ -196,13 +207,11 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 			startActivity(i);
 		} else if (v.getId() == R.id.btnPagarDeudas){
 			pagarDeudas();
-
-//		else if (v.getId() == R.id.btnPersGrupo) {
-//			new MaterialAlertDialogBuilder(this)
-//					.setTitle("Personas")
-//					.setAdapter(new ArrayAdapter<Usuario>(this, ))
+		} else if (v.getId() == R.id.btnPersGrupo) {
+			conseguirListaUsuarios();
 		}
 	}
+	
 
 	private void pagarDeudas() {
 
@@ -246,6 +255,58 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 			}
 		});
+  }
+
+
+	private void conseguirListaUsuarios() {
+		listaUsuario = new ArrayList<>();
+
+		FirebaseDatabase db = FirebaseDatabase.getInstance();
+		ArrayList<UsuarioGrupo> listaGrupoUsuarios = grupo.getUsuarios();
+		db.getReference("Usuarios").addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot snapshot) {
+				for (DataSnapshot data : snapshot.getChildren()) {
+					Usuario usuario = data.getValue(Usuario.class);
+					for (int i = 0; i < listaGrupoUsuarios.size(); i++) {
+						String id = listaGrupoUsuarios.get(i).getId();
+						String usuarioId = usuario.getId();
+						if (id.equals(usuarioId)) {
+							listaUsuario.add(usuario);
+						}
+					}
+				}
+				mostrarDialogUsuarios();
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError error) {
+			}
+		});
+	}
+
+	public void mostrarDialogUsuarios() {
+		MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getContext());
+		View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_usuarios, null);
+
+		RecyclerView usuariosRecyclerView = dialogView.findViewById(R.id.rvUsuariosGrupo);
+
+		AdapterUsuariosGrupo adapter = new AdapterUsuariosGrupo(listaUsuario);
+
+		usuariosRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		usuariosRecyclerView.setAdapter(adapter);
+
+		materialAlertDialogBuilder
+				.setTitle("Usuarios")
+				.setView(dialogView)
+				.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+
+		materialAlertDialogBuilder.show();
 
 	}
 }

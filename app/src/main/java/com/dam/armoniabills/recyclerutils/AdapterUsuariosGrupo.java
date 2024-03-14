@@ -3,7 +3,6 @@ package com.dam.armoniabills.recyclerutils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,48 +19,26 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGasto.UsuarioVH> implements View.OnClickListener {
-
-	public static ArrayList<String> idsPagan;
+public class AdapterUsuariosGrupo extends RecyclerView.Adapter<AdapterUsuariosGrupo.UsuarioGrupoVH> {
 	ArrayList<Usuario> listaUsuario;
-	View.OnClickListener listener;
 
 
-	public AdapterUsuariosGasto(ArrayList<Usuario> listaUsuario, View.OnClickListener listener) {
+	public AdapterUsuariosGrupo(ArrayList<Usuario> listaUsuario) {
 		this.listaUsuario = listaUsuario;
-		this.listener = listener;
 	}
 
 	@NonNull
 	@Override
-	public UsuarioVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
+	public AdapterUsuariosGrupo.UsuarioGrupoVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_lista_usuario, parent, false);
 
-		idsPagan = new ArrayList<>();
-		for (Usuario usuario : listaUsuario) {
-			idsPagan.add(usuario.getId());
-		}
-
-		v.setOnClickListener(this);
-
-		return new AdapterUsuariosGasto.UsuarioVH(v);
+		return new AdapterUsuariosGrupo.UsuarioGrupoVH(v);
 	}
 
 	@Override
-	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
+	public void onBindViewHolder(@NonNull AdapterUsuariosGrupo.UsuarioGrupoVH holder, int position) {
 
 		holder.bindUsuario(listaUsuario.get(position));
-		holder.btnCheck.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String userId = listaUsuario.get(holder.getAdapterPosition()).getId();
-				if (idsPagan.contains(userId)) {
-					idsPagan.remove(userId);
-				} else {
-					idsPagan.add(userId);
-				}
-			}
-		});
 	}
 
 	@Override
@@ -69,29 +46,18 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 		return listaUsuario.size();
 	}
 
-	@Override
-	public void onClick(View v) {
-		listener.onClick(v);
-	}
-
-	public ArrayList<String> getIdsPagan() {
-		return idsPagan;
-	}
-
-	public class UsuarioVH extends RecyclerView.ViewHolder {
+	public class UsuarioGrupoVH extends RecyclerView.ViewHolder {
 
 		private static final String DB_PATH = "Usuarios";
 		ImageView iv;
 		TextView tv;
-		CheckBox btnCheck;
 		FirebaseDatabase db;
 
-		public UsuarioVH(@NonNull View itemView) {
+		public UsuarioGrupoVH(@NonNull View itemView) {
 			super(itemView);
 			db = FirebaseDatabase.getInstance();
-			iv = itemView.findViewById(R.id.ivFotoPerfilUsuarioGasto);
-			tv = itemView.findViewById(R.id.tvUsuarioGasto);
-			btnCheck = itemView.findViewById(R.id.btnChk);
+			iv = itemView.findViewById(R.id.ivUsuarioListaGrupo);
+			tv = itemView.findViewById(R.id.tvNomUsuarioListaGrupo);
 		}
 
 		public void bindUsuario(Usuario usuario) {
@@ -111,6 +77,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 					}
 				}
 			});
+
 		}
 
 	}
