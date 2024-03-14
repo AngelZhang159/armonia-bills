@@ -36,7 +36,6 @@ import java.util.ArrayList;
 public class MiPerfilActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private static final String STORAGE_PATH = "ProfileImages";
-	private static final String DB_PATH = "Usuarios";
 
 	ImageView ivPerfil;
 	EditText etNombre, etEmail, etTlf, etPassword, etRepPassword;
@@ -183,7 +182,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 
 		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, balance, grupos);
 
-		db.getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+		db.getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {
@@ -225,7 +224,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 	}
 
 	private void readUsuario() {
-		db.getReference(DB_PATH).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+		db.getReference(MainActivity.DB_PATH_USUARIOS).child(id).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
 				if (task.isSuccessful()) {

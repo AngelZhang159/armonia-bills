@@ -95,15 +95,13 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 
 			String pagoUsuarioStr = "";
 			if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
-
 				pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
-				pagoUsuarioStr = String.format("Te deben: %.2f€", pago);
-				tvPagoUsuario.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.verde));
+				pagoUsuarioStr = String.format(itemView.getContext().getString(R.string.te_deben_g), pago);
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.verde));
 			} else {
-
 				pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
-				pagoUsuarioStr = String.format("Debes: %.2f€", pago);
-				tvPagoUsuario.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rojo));
+				pagoUsuarioStr = String.format(itemView.getContext().getString(R.string.debes_g), pago);
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.rojo));
 			}
 			tvPagoUsuario.setText(pagoUsuarioStr);
 

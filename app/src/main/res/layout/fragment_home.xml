@@ -21,7 +21,7 @@
                 android:id="@+id/tvTituloBienvenida"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tus grupos"
+                android:text="@string/mis_grupos"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent" />
