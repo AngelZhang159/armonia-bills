@@ -88,7 +88,6 @@
                         android:id="@+id/tvDeudaGrupoDetalle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tv_grupo_tu_pagas"
                         android:textSize="20sp" />
 
                     <TextView
@@ -102,6 +101,12 @@
 
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnPagarDeudas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pagar deudas"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="@dimen/margen"
