@@ -81,4 +81,6 @@
     <string name="tv_grupo_tu_pagas">Deuda: %1$.2f€</string>
     <string name="tv_grupo_total_pagar">Total: %1$.2f€</string>
     <string name="tv_gasto_pago">%1$s pagó %2$.2f€</string>
+    <string name="btn_pagar">Pagar deudas</string>
+    <string name="btn_nuevo_gasto">Nuevo gasto</string>
 </resources>

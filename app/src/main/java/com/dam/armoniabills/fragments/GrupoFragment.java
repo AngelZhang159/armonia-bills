@@ -208,7 +208,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 
 	private void pagarDeudas() {
-
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 		FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -220,8 +219,8 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 						DataSnapshot dataSnapshot = task.getResult();
 						usuarioActual = dataSnapshot.getValue(Usuario.class);
 
-						ArrayList<UsuarioGrupo> listausuariosGrupo = grupo.getUsuarios();
-						for (UsuarioGrupo usuarioGrupo : listausuariosGrupo) {
+						ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+						for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
 							if (usuarioGrupo.getId().equals(user.getUid())) {
 								usuarioGrupoActual = usuarioGrupo;
 							}

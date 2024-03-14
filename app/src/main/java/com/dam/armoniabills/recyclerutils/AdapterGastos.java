@@ -1,5 +1,6 @@
 package com.dam.armoniabills.recyclerutils;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,25 +76,23 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 
 									if (usuario.getId().equals(user.getUid())) {
 										tvUsuarioPago.setText("Pagaste " + gasto.getPrecio());
-
 									} else {
 										tvUsuarioPago.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_pago), usuario.getNombre(), gasto.getPrecio()));
-
 									}
-
 								}
 							}
 						}
 					});
 
-
 			double deuda = 0;
 			if (user.getUid().equals(gasto.getUsuario())) {
 				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Te deben", deuda));
+				tvGastoUsuario.setTextColor(Color.GREEN);
 			} else {
 				deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Debes", deuda));
+				tvGastoUsuario.setTextColor(Color.RED);
 			}
 		}
 	}
