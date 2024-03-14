@@ -53,13 +53,16 @@ public class AdapterBalance extends RecyclerView.Adapter<AdapterBalance.BalanceV
 
         public void bindHistorial(HistorialBalance historial) {
             if (historial.getAccion().equals("retirado")) {
-                iv.setImageResource(R.drawable.baseline_arrow_circle_down_24);
+                iv.setImageResource(R.drawable.baseline_arrow_circle_up_24);
+                iv.setColorFilter(itemView.getContext().getColor(R.color.rojo));
                 tvInformacion.setText(String.format(itemView.getContext().getString(R.string.historial_retiro), historial.getCantidad()));
             } else if (historial.getAccion().equals("ingresado")) {
-                iv.setImageResource(R.drawable.baseline_arrow_circle_up_24);
+                iv.setImageResource(R.drawable.baseline_arrow_circle_down_24);
+                iv.setColorFilter(itemView.getContext().getColor(R.color.verde));
                 tvInformacion.setText(String.format(itemView.getContext().getString(R.string.historial_ingreso), historial.getCantidad()));
             } else if (historial.getAccion().equals("pagado")) {
                 iv.setImageResource(R.drawable.baseline_payments_24);
+                iv.setColorFilter(itemView.getContext().getColor(R.color.azul));
                 tvInformacion.setText(String.format(itemView.getContext().getString(R.string.historial_pagado), historial.getCantidad()));
             }
         }

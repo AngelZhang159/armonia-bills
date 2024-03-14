@@ -14,7 +14,7 @@
     <item
         android:id="@+id/botNavVarMisDeudas"
         android:enabled="true"
-        android:icon="@drawable/baseline_payments_24"
+        android:icon="@drawable/baseline_account_balance_wallet_24"
         android:title="@string/mi_balance" />
     <item
         android:id="@+id/botNavVarPerfil"

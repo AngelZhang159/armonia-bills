@@ -5,6 +5,9 @@ public class HistorialBalance {
     String id, nombre, accion;
     double cantidad;
 
+    public HistorialBalance() {
+    }
+
     public HistorialBalance(String id, String nombre, String accion, double cantidad) {
         this.id = id;
         this.nombre = nombre;

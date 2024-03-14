@@ -35,7 +35,6 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	private FirebaseDatabase mDatabase;
 
 	public DepositoFragment() {
-		// Required empty public constructor
 	}
 
 	@Override
@@ -62,6 +61,8 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 		return v;
 	}
+
+
 
 	private void rellenarDinero() {
 		if (currentUser != null) {
@@ -99,6 +100,8 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 					public void onComplete(@NonNull Task<Void> task) {
 						etCantidad.setText("");
 						Toast.makeText(getContext(), R.string.deposito_correcto, Toast.LENGTH_SHORT).show();
+
+
 					}
 				});
 
@@ -107,4 +110,5 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 			}
 		}
 	}
+
 }

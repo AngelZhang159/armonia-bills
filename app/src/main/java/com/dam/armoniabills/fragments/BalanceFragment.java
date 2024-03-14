@@ -11,10 +11,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
+import com.dam.armoniabills.model.HistorialBalance;
+import com.dam.armoniabills.recyclerutils.AdapterBalance;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,12 +27,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 	Button btnDepositar, btnRetirar;
 	TextView tvDinero;
 	private FirebaseAuth mAuth;
 	private FirebaseDatabase mDatabase;
+	RecyclerView rv;
+	ArrayList<HistorialBalance> listaHistorialBalance;
+	AdapterBalance adapterBalance;
 
 	public BalanceFragment() {
 	}
@@ -53,10 +63,34 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
+		listaHistorialBalance = new ArrayList<>();
+		rv = v.findViewById(R.id.rvBalance);
 
 		rellenarDinero();
+		rellenarHistorial();
 
 		return v;
+	}
+
+	private void rellenarHistorial() {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot snapshot) {
+				listaHistorialBalance.clear();
+				for (DataSnapshot data : snapshot.getChildren()) {
+					HistorialBalance historial = data.getValue(HistorialBalance.class);
+					listaHistorialBalance.add(historial);
+				}
+				Collections.reverse(listaHistorialBalance);
+				configurarRV();
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError error) {
+
+			}
+		});
 	}
 
 	private void rellenarDinero() {
@@ -95,4 +129,13 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 			startActivity(i);
 		}
 	}
+
+	public void configurarRV() {
+		adapterBalance = new AdapterBalance(listaHistorialBalance);
+
+		rv.setLayoutManager(new LinearLayoutManager(getContext()));
+		rv.setAdapter(adapterBalance);
+		rv.setHasFixedSize(true);
+	}
+
 }

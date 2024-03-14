@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/margen" >
 
             <TextView
                 android:id="@+id/tvTituloGrupo"
@@ -39,13 +40,17 @@
                     android:textSize="25sp" />
 
                 <ImageView
+                    android:layout_marginStart="@dimen/margen"
                     android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/baseline_person_24" />
+                    android:layout_height="35dp" />
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="#36C60E"
+                android:textColor="@color/verde"
                 android:textSize="20sp" />
 
             <TextView
@@ -68,7 +73,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/tv_total"
                 android:textSize="20sp" />
 
         </LinearLayout>
