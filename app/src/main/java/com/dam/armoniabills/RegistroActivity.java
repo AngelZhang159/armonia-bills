@@ -35,7 +35,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener {
 
 	private static final String STORAGE_PATH = "ProfileImages";
-	private static final String DB_PATH = "Usuarios";
 
 	CircleImageView imvPerfil;
 	EditText etNomApe, etEmail, etContra, etTlf;
@@ -139,7 +138,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 		Usuario usuario = new Usuario(id, nombre, email, tlf, imageUrl, 0, listaGrupos);
 
-		FirebaseDatabase.getInstance().getReference(DB_PATH).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).setValue(usuario).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {

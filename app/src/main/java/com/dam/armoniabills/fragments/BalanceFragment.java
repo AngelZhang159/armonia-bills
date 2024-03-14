@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,7 +63,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 		FirebaseUser currentUser = mAuth.getCurrentUser();
 		if (currentUser != null) {
 			String uid = currentUser.getUid();
-			DatabaseReference balanceRef = mDatabase.getReference("Usuarios").child(uid).child("balance");
+			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -74,11 +75,9 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 				@Override
 				public void onCancelled(@NonNull DatabaseError databaseError) {
-					Toast.makeText(getContext(), "Error balance dinero", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
 				}
 			});
-		} else {
-			Toast.makeText(getContext(), "Usuario null", Toast.LENGTH_SHORT).show();
 		}
 	}
 

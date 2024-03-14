@@ -5,61 +5,73 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.model.Historial;
+import com.dam.armoniabills.recyclerutils.AdapterHistorial;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HistorialFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+
 public class HistorialFragment extends Fragment {
 
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
-
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
+	ArrayList<Historial> listaHistorial;
+	RecyclerView rv;
+	AdapterHistorial adapterHistorial;
 
 	public HistorialFragment() {
-		// Required empty public constructor
-	}
-
-	/**
-	 * Use this factory method to create a new instance of
-	 * this fragment using the provided parameters.
-	 *
-	 * @param param1 Parameter 1.
-	 * @param param2 Parameter 2.
-	 * @return A new instance of fragment HistorialFragment.
-	 */
-	// TODO: Rename and change types and number of parameters
-	public static HistorialFragment newInstance(String param1, String param2) {
-		HistorialFragment fragment = new HistorialFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM1, param1);
-		args.putString(ARG_PARAM2, param2);
-		fragment.setArguments(args);
-		return fragment;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		if (getArguments() != null) {
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
-		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_historial, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View v = inflater.inflate(R.layout.fragment_historial, container, false);
+
+		rv = v.findViewById(R.id.rvHistorial);
+		listaHistorial = new ArrayList<>();
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+		db.getReference("Historial").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+			@Override
+			public void onComplete(@NonNull Task<DataSnapshot> task) {
+				if (task.isSuccessful()) {
+					if (task.getResult().exists()) {
+
+						DataSnapshot dataSnapshot = task.getResult();
+						for (DataSnapshot data : dataSnapshot.getChildren()) {
+							Historial historial = data.getValue(Historial.class);
+							listaHistorial.add(historial);
+						}
+
+						configurarRV();
+					}
+				}
+			}
+		});
+
+		return v;
+	}
+
+	private void configurarRV() {
+
+		adapterHistorial = new AdapterHistorial(listaHistorial);
+		rv.setHasFixedSize(true);
+		rv.setLayoutManager(new LinearLayoutManager(getContext()));
+		rv.setAdapter(adapterHistorial);
+
 	}
 }

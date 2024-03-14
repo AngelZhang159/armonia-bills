@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.NuevoGrupoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
@@ -79,7 +80,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-		db.getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+		db.getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
 				if (task.isSuccessful()) {
@@ -91,7 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 						listaGruposUsuario = usuario.getGrupos();
 
 						if (listaGruposUsuario != null) {
-							db.getReference("Grupos").addValueEventListener(new ValueEventListener() {
+							db.getReference(MainActivity.DB_PATH_GRUPOS).addValueEventListener(new ValueEventListener() {
 								@Override
 								public void onDataChange(@NonNull DataSnapshot snapshot) {
 									lista.clear();
@@ -129,7 +130,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	private void configurarRV() {
 
-		adapter = new AdapterGrupos(getContext(), lista, this);
+		adapter = new AdapterGrupos(lista, this);
 		rv.setHasFixedSize(true);
 		rv.setLayoutManager(new LinearLayoutManager(getContext()));
 		rv.setAdapter(adapter);

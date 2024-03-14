@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -65,7 +66,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	private void rellenarDinero() {
 		if (currentUser != null) {
 			String uid = currentUser.getUid();
-			DatabaseReference balanceRef = mDatabase.getReference("Usuarios").child(uid).child("balance");
+			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -77,11 +78,9 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 				@Override
 				public void onCancelled(@NonNull DatabaseError databaseError) {
-					Toast.makeText(getContext(), "Error balance dinero", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
 				}
 			});
-		} else {
-			Toast.makeText(getContext(), "Usuario null", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -93,18 +92,18 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 				Double cantidadFinal = cantidad + balanceCuenta;
 				String uid = currentUser.getUid();
-				DatabaseReference balanceRef = mDatabase.getReference("Usuarios").child(uid).child("balance");
+				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
 
 				balanceRef.setValue(cantidadFinal).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
 						etCantidad.setText("");
-						Toast.makeText(getContext(), "Dinero ingresado con éxito", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getContext(), R.string.deposito_correcto, Toast.LENGTH_SHORT).show();
 					}
 				});
 
 			} else {
-				Toast.makeText(getContext(), "Debes de introducir una cantidad", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), R.string.cantidad_obligatoria, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
