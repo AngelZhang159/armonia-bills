@@ -60,22 +60,41 @@ public class Grupo implements Parcelable {
 		return titulo;
 	}
 
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
 	public String getDescripcion() {
 		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public ArrayList<UsuarioGrupo> getUsuarios() {
 		return usuarios;
 	}
 
+	public void setUsuarios(ArrayList<UsuarioGrupo> usuarios) {
+		this.usuarios = usuarios;
+	}
+
 	public double getTotal() {
 		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
 	}
 
 	public ArrayList<Gasto> getListaGastos() {
 		return listaGastos;
 	}
 
+	public void setListaGastos(ArrayList<Gasto> listaGastos) {
+		this.listaGastos = listaGastos;
+	}
 
 	@Override
 	public int describeContents() {

@@ -198,7 +198,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	}
 
 	private void aniadirUsuario() {
-		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference(DB_PATH_USERS).addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				for (DataSnapshot data : snapshot.getChildren()) {

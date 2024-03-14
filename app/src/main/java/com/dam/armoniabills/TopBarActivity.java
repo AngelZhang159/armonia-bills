@@ -1,12 +1,17 @@
 package com.dam.armoniabills;
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.dam.armoniabills.fragments.ConfiguracionFragment;
 import com.dam.armoniabills.fragments.DepositoFragment;
 import com.dam.armoniabills.fragments.GrupoFragment;
 import com.dam.armoniabills.fragments.HomeFragment;
@@ -17,6 +22,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 public class TopBarActivity extends AppCompatActivity {
 
 	MaterialToolbar toolbar;
+	Grupo grupo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +33,19 @@ public class TopBarActivity extends AppCompatActivity {
 
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view) {
+			public void onClick(View v) {
 				finish();
+			}
+		});
+
+		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				if (item.getItemId() == R.id.item_config) {
+					cargarConfigGrupo();
+				}
+
+				return false;
 			}
 		});
 
@@ -49,9 +66,10 @@ public class TopBarActivity extends AppCompatActivity {
 		}
 	}
 
-	private void cargarGrupo() {
 
-		Grupo grupo = getIntent().getParcelableExtra(HomeFragment.GRUPO_SELECCIONADO);
+
+	private void cargarGrupo() {
+		grupo = getIntent().getParcelableExtra(HomeFragment.GRUPO_SELECCIONADO);
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -61,7 +79,7 @@ public class TopBarActivity extends AppCompatActivity {
 
 		transaction.commit();
 
-
+		toolbar.inflateMenu(R.menu.topbar_menu);
 	}
 
 	private void cargarRetirar() {
@@ -78,6 +96,16 @@ public class TopBarActivity extends AppCompatActivity {
 		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 		DepositoFragment depositoFragment = new DepositoFragment();
 		fragmentTransaction.replace(R.id.flTopBar, depositoFragment);
+
+		fragmentTransaction.commit();
+	}
+
+	private void cargarConfigGrupo() {
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		ConfiguracionFragment configuracionFragment = ConfiguracionFragment.newInstance(grupo);
+		fragmentTransaction.addToBackStack(null);
+		fragmentTransaction.replace(R.id.flTopBar, configuracionFragment);
 
 		fragmentTransaction.commit();
 	}

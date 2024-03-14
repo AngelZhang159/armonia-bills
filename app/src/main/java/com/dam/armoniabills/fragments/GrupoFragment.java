@@ -142,47 +142,45 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		db.getReference("Grupos").child(grupo.getId()).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
-
 				grupo = snapshot.getValue(Grupo.class);
 
-				ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
-				UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
+				if (grupo != null) {
+					ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+					UsuarioGrupo usuarioGrupoActual = new UsuarioGrupo();
 
-				for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
-					if (usuarioGrupo.getId().equals(user.getUid())) {
-						usuarioGrupoActual = usuarioGrupo;
-					}
-				}
-
-
-				double pago;
-				String deudaStr = "";
-
-				if (isAdded()) {
-					Context context = getContext();
-					if (context != null) {
-
-						tvTitulo.setText(grupo.getTitulo());
-						tvDescripcion.setText(grupo.getDescripcion());
-						tvTotal.setText(String.format(getString(R.string.tv_grupo_total_pagar), grupo.getTotal()));
-						btnPers.setText(String.valueOf(listaUsuariosGrupo.size()));
-
-						if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
-
-							pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
-							deudaStr = String.format("Te deben: %.2f€", pago);
-							tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.verde));
-						} else {
-
-							pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
-							deudaStr = String.format("Debes: %.2f€", pago);
-							tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.rojo));
+					for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
+						if (usuarioGrupo.getId().equals(user.getUid())) {
+							usuarioGrupoActual = usuarioGrupo;
 						}
-						tvDeuda.setText(deudaStr);
+					}
+
+					double pago;
+					String deudaStr = "";
+
+					if (isAdded()) {
+						Context context = getContext();
+						if (context != null) {
+
+							tvTitulo.setText(grupo.getTitulo());
+							tvDescripcion.setText(grupo.getDescripcion());
+							tvTotal.setText(String.format(getString(R.string.tv_grupo_total_pagar), grupo.getTotal()));
+							btnPers.setText(String.valueOf(listaUsuariosGrupo.size()));
+
+							if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
+
+								pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
+								deudaStr = String.format("Te deben: %.2f€", pago);
+								tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.verde));
+							} else {
+
+								pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
+								deudaStr = String.format("Debes: %.2f€", pago);
+								tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.rojo));
+							}
+							tvDeuda.setText(deudaStr);
+						}
 					}
 				}
-
-
 			}
 
 			@Override

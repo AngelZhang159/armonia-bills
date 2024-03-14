@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -111,29 +112,27 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 	}
 
 	private void mostrarDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.tit_dialog_perfil);
-		builder.setCancelable(false);
-		builder.setMessage(R.string.dialog_msg_perfil);
-		builder.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
+		MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+
+		builder.setTitle(R.string.tit_dialog_perfil)
+				.setCancelable(false).
+				setMessage(R.string.dialog_msg_perfil)
+				.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				FirebaseAuth.getInstance().signOut();
 				Intent i = new Intent(MiPerfilActivity.this, LoginActivity.class);
 				startActivity(i);
 			}
-		});
-		builder.setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
+		})
+				.setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
 		});
 
-		AlertDialog ad = builder.create();
-		ad.setCanceledOnTouchOutside(false);
-
-		ad.show();
+		builder.show();
 	}
 
 	private void updateData() {
