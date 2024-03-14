@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.NuevoGastoActivity;
+import com.dam.armoniabills.NuevoGrupoActivity;
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.dialogutils.AniadirDialogFragment;
+import com.dam.armoniabills.dialogutils.OnDatosDialogListener;
 import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
@@ -39,22 +44,29 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class GrupoFragment extends Fragment implements View.OnClickListener {
+public class GrupoFragment extends Fragment implements View.OnClickListener, OnDatosDialogListener {
 
 	private static final String ARG_PARAM1 = "param1";
+	
 	TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal;
 	Button btnPagar;
 	MaterialButton btnPers;
+	ExtendedFloatingActionButton efab;
 	RecyclerView rv;
 	AdapterGastos adapter;
+	
 	ArrayList<Gasto> listaGastos;
-	ExtendedFloatingActionButton efab;
 	Usuario usuarioActual;
+	Usuario usuarioAniadir;
 	UsuarioGrupo usuarioGrupoActual;
 	ArrayList<Usuario> listaUsuario;
+	ArrayList<UsuarioGrupo> listaUsuarioGrupo;
 	private Grupo grupo;
+	
 
 	public GrupoFragment() {
 		// Required empty public constructor
@@ -96,8 +108,8 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		cargarGrupo();
 
 		listaGastos = new ArrayList<>();
-
-
+		listaUsuarioGrupo = new ArrayList<>();
+		
 		rellenarListaGastos();
 
 		efab.setOnClickListener(this);
@@ -250,14 +262,14 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		listaUsuario = new ArrayList<>();
 
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
-		ArrayList<UsuarioGrupo> listaGrupoUsuarios = grupo.getUsuarios();
+		listaUsuarioGrupo = grupo.getUsuarios();
 		db.getReference("Usuarios").addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				for (DataSnapshot data : snapshot.getChildren()) {
 					Usuario usuario = data.getValue(Usuario.class);
-					for (int i = 0; i < listaGrupoUsuarios.size(); i++) {
-						String id = listaGrupoUsuarios.get(i).getId();
+					for (int i = 0; i < listaUsuarioGrupo.size(); i++) {
+						String id = listaUsuarioGrupo.get(i).getId();
 						String usuarioId = usuario.getId();
 						if (id.equals(usuarioId)) {
 							listaUsuario.add(usuario);
@@ -287,7 +299,14 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		materialAlertDialogBuilder
 				.setTitle("Usuarios")
 				.setView(dialogView)
-				.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+				.setPositiveButton("Añadir persona", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						AniadirDialogFragment adf = new AniadirDialogFragment();
+						adf.show(getActivity().getSupportFragmentManager(), "AniadirDialogFragment");
+					}
+				})
+				.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
@@ -296,5 +315,95 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 		materialAlertDialogBuilder.show();
 
+	}
+
+	@Override
+	public void onAceptarDatos(String email) {
+		ArrayList<Usuario> listaUsuarios = new ArrayList();
+		listaUsuarioGrupo = grupo.getUsuarios();
+		
+		FirebaseDatabase.getInstance().getReference("Usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot snapshot) {
+				for (DataSnapshot data : snapshot.getChildren()) {
+					Usuario usuario = data.getValue(Usuario.class);
+					listaUsuarios.add(usuario);
+				}
+
+				if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+					boolean usuarioEncontrado = false;
+
+					for (Usuario usuario : listaUsuarios) {
+						if (usuario.getEmail().equals(email)) {
+							usuarioEncontrado = true;
+							usuarioAniadir = usuario;
+							break;
+						}
+					}
+
+					if (usuarioEncontrado) {
+						for (UsuarioGrupo usuarioGrupo : listaUsuarioGrupo) {
+							if (usuarioGrupo.getId().equals(usuarioAniadir.getId())) {
+								usuarioEncontrado = true;
+								break;
+							} else {
+								usuarioEncontrado = false;
+							}
+						}
+
+						if (!usuarioEncontrado) {
+							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, usuarioAniadir.getId()));
+							aniadirUsuario();
+						} else {
+							Toast.makeText(getContext(), getString(R.string.usuario_grupo), Toast.LENGTH_SHORT).show();
+						}
+					} else {
+						Toast.makeText(getContext(), getString(R.string.user_no_registrado), Toast.LENGTH_SHORT).show();
+					}
+				} else {
+					Toast.makeText(getContext(), getString(R.string.email_incorrecto), Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError error) {
+				Toast.makeText(getContext(), error.toString(), Toast.LENGTH_SHORT).show();
+			}
+		});
+	}
+
+	private void aniadirUsuario() {
+		ArrayList<String> listaGrupos = new ArrayList<>();
+		listaGrupos = usuarioAniadir.getGrupos();
+
+		if (listaGrupos == null) {
+			listaGrupos = new ArrayList<>();
+			listaGrupos.add(grupo.getId());
+		} else {
+			listaGrupos.add(grupo.getId());
+		}
+
+		FirebaseDatabase.getInstance().getReference("Usuarios").child(usuarioAniadir.getId()).child("grupos").setValue(listaGrupos)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						updateGrupo();
+					}
+				});
+	}
+
+	private void updateGrupo() {
+		listaUsuario.add(usuarioAniadir);
+
+		Map<String, Object> mapa = new HashMap<>();
+		mapa.put("usuarios", listaUsuario);
+
+		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).updateChildren(mapa)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						Toast.makeText(getContext(), "Usuario añadido correctamente", Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 }
