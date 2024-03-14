@@ -224,7 +224,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 
 					if (usuarioEncontrado) {
 						for (UsuarioGrupo usuarioGrupo : listaUsuarioGrupo) {
-							if (usuarioGrupo.getId().equals(email)) {
+							if (usuarioGrupo.getId().equals(idUsuario)) {
 								usuarioEncontrado = true;
 								break;
 							} else {

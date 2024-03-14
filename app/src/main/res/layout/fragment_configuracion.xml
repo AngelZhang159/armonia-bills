@@ -46,12 +46,36 @@
             android:text="@string/btn_actualizar_datos"
             app:icon="@drawable/baseline_edit_24"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margen"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etAniadirPersonaConfig"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_et_participante"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btnAniadirConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margen"
+                android:text="@string/btn_aniadir_participante"/>
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnEliminar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Eliminar grupo"
             android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margen"
             app:icon="@drawable/baseline_delete_24"/>
     </LinearLayout>
 

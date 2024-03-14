@@ -88,11 +88,11 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 			if (user.getUid().equals(gasto.getUsuario())) {
 				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Te deben", deuda));
-				tvGastoUsuario.setTextColor(Color.GREEN);
+				tvGastoUsuario.setTextColor(itemView.getContext().getColor(R.color.verde));
 			} else {
 				deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Debes", deuda));
-				tvGastoUsuario.setTextColor(Color.RED);
+				tvGastoUsuario.setTextColor(itemView.getContext().getColor(R.color.rojo));
 			}
 		}
 	}
