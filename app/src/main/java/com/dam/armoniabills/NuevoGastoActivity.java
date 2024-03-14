@@ -127,13 +127,15 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 				} else {
 					double precio = Double.parseDouble(etPrecio.getText().toString());
 
-					Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio, idsPagan);
 
 //					Introducir datos en grupos/grupo/gastos
 
 					DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Grupos");
 
 					String id = databaseReference.push().getKey();
+
+					Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio, idsPagan, id);
+
 					databaseReference.child(grupo.getId()).child("gastos").child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
 						@Override
 						public void onComplete(@NonNull Task<Void> task) {

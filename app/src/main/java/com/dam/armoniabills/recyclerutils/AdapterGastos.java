@@ -65,7 +65,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 			tvTitulo.setText(gasto.getTitulo());
-			FirebaseDatabase.getInstance().getReference("Usuarios").child(gasto.getUsuario()).get()
+			FirebaseDatabase.getInstance().getReference("Usuarios").child(gasto.getIdUsuario()).get()
 					.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 						@Override
 						public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -85,7 +85,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 					});
 
 			double deuda = 0;
-			if (user.getUid().equals(gasto.getUsuario())) {
+			if (user.getUid().equals(gasto.getIdUsuario())) {
 				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), "Te deben", deuda));
 				tvGastoUsuario.setTextColor(Color.GREEN);
