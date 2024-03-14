@@ -1,6 +1,5 @@
 package com.dam.armoniabills.recyclerutils;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +19,11 @@ import java.util.ArrayList;
 
 public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> implements View.OnClickListener {
 
-	Context context;
 	ArrayList<Grupo> listaGrupos;
 	View.OnClickListener listener;
 
 
-	public AdapterGrupos(Context context, ArrayList<Grupo> listaGrupos, View.OnClickListener listener) {
-		this.context = context;
+	public AdapterGrupos(ArrayList<Grupo> listaGrupos, View.OnClickListener listener) {
 		this.listaGrupos = listaGrupos;
 		this.listener = listener;
 	}
@@ -35,7 +32,7 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 	@Override
 	public GrupoVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-		View v = LayoutInflater.from(context).inflate(R.layout.item_grupo, parent, false);
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grupo, parent, false);
 
 		v.setOnClickListener(this);
 
@@ -101,12 +98,12 @@ public class AdapterGrupos extends RecyclerView.Adapter<AdapterGrupos.GrupoVH> i
 
 				pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
 				pagoUsuarioStr = String.format("Te deben: %.2f€", pago);
-				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.verde));
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.verde));
 			} else {
 
 				pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
 				pagoUsuarioStr = String.format("Debes: %.2f€", pago);
-				tvPagoUsuario.setTextColor(ContextCompat.getColor(context, R.color.rojo));
+				tvPagoUsuario.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.rojo));
 			}
 			tvPagoUsuario.setText(pagoUsuarioStr);
 
