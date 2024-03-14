@@ -21,6 +21,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class HistorialFragment extends Fragment {
 
@@ -53,6 +55,7 @@ public class HistorialFragment extends Fragment {
                     Historial historial = data.getValue(Historial.class);
                     listaHistorial.add(historial);
                 }
+                Collections.reverse(listaHistorial);
                 configurarRV();
             }
 
