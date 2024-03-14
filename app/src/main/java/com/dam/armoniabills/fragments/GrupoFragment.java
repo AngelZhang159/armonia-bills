@@ -2,9 +2,7 @@ package com.dam.armoniabills.fragments;
 
 
 import android.content.Context;
-
 import android.content.DialogInterface;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,12 +25,9 @@ import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterGastos;
-
+import com.dam.armoniabills.recyclerutils.AdapterUsuariosGrupo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import com.dam.armoniabills.recyclerutils.AdapterUsuariosGrupo;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -40,7 +35,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -59,8 +53,8 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 	ExtendedFloatingActionButton efab;
 	Usuario usuarioActual;
 	UsuarioGrupo usuarioGrupoActual;
-	private Grupo grupo;
 	ArrayList<Usuario> listaUsuario;
+	private Grupo grupo;
 
 	public GrupoFragment() {
 		// Required empty public constructor
@@ -164,9 +158,9 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 				double pago;
 				String deudaStr = "";
 
-				if(isAdded()){
+				if (isAdded()) {
 					Context context = getContext();
-					if(context != null){
+					if (context != null) {
 
 						tvTitulo.setText(grupo.getTitulo());
 						tvDescripcion.setText(grupo.getDescripcion());
@@ -205,13 +199,13 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 			Intent i = new Intent(getContext(), NuevoGastoActivity.class);
 			i.putExtra("grupo", grupo);
 			startActivity(i);
-		} else if (v.getId() == R.id.btnPagarDeudas){
+		} else if (v.getId() == R.id.btnPagarDeudas) {
 			pagarDeudas();
 		} else if (v.getId() == R.id.btnPersGrupo) {
 			conseguirListaUsuarios();
 		}
 	}
-	
+
 
 	private void pagarDeudas() {
 
@@ -220,31 +214,28 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
-				if(task.isSuccessful()){
-					if(task.getResult().exists()){
+				if (task.isSuccessful()) {
+					if (task.getResult().exists()) {
 
 						DataSnapshot dataSnapshot = task.getResult();
 						usuarioActual = dataSnapshot.getValue(Usuario.class);
 
 						ArrayList<UsuarioGrupo> listausuariosGrupo = grupo.getUsuarios();
-						for(UsuarioGrupo usuarioGrupo : listausuariosGrupo){
-							if(usuarioGrupo.getId().equals(user.getUid())){
+						for (UsuarioGrupo usuarioGrupo : listausuariosGrupo) {
+							if (usuarioGrupo.getId().equals(user.getUid())) {
 								usuarioGrupoActual = usuarioGrupo;
 							}
 						}
 
 						double balance = usuarioActual.getBalance();
-						if(balance > 0){
-							if(usuarioGrupoActual.getDebes() > 0){
+						if (balance > 0) {
+							if (usuarioGrupoActual.getDebes() > 0) {
 
 								//pillar la lista de gastos
 								//ver en que gastos estoy
 								//coger cuanto tengo que pagar de cada gasto : total / size()
 								//pagar esa deuda restando de tu balance la deuda y añadiendosela al balance del usuario que la ha pagado
 								//asi con toda la lista hasta que se acabe la lista
-
-
-
 
 
 							}
@@ -255,7 +246,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 			}
 		});
-  }
+	}
 
 
 	private void conseguirListaUsuarios() {

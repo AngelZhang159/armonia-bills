@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingHorizontal="@dimen/margen"
-            android:textSize="20sp"
-            android:text="Usuario" />
+            android:text="Usuario"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

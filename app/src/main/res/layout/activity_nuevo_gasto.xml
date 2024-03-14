@@ -91,12 +91,12 @@
     </LinearLayout>
 
     <TextView
-        android:layout_marginTop="@dimen/margen"
         android:id="@+id/tvNuevoGastoAniadir"
-        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="¿Quienes van a pagar?"/>
+        android:layout_marginTop="@dimen/margen"
+        android:text="¿Quienes van a pagar?"
+        app:layout_constraintTop_toBottomOf="@id/llNuevoGasto" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsuariosGasto"

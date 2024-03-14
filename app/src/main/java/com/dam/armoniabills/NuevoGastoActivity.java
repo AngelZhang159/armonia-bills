@@ -181,7 +181,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										double deben;
 										for (int j = 0; j < idsPagan.size(); j++) {
 
-											if(usuarioGrupo.getId().equals(user.getUid())){
+											if (usuarioGrupo.getId().equals(user.getUid())) {
 												deben = usuarioGrupo.getDeben() + teDeben;
 												Map<String, Object> mapDeben = new HashMap<>();
 												mapDeben.put("deben", deben);

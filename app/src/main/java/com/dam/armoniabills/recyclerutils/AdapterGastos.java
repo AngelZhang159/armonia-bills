@@ -73,7 +73,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 									DataSnapshot dataSnapshot = task.getResult();
 									Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-									if(usuario.getId().equals(user.getUid())){
+									if (usuario.getId().equals(user.getUid())) {
 										tvUsuarioPago.setText("Pagaste " + gasto.getPrecio());
 
 									} else {

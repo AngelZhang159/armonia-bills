@@ -17,6 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 public class TopBarActivity extends AppCompatActivity {
 
 	MaterialToolbar toolbar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
