@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Grupo;
+import com.dam.armoniabills.model.Historial;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterUsuariosGasto;
@@ -28,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +42,8 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	ArrayList<Usuario> listaUsuarios;
 	ArrayList<UsuarioGrupo> listaGrupoUsuarios;
 	Grupo grupo;
+	FirebaseUser user;
+	Usuario usuarioActual;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +120,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 			} else {
 
 				ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
-				FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+				user = FirebaseAuth.getInstance().getCurrentUser();
 
 				if (idsPagan.isEmpty()) {
 					Toast.makeText(this, R.string.una_persona, Toast.LENGTH_SHORT).show();
@@ -141,6 +145,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
 								Toast.makeText(NuevoGastoActivity.this, R.string.gasto_correcto, Toast.LENGTH_SHORT).show();
+
+								añadirHistorial();
+
 								finish();
 							}
 						}
@@ -211,5 +218,35 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 			}
 		}
+	}
+
+	private void añadirHistorial() {
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get()
+				.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+					@Override
+					public void onComplete(@NonNull Task<DataSnapshot> task) {
+						if (task.isSuccessful()) {
+							if (task.getResult().exists()) {
+								usuarioActual = task.getResult().getValue(Usuario.class);
+
+								String id = FirebaseDatabase.getInstance().getReference("Historial").push().getKey();
+
+								Historial historial = new Historial(id, grupo.getTitulo(),
+										usuarioActual.getNombre() + " ha añadido un nuevo gasto",
+										usuarioActual.getImagenPerfil(), new Date().getTime());
+
+								for (Usuario usuario : listaUsuarios) {
+									FirebaseDatabase.getInstance().getReference("Historial").child(usuario.getId()).child(id)
+											.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
+												@Override
+												public void onComplete(@NonNull Task<Void> task) {
+
+												}
+											});
+								}
+							}
+						}
+					}
+				});
 	}
 }
