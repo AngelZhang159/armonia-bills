@@ -14,6 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.model.Historial;
+import com.dam.armoniabills.model.HistorialBalance;
+import com.dam.armoniabills.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Date;
 
 public class DepositoFragment extends Fragment implements View.OnClickListener {
 
@@ -98,10 +103,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 				balanceRef.setValue(cantidadFinal).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
-						etCantidad.setText("");
-						Toast.makeText(getContext(), R.string.deposito_correcto, Toast.LENGTH_SHORT).show();
-
-
+						aniadirHistorial();
 					}
 				});
 
@@ -109,6 +111,23 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 				Toast.makeText(getContext(), R.string.cantidad_obligatoria, Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+
+	private void aniadirHistorial() {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+		String id = FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).push().getKey();
+
+		HistorialBalance historialBalance = new HistorialBalance(id, "ingresado", Double.parseDouble(etCantidad.getText().toString()));
+
+		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).child(id).setValue(historialBalance)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						etCantidad.setText("");
+						Toast.makeText(getContext(), R.string.deposito_correcto, Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 
 }

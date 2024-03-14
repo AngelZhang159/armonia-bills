@@ -2,15 +2,14 @@ package com.dam.armoniabills.model;
 
 public class HistorialBalance {
 
-    String id, nombre, accion;
+    String id, accion;
     double cantidad;
 
     public HistorialBalance() {
     }
 
-    public HistorialBalance(String id, String nombre, String accion, double cantidad) {
+    public HistorialBalance(String id, String accion, double cantidad) {
         this.id = id;
-        this.nombre = nombre;
         this.accion = accion;
         this.cantidad = cantidad;
     }
@@ -21,14 +20,6 @@ public class HistorialBalance {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getAccion() {

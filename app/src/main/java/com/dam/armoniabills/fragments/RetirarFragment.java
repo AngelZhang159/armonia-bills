@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
+import com.dam.armoniabills.model.HistorialBalance;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -117,12 +118,28 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 			balanceRef.setValue(nuevoBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
 				@Override
 				public void onComplete(@NonNull Task<Void> task) {
-					etCantidadRetirar.setText("");
-					Toast.makeText(getContext(), R.string.retiro_correcto, Toast.LENGTH_SHORT).show();
+					aniadirHistorial();
 				}
 			});
 
 		}
 
+	}
+
+	private void aniadirHistorial() {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+		String id = FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).push().getKey();
+
+		HistorialBalance historialBalance = new HistorialBalance(id, "retirado", Double.parseDouble(etCantidadRetirar.getText().toString()));
+
+		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).child(id).setValue(historialBalance)
+				.addOnCompleteListener(new OnCompleteListener<Void>() {
+					@Override
+					public void onComplete(@NonNull Task<Void> task) {
+						etCantidadRetirar.setText("");
+						Toast.makeText(getContext(), R.string.retiro_correcto, Toast.LENGTH_SHORT).show();
+					}
+				});
 	}
 }
