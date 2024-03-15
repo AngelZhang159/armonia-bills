@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
 	public static final String GRUPO_SELECCIONADO = "Grupo_seleccionado";
-	public static final String PATH_GRUPO = "Grupos";
+
 	ExtendedFloatingActionButton efab;
 	RecyclerView rv;
 	AdapterGrupos adapter;

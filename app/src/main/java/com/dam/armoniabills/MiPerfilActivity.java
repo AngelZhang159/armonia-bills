@@ -113,7 +113,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 	private void mostrarDialog() {
 		MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
 
-		builder.setTitle(R.string.tit_dialog_perfil)
+		builder.setTitle(R.string.btn_cerrar_sesion)
 				.setCancelable(false).
 				setMessage(R.string.dialog_msg_perfil)
 				.setPositiveButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
