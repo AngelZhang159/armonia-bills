@@ -40,6 +40,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	RecyclerView rv;
 	ArrayList<Usuario> listaUsuarios;
 	ArrayList<UsuarioGrupo> listaGrupoUsuarios;
+	ArrayList<Gasto> listaGastos;
 	Grupo grupo;
 	FirebaseUser user;
 	Usuario usuarioActual;
@@ -58,6 +59,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 		btnAniadir.setOnClickListener(this);
 
+		listaGastos = getIntent().getParcelableArrayListExtra("listaGastos");
 		grupo = getIntent().getParcelableExtra("grupo");
 		consultaUsuarios();
 	}
@@ -310,8 +312,6 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 	private void eliminarDeListaGastos(String id) {
 
-
-		ArrayList<Gasto> listaGastos = grupo.getListaGastos();
 
 		for(Gasto gasto : listaGastos){
 
