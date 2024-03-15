@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".fragments.RetirarFragment">
 
     <LinearLayout
@@ -17,7 +16,6 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/margen"
             android:text="@string/tv_retirar"
-            android:textColor="@color/black"
             android:textSize="40sp"
             android:textStyle="bold" />
 
@@ -26,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
-            app:cardBackgroundColor="@color/white"
             app:cardElevation="@dimen/margen">
 
             <LinearLayout
@@ -64,7 +61,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/euro"
-                        android:textColor="@color/black"
                         android:textSize="50sp"
                         android:textStyle="bold" />
 

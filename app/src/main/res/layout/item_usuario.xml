@@ -5,14 +5,12 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margen"
     android:layout_marginTop="@dimen/margen"
-    app:cardBackgroundColor="@color/white"
     app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
-        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -35,7 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:background="@color/white"
         android:checked="true"/>
 
 </com.google.android.material.card.MaterialCardView>

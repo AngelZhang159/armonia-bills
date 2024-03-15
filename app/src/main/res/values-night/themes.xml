@@ -1,11 +1,56 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ArmoniaBills" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/color_principal_dark</item>
-        <item name="colorSecondary">@color/color_secundario_dark</item>
 
-        <item name="android:windowBackground">@color/dark_mode_background</item>
+    <!-- Estilo del tema Night -->
+
+    <style name="Base.Theme.ArmoniaBills" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/md_theme_primary_dark</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary_dark</item>
+        <item name="colorPrimaryContainer">@color/md_theme_primaryContainer_dark</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer_dark</item>
+        <item name="colorSecondary">@color/md_theme_secondary_dark</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary_dark</item>
+        <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer_dark</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer_dark</item>
+        <item name="colorTertiary">@color/md_theme_tertiary_dark</item>
+        <item name="colorOnTertiary">@color/md_theme_onTertiary_dark</item>
+        <item name="colorTertiaryContainer">@color/md_theme_tertiaryContainer_dark</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_onTertiaryContainer_dark</item>
+        <item name="colorError">@color/md_theme_error_dark</item>
+        <item name="colorOnError">@color/md_theme_onError_dark</item>
+        <item name="colorErrorContainer">@color/md_theme_errorContainer_dark</item>
+        <item name="colorOnErrorContainer">@color/md_theme_onErrorContainer_dark</item>
+        <item name="android:colorBackground">@color/md_theme_background_dark</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground_dark</item>
+        <item name="colorSurface">@color/md_theme_surface_dark</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface_dark</item>
+        <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant_dark</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant_dark</item>
+        <item name="colorOutline">@color/md_theme_outline_dark</item>
+        <item name="colorOutlineVariant">@color/md_theme_outlineVariant_dark</item>
+        <item name="colorSurfaceInverse">@color/md_theme_inverseSurface_dark</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_inverseOnSurface_dark</item>
+        <item name="colorPrimaryInverse">@color/md_theme_inversePrimary_dark</item>
+        <item name="colorPrimaryFixed">@color/md_theme_primaryFixed_dark</item>
+        <item name="colorOnPrimaryFixed">@color/md_theme_onPrimaryFixed_dark</item>
+        <item name="colorPrimaryFixedDim">@color/md_theme_primaryFixedDim_dark</item>
+        <item name="colorOnPrimaryFixedVariant">@color/md_theme_onPrimaryFixedVariant_dark</item>
+        <item name="colorSecondaryFixed">@color/md_theme_secondaryFixed_dark</item>
+        <item name="colorOnSecondaryFixed">@color/md_theme_onSecondaryFixed_dark</item>
+        <item name="colorSecondaryFixedDim">@color/md_theme_secondaryFixedDim_dark</item>
+        <item name="colorOnSecondaryFixedVariant">@color/md_theme_onSecondaryFixedVariant_dark</item>
+        <item name="colorTertiaryFixed">@color/md_theme_tertiaryFixed_dark</item>
+        <item name="colorOnTertiaryFixed">@color/md_theme_onTertiaryFixed_dark</item>
+        <item name="colorTertiaryFixedDim">@color/md_theme_tertiaryFixedDim_dark</item>
+        <item name="colorOnTertiaryFixedVariant">@color/md_theme_onTertiaryFixedVariant_dark</item>
+        <item name="colorSurfaceDim">@color/md_theme_surfaceDim_dark</item>
+        <item name="colorSurfaceBright">@color/md_theme_surfaceBright_dark</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_surfaceContainerLowest_dark</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_surfaceContainerLow_dark</item>
+        <item name="colorSurfaceContainer">@color/md_theme_surfaceContainer_dark</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_surfaceContainerHigh_dark</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_surfaceContainerHighest_dark</item>
+
     </style>
 
 </resources>

@@ -18,7 +18,6 @@ import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
 import com.dam.armoniabills.recyclerutils.AdapterUsuariosGasto;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -147,7 +146,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 							if (task.isSuccessful()) {
 								Toast.makeText(NuevoGastoActivity.this, R.string.gasto_correcto, Toast.LENGTH_SHORT).show();
 
-								añadirHistorial();
+								aniadirHistorial();
 
 								finish();
 							}
@@ -337,7 +336,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 	}
 
-	private void añadirHistorial() {
+	private void aniadirHistorial() {
 		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get()
 				.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 					@Override

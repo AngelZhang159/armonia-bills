@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".fragments.BalanceFragment">
 
     <LinearLayout
@@ -46,7 +45,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    app:cardBackgroundColor="@color/white"
                     app:cardElevation="@dimen/margen">
 
                     <LinearLayout
@@ -62,7 +60,6 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/margen"
                             android:textAlignment="textEnd"
-                            android:textColor="@color/black"
                             android:textSize="50sp"
                             android:textStyle="bold" />
 
@@ -115,7 +112,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/margen" />
-
 
             </LinearLayout>
         </LinearLayout>

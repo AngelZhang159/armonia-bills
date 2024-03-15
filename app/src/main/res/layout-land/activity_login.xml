@@ -4,13 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_login"
     tools:context=".LoginActivity">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradiente" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,7 +81,6 @@
                     android:id="@+id/btnIniciarSesionLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/color_secundario"
                     android:paddingHorizontal="60dp"
                     android:paddingVertical="@dimen/margen"
                     android:layout_marginBottom="@dimen/margen"
@@ -98,7 +91,6 @@
                     android:id="@+id/btnRegistroLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/color_secundario"
                     android:text="@string/btn_reg"
                     android:textSize="14sp" />
 
@@ -106,8 +98,6 @@
 
         </LinearLayout>
 
-
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

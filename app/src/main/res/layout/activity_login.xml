@@ -4,13 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_login"
     tools:context=".LoginActivity">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/gradiente" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -69,7 +63,6 @@
             android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/color_secundario"
             android:text="@string/btn_login"
             android:textSize="25sp" />
 
@@ -79,7 +72,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="80dp"
-            android:backgroundTint="@color/color_secundario"
             android:text="@string/btn_reg"
             android:textSize="14sp" />
     </LinearLayout>
