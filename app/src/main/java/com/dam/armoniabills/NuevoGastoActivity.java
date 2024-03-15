@@ -191,16 +191,19 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										for (int j = 0; j < idsPagan.size(); j++) {
 
 											if (usuarioGrupo.getId().equals(user.getUid())) {
+
 												deben = usuarioGrupo.getDeben() + teDeben;
 												Map<String, Object> mapDeben = new HashMap<>();
 												mapDeben.put("deben", deben);
 												reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 											} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
+
 												debes = usuarioGrupo.getDebes() + deuda;
 												Map<String, Object> mapDebes = new HashMap<>();
 												mapDebes.put("debes", debes);
 												reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
 											}
 										}
 									}

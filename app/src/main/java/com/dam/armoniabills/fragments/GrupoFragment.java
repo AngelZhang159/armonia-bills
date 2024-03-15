@@ -231,7 +231,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 						}
 
 						//TODO dejar solo si el balance es mayor que la deuda?
-						//TODO alomejor hay que actualizar el balance mas a abajo
+						//TODO alomejor hay que actualizar el balance mas a abajo  ------- ya ta hecho
 						double balance = usuarioActual.getBalance();
 						if (balance > 0) {
 							if (usuarioGrupoActual.getDebes() > 0) {
@@ -248,75 +248,108 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 									}
 								}
 
+
 								for (int i = 0; i < listaGastosUsuario.size(); i++) {
+
+									final int index = i;
+
 									String idUsuarioAPagar = listaGastosUsuario.get(i).getIdUsuario();
 
 									double deudaPorUsuario = (listaGastosUsuario.get(i).getPrecio() / listaGastosUsuario.get(i).getListaUsuariosPagan().size());
 									double balanceMenosDeuda = balance - deudaPorUsuario;
+									balance = balanceMenosDeuda;
 									Map<String, Object> mapBalance = new HashMap<>();
 									mapBalance.put("balance", balanceMenosDeuda);
 
 									// Actualizar tu balance
-									FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).updateChildren(mapBalance);
-
-									//Actualizar el balance del que ha pagado
-									FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+									FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).updateChildren(mapBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
 										@Override
-										public void onComplete(@NonNull Task<DataSnapshot> task) {
+										public void onComplete(@NonNull Task<Void> task) {
 											if(task.isSuccessful()){
-												if(task.getResult().exists()){
-													DataSnapshot snapshot = task.getResult();
-													Usuario usuarioAPagar = snapshot.getValue(Usuario.class);
-													double balanceUsuarioAPagar = usuarioAPagar.getBalance();
 
-													mapBalance.clear();
-													mapBalance.put("balance", (balanceUsuarioAPagar + deudaPorUsuario));
-													FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).updateChildren(mapBalance);
+												//Actualizar el balance del que ha pagado
+												FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+													@Override
+													public void onComplete(@NonNull Task<DataSnapshot> task) {
+														if(task.isSuccessful()){
+															if(task.getResult().exists()){
+																DataSnapshot snapshot = task.getResult();
+																Usuario usuarioAPagar = snapshot.getValue(Usuario.class);
+																double balanceUsuarioAPagar = usuarioAPagar.getBalance();
+
+																mapBalance.clear();
+																mapBalance.put("balance", (balanceUsuarioAPagar + deudaPorUsuario));
+																FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).updateChildren(mapBalance);
+															}
+														}
+													}
+												});
+
+												//cambiar el id del usuario del gasto a 0 cuando lo pague para que cuando obtenga la lista de gastos no lo tenga qeu pagar otra vez
+
+												int posicionUsuarioListaUsuariosPagan = 0;
+												for (int j = 0; j <listaGastosUsuario.get(index).getListaUsuariosPagan().size(); j++) {
+													if(listaGastosUsuario.get(index).getListaUsuariosPagan().get(j).equals(user.getUid())){
+														posicionUsuarioListaUsuariosPagan = j;
+													}
+
 												}
+
+												mapBalance.clear();
+												mapBalance.put(String.valueOf(posicionUsuarioListaUsuariosPagan), String.valueOf(posicionUsuarioListaUsuariosPagan));
+
+												FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(String.valueOf(listaGastosUsuario.get(index).getId())).child("listaUsuariosPagan").updateChildren(mapBalance);
+
+
+												// Actualizar debes y deben
+
+
+												for (int k = 0; k < listaUsuariosGrupo.size(); k++) {
+
+													if(listaUsuariosGrupo.get(k).getId().equals(user.getUid())){
+
+														mapBalance.clear();
+														double debesAcutalizado = listaUsuariosGrupo.get(k).getDebes() - deudaPorUsuario;
+														mapBalance.put("debes", debesAcutalizado);
+														System.out.println("debes actualozado: " + debesAcutalizado);
+														FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
+														listaUsuariosGrupo.get(k).setDebes(debesAcutalizado);
+
+													} else if(listaUsuariosGrupo.get(k).getId().equals(idUsuarioAPagar)){
+
+														double debenAcutalizado = listaUsuariosGrupo.get(k).getDeben() - deudaPorUsuario;
+
+														// Si debes y deben son iguales se cambian a 0 los dos
+														if(listaUsuariosGrupo.get(k).getDebes() == debenAcutalizado){
+
+															mapBalance.clear();
+															mapBalance.put("deben", 0);
+															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
+
+															mapBalance.clear();
+															mapBalance.put("debes", 0);
+															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
+
+														} else {
+															mapBalance.clear();
+															mapBalance.put("deben", debenAcutalizado);
+															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
+														}
+
+
+													}
+
+												}
+
 											}
+
+
 										}
 									});
 
-									//cambiar el id del usuario del gasto a 0 cuando lo pague para que cuando obtenga la lista de gastos no lo tenga qeu pagar otra vez
 
-									int posicionUsuarioListaUsuariosPagan = 0;
-									for (int j = 0; j <listaGastosUsuario.get(i).getListaUsuariosPagan().size(); j++) {
-										if(listaGastosUsuario.get(i).getListaUsuariosPagan().get(j).equals(user.getUid())){
-											posicionUsuarioListaUsuariosPagan = j;
-										}
-
-									}
-									mapBalance.clear();
-									mapBalance.put(String.valueOf(posicionUsuarioListaUsuariosPagan), String.valueOf(posicionUsuarioListaUsuariosPagan));
-
-									FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(String.valueOf(listaGastosUsuario.get(i).getId())).child("listaUsuariosPagan").updateChildren(mapBalance);
-
-
-									// Actualizar debes y deben
-
-									for (int k = 0; k < listaUsuariosGrupo.size(); k++) {
-
-										if(listaUsuariosGrupo.get(k).getId().equals(user.getUid())){
-
-											mapBalance.clear();
-											double debesAcutalizado = listaUsuariosGrupo.get(k).getDebes() - deudaPorUsuario;
-											mapBalance.put("debes", debesAcutalizado);
-											FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
-
-										} else if(listaUsuariosGrupo.get(k).getId().equals(idUsuarioAPagar)){
-
-											mapBalance.clear();
-											double debenAcutalizado = listaUsuariosGrupo.get(k).getDeben() - deudaPorUsuario;
-											mapBalance.put("deben", debenAcutalizado);
-											FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
-
-										}
-
-									}
 
 								}
-
-
 
 
 
@@ -363,27 +396,34 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 	}
 
 	public void mostrarDialogUsuarios() {
-		MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getContext());
-		View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_usuarios, null);
 
-		RecyclerView usuariosRecyclerView = dialogView.findViewById(R.id.rvUsuariosGrupo);
+		if (isAdded()) {
+			Context context = getContext();
+			if (context != null) {
+				MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getContext());
+				View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_usuarios, null);
 
-		AdapterUsuariosGrupo adapter = new AdapterUsuariosGrupo(listaUsuario);
+				RecyclerView usuariosRecyclerView = dialogView.findViewById(R.id.rvUsuariosGrupo);
 
-		usuariosRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		usuariosRecyclerView.setAdapter(adapter);
+				AdapterUsuariosGrupo adapter = new AdapterUsuariosGrupo(listaUsuario);
 
-		materialAlertDialogBuilder
-				.setTitle("Usuarios")
-				.setView(dialogView)
-				.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+				usuariosRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+				usuariosRecyclerView.setAdapter(adapter);
 
-		materialAlertDialogBuilder.show();
+				materialAlertDialogBuilder
+						.setTitle("Usuarios")
+						.setView(dialogView)
+						.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+							}
+						});
+
+				materialAlertDialogBuilder.show();
+			}
+		}
+
 
 	}
 }
