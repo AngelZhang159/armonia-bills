@@ -55,6 +55,22 @@ public class UsuarioGrupo implements Parcelable {
 		return id;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setDeben(double deben) {
+		this.deben = deben;
+	}
+
+	public void setDebes(double debes) {
+		this.debes = debes;
+	}
+
+	public void setPagado(double pagado) {
+		this.pagado = pagado;
+	}
+
 	@Override
 	public int describeContents() {
 		return 0;
