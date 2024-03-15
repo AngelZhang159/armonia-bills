@@ -1,5 +1,6 @@
 package com.dam.armoniabills.recyclerutils;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +124,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 				public void onComplete(@NonNull Task<DataSnapshot> task) {
 					if (task.isSuccessful()) {
 						if (task.getResult().exists()) {
+
 
 							String nombre = String.valueOf(usuario.getNombre());
 							String imageUrl = (String.valueOf(usuario.getImagenPerfil()));

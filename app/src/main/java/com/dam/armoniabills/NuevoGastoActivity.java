@@ -40,7 +40,6 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	RecyclerView rv;
 	ArrayList<Usuario> listaUsuarios;
 	ArrayList<UsuarioGrupo> listaGrupoUsuarios;
-	ArrayList<Gasto> listaGastos;
 	Grupo grupo;
 	FirebaseUser user;
 	Usuario usuarioActual;
@@ -59,7 +58,6 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 		btnAniadir.setOnClickListener(this);
 
-		listaGastos = getIntent().getParcelableArrayListExtra("listaGastos");
 		grupo = getIntent().getParcelableExtra("grupo");
 		consultaUsuarios();
 	}
@@ -213,6 +211,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 													mapDeben.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
+													eliminarDeListaGastos(user.getUid());
+
+
 												} else if(debenActualizado > usuarioGrupo.getDebes()){
 
 													//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
@@ -260,6 +261,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 													mapDebes.clear();
 													mapDebes.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+													eliminarDeListaGastos(idsPagan.get(j));
+
 
 												} else if(debesActualizado > usuarioGrupo.getDeben()){
 
@@ -313,25 +317,43 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	private void eliminarDeListaGastos(String id) {
 
 
-		for(Gasto gasto : listaGastos){
+		ArrayList<Gasto> listaGastos = new ArrayList<>();
+		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot snapshot) {
+				listaGastos.clear(); // Clear the list before adding new data
+				for (DataSnapshot data : snapshot.getChildren()) {
+					Gasto gasto = data.getValue(Gasto.class);
+					listaGastos.add(gasto);
+				}
 
-			ArrayList<String> listaIds = gasto.getListaUsuariosPagan();
+				for(Gasto gasto : listaGastos){
 
-			for (int i = 0; i < listaIds.size(); i++) {
+					ArrayList<String> listaIds = gasto.getListaUsuariosPagan();
 
-				if(listaIds.get(i).equals(id)){
+					for (int i = 0; i < listaIds.size(); i++) {
 
-					Map<String, Object> mapId = new HashMap<>();
+						if(listaIds.get(i).equals(id)){
 
-					mapId.put(String.valueOf(i), String.valueOf(i));
+							Map<String, Object> mapId = new HashMap<>();
 
-					FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(gasto.getId()).child("listaUsuariosPagan").updateChildren(mapId);
+							mapId.put(String.valueOf(i), String.valueOf(i));
+
+							FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(gasto.getId()).child("listaUsuariosPagan").updateChildren(mapId);
+
+						}
+
+					}
 
 				}
 
 			}
 
-		}
+			@Override
+			public void onCancelled(@NonNull DatabaseError error) {
+			}
+		});
+
 
 
 	}

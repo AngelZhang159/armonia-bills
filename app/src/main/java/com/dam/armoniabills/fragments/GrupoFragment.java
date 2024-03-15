@@ -202,7 +202,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 		if (v.getId() == R.id.efabNuevoGasto) {
 			Intent i = new Intent(getContext(), NuevoGastoActivity.class);
 			i.putExtra("grupo", grupo);
-			i.putExtra("listaGastos", listaGastos);
 			startActivity(i);
 		} else if (v.getId() == R.id.btnPagarDeudas) {
 			pagarDeudas();
