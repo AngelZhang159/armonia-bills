@@ -28,7 +28,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Editar grupo"
+                    android:text="@string/editar_grupo"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Añadir persona"
+                    android:text="@string/aniadir_persona"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margen"
-                    android:hint="Añade un email"
+                    android:hint="@string/hint_et_participante"
                     app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText

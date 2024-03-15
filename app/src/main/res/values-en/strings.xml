@@ -109,4 +109,7 @@
     <string name="historial_gasto">%1$s has added a new expense</string>
     <string name="yo">Me (%1$s)</string>
     <string name="nuevo_grupo">New group</string>
+    <string name="cambiar_datos">Change data</string>
+    <string name="editar_grupo">Edit group</string>
+    <string name="aniadir_persona">Add person</string>
 </resources>

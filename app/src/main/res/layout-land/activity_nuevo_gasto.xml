@@ -32,7 +32,7 @@
                 android:id="@+id/btnAniadirGasto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Añadir gasto"
+                android:text="@string/tv_aniadir_gasto"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </LinearLayout>
