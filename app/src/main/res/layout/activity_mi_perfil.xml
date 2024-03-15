@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,9 +11,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:scrollbars="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
 
         <TextView
             android:layout_width="match_parent"
@@ -23,100 +23,154 @@
             android:textSize="25sp"
             android:textStyle="bold" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imvPerfilP"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margen"
-            android:src="@drawable/perfil" />
-
-        <TextView
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/tv_email" />
+            android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/etEmailP"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:hint="@string/hint_et_email" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/tv_nombre" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:scrollbars="vertical">
 
-        <EditText
-            android:id="@+id/etNombreP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_et_nombre" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/tv_telefono" />
 
-        <EditText
-            android:id="@+id/etTelefonoP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_et_telefono"
-            android:inputType="phone" />
 
-        <Button
-            android:id="@+id/btnUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margen"
-            app:icon="@drawable/baseline_edit_24"
-            android:text="@string/btn_actualizar_datos" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/tv_contrasenia" />
 
-        <EditText
-            android:id="@+id/etPasswordP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_et_contra" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/imvPerfilP"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margen"
+                    android:src="@drawable/perfil" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/tv_repetir_contrasenia" />
+                <TextView
+                    android:text="Cambiar datos"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-        <EditText
-            android:id="@+id/etRepPasswordP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_et_repcontra" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_email"
+                    android:padding="@dimen/margen"
+                    app:endIconMode="clear_text">
 
-        <Button
-            android:id="@+id/btnCambiar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margen"
-            android:text="@string/btn_cambiar_contrasenia" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false" />
 
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_nombre"
+                    android:padding="@dimen/margen"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNombreP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_telefono"
+                    android:padding="@dimen/margen"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etTelefonoP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margen"
+                    android:text="@string/btn_actualizar_datos"
+                    app:icon="@drawable/baseline_edit_24" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_marginVertical="@dimen/margen"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="Cambiar contraseña"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_contra"
+                    android:padding="@dimen/margen"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPasswordP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:padding="@dimen/margen"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_et_repcontra"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etRepPasswordP"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnCambiar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/btn_cambiar_contrasenia" />
+
+                <Button
+                    android:id="@+id/btnCerrarSesion"
+                    android:layout_marginTop="@dimen/margen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_cerrar_sesion" />
+
+
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnCerrarSesion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="@string/btn_cerrar_sesion" />
+
 
 </RelativeLayout>
