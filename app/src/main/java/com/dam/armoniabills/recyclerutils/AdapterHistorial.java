@@ -56,7 +56,7 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.Hist
 
 		public void bindGrupo(Historial historial) {
 			tvNombre.setText(historial.getNombreGrupo());
-			tvDesc.setText(historial.getDescripcion());
+			tvDesc.setText(String.format(itemView.getContext().getString(R.string.historial_gasto), historial.getDescripcion()));
 
 			long tiempoNoti = historial.getTiempo();
 			long tiempoAhora = System.currentTimeMillis();
@@ -66,19 +66,16 @@ public class AdapterHistorial extends RecyclerView.Adapter<AdapterHistorial.Hist
 			long horas = TimeUnit.MILLISECONDS.toHours(difEnMilis);
 			long dias = TimeUnit.MILLISECONDS.toDays(difEnMilis);
 
-			String tiempoString;
 			if (dias > 0) {
-				tiempoString = "Hace " + dias + " días";
+				tvTiempo.setText(String.format(itemView.getContext().getString(R.string.dias), dias));
 			} else if (horas > 0) {
-				tiempoString = "Hace " + horas + " horas";
+				tvTiempo.setText(String.format(itemView.getContext().getString(R.string.horas), horas));
 			} else if (mins > 0) {
-				tiempoString = "Hace " + mins + " minutos";
+				tvTiempo.setText(String.format(itemView.getContext().getString(R.string.mins), mins));
 			} else {
-				tiempoString = "Hace menos de un minuto";
+				tvTiempo.setText(itemView.getContext().getString(R.string.menos_minuto));
 			}
-			tvTiempo.setText(tiempoString);
 			Glide.with(itemView.getContext()).load(historial.getImagenPerfil()).into(iv);
-
 		}
 	}
 }

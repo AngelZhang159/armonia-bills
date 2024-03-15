@@ -34,13 +34,15 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:text="3"
+                    android:layout_marginStart="@dimen/margen"
                     android:id="@+id/tvNumPersonasGrupo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="25sp" />
 
                 <ImageView
-                    android:layout_marginStart="@dimen/margen"
+                    android:src="@drawable/baseline_person_24"
                     android:layout_width="35dp"
                     android:layout_height="35dp" />
 

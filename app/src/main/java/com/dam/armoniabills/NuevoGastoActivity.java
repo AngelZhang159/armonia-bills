@@ -94,6 +94,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 			@Override
 			public void onCancelled(@NonNull DatabaseError error) {
+				Toast.makeText(NuevoGastoActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
@@ -150,11 +151,6 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 								finish();
 							}
-						}
-					}).addOnFailureListener(new OnFailureListener() {
-						@Override
-						public void onFailure(@NonNull Exception e) {
-							Toast.makeText(NuevoGastoActivity.this, "Error al añadir el gasto", Toast.LENGTH_SHORT).show();
 						}
 					});
 
@@ -235,7 +231,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 								String id = FirebaseDatabase.getInstance().getReference("Historial").push().getKey();
 
 								Historial historial = new Historial(id, grupo.getTitulo(),
-										usuarioActual.getNombre() + " ha añadido un nuevo gasto",
+										usuarioActual.getNombre(),
 										usuarioActual.getImagenPerfil(), new Date().getTime());
 
 								for (Usuario usuario : listaUsuarios) {

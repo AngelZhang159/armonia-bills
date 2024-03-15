@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
 import com.dam.armoniabills.model.Grupo;
@@ -108,7 +109,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
     private void readUsuario() {
         listaUsuarioGrupo = grupo.getUsuarios();
 
-        FirebaseDatabase.getInstance().getReference("Usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot data : snapshot.getChildren()) {
@@ -171,7 +172,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
             listaGrupos.add(grupo.getId());
         }
 
-        FirebaseDatabase.getInstance().getReference("Usuarios").child(usuarioAniadir.getId()).child("grupos").setValue(listaGrupos)
+        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(usuarioAniadir.getId()).child("grupos").setValue(listaGrupos)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -184,12 +185,12 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
         Map<String, Object> mapa = new HashMap<>();
         mapa.put("usuarios", listaUsuarioGrupo);
 
-        FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).updateChildren(mapa)
+        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).updateChildren(mapa)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         etPersona.setText("");
-                        Toast.makeText(getContext(), "Usuario añadido correctamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.usuario_aniadido_correcto, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -199,15 +200,15 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
 
         materialAlertDialogBuilder
                 .setCancelable(false)
-                .setTitle("Eliminar grupo")
-                .setMessage("¿Desea eliminar el grupo definitivamente?")
-                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.btn_eliminar)
+                .setMessage(R.string.dialog_msg_eliminar)
+                .setPositiveButton(R.string.btn_eliminar_d, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         borrarGrupo();
                     }
                 })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.btn_cancelar_d, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -222,24 +223,24 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
         String descripcion = etDescripcion.getText().toString();
 
         if (titulo.isEmpty()) {
-            Toast.makeText(getContext(), "Debe introducir un titulo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.campos_obligatorios, Toast.LENGTH_SHORT).show();
         } else {
             Map<String, Object> mapa = new HashMap<>();
             mapa.put("titulo", titulo);
             mapa.put("descripcion", descripcion);
 
-            FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).updateChildren(mapa)
+            FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).updateChildren(mapa)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getContext(), "Grupo editado correctamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.grupo_editado, Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
     
     private void borrarGrupo() {
-        FirebaseDatabase.getInstance().getReference("Usuarios").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ArrayList<Usuario> listaUsuario = new ArrayList<>();
@@ -258,7 +259,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
                                 listaGruposUsuario.remove(idGrupo);
                                 usuario.setGrupos(listaGruposUsuario);
 
-                                FirebaseDatabase.getInstance().getReference("Usuarios").child(usuario.getId()).setValue(usuario)
+                                FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).setValue(usuario)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
@@ -270,12 +271,12 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
                     }
                 }
 
-                FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).removeValue()
+                FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).removeValue()
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 getActivity().finish();
-                                Toast.makeText(getContext(), "Grupo eliminado correctamente", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), R.string.grupo_eliminado, Toast.LENGTH_SHORT).show();
                             }
                         });
             }

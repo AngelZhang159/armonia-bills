@@ -26,7 +26,7 @@
             android:textSize="@dimen/tam_tv_bienvenida"
             android:textStyle="bold" />
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imvPerfil"
             android:layout_width="100dp"
             android:layout_height="100dp"

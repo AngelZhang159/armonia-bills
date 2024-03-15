@@ -4,7 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_principal">#70BCC8</color>
     <color name="color_secundario">#3F5978</color>
+    <color name="color_principal_dark">#3E7B85</color>
+    <color name="color_secundario_dark">#1C2A3B</color>
     <color name="verde">#9CCC65</color>
     <color name="rojo">#EF5350</color>
     <color name="azul">#26A69A</color>
+    <color name="dark_mode_background">#121212</color>
 </resources>

@@ -70,7 +70,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, user.getUid()));
-		listaNombres.add("Yo (" + user.getEmail() + ")");
+		listaNombres.add(String.format(getString(R.string.yo), user.getEmail()));
 		listaId.add(user.getUid());
 
 		adapter = new ArrayAdapter<>(NuevoGrupoActivity.this, android.R.layout.simple_list_item_1, listaNombres);
