@@ -109,8 +109,6 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnAniadirGasto) {
 
-			//TODO optimizar
-
 			String titulo = etTitulo.getText().toString();
 			String descripcion = etDescripcion.getText().toString();
 			String precioString = etPrecio.getText().toString();
@@ -129,15 +127,10 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 					Toast.makeText(this, R.string.pagar_solo, Toast.LENGTH_SHORT).show();
 
 				} else {
-					double precio = Double.parseDouble(etPrecio.getText().toString());
-
-
-//					Introducir datos en grupos/grupo/gastos
+					double precio = Double.parseDouble(precioString);
 
 					DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS);
-
 					String id = databaseReference.push().getKey();
-
 					Gasto gasto = new Gasto(titulo, descripcion, user.getUid(), precio, idsPagan, id);
 
 					databaseReference.child(grupo.getId()).child("gastos").child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -145,24 +138,16 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 						public void onComplete(@NonNull Task<Void> task) {
 							if (task.isSuccessful()) {
 								Toast.makeText(NuevoGastoActivity.this, R.string.gasto_correcto, Toast.LENGTH_SHORT).show();
-
 								aniadirHistorial();
-
 								finish();
 							}
 						}
 					});
 
-
-					//Actualizar total
-
 					double total = grupo.getTotal() + precio;
 					Map<String, Object> mapaTotal = new HashMap<>();
 					mapaTotal.put("total", total);
 					databaseReference.child(grupo.getId()).updateChildren(mapaTotal);
-
-
-//					Hacer que paguen
 
 					double deuda = precio / idsPagan.size();
 					double teDeben = precio - deuda;
@@ -170,9 +155,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 					DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("usuarios");
 
 					for (int i = 0; i < grupo.getUsuarios().size(); i++) {
-
 						final int index = i;
-
 						reference.child(String.valueOf(index)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 							@Override
 							public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -180,211 +163,125 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 									if (task.getResult().exists()) {
 										DataSnapshot dataSnapshot = task.getResult();
 										UsuarioGrupo usuarioGrupo = dataSnapshot.getValue(UsuarioGrupo.class);
-
 										double debesActualizado;
 										double debenActualizado;
 										for (int j = 0; j < idsPagan.size(); j++) {
-
 											if (usuarioGrupo.getId().equals(user.getUid())) {
-
 												Map<String, Object> mapDeben = new HashMap<>();
-
-												//Si el usuario que ha pagado no está en la lista de ids que han pagado, se le suma el precio a lo que le deben en vez de el precio menos su parte
-
-												if(usuarioGrupo.getId().equals(user.getUid()) && idsPagan.contains(user.getUid())){
-
+												if (usuarioGrupo.getId().equals(user.getUid()) && idsPagan.contains(user.getUid())) {
 													debenActualizado = usuarioGrupo.getDeben() + teDeben;
-
 												} else {
-
 													debenActualizado = usuarioGrupo.getDeben() + precio;
 												}
-
-												if(usuarioGrupo.getDebes() == debenActualizado){
-
-													// Si debes y deben son iguales se cambian a 0 los dos
-
+												if (usuarioGrupo.getDebes() == debenActualizado) {
 													mapDeben.put("deben", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
 													mapDeben.clear();
 													mapDeben.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
 													eliminarDeListaGastos(user.getUid());
-
-
-												} else if(debenActualizado > usuarioGrupo.getDebes()){
-
-													//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
-
+												} else if (debenActualizado > usuarioGrupo.getDebes()) {
 													debenActualizado = debenActualizado - usuarioGrupo.getDebes();
 													mapDeben.put("deben", debenActualizado);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
 													mapDeben.clear();
 													mapDeben.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
-													//TODO borrar id del usuario en todos los gastos
 													eliminarDeListaGastos(user.getUid());
-
 												} else {
-
-													//Si lo que debes ahora es mayor a lo que deben entonces lo que debes es la diferencia
-
 													debesActualizado = usuarioGrupo.getDebes() - debenActualizado;
 													mapDeben.put("debes", debesActualizado);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
 													mapDeben.clear();
 													mapDeben.put("deben", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDeben);
-
 												}
-
-
 											} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
-
-												//TODO se ha bugueao
-
 												debesActualizado = usuarioGrupo.getDebes() + deuda;
 												Map<String, Object> mapDebes = new HashMap<>();
-
-												if(usuarioGrupo.getDeben() == debesActualizado){
-
-													// Si debes y deben son iguales se cambian a 0 los dos
-
+												if (usuarioGrupo.getDeben() == debesActualizado) {
 													mapDebes.put("deben", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
 													mapDebes.clear();
 													mapDebes.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
 													eliminarDeListaGastos(idsPagan.get(j));
-
-
-												} else if(debesActualizado > usuarioGrupo.getDeben()){
-
-													//Si lo que debes ahora es mayor a lo que te deben entonces lo que debes es la diferencia
-
+												} else if (debesActualizado > usuarioGrupo.getDeben()) {
 													debesActualizado = debesActualizado - usuarioGrupo.getDeben();
 													mapDebes.put("debes", debesActualizado);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
 													mapDebes.clear();
 													mapDebes.put("deben", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
-												} else {
-
-													//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
-
-													//TODO borrar id del usuario en todos los gastos
+												} else if (debesActualizado < usuarioGrupo.getDeben()) {
 													eliminarDeListaGastos(idsPagan.get(j));
-
-
 													debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
 													mapDebes.put("deben", debesActualizado);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
 													mapDebes.clear();
 													mapDebes.put("debes", 0);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
-
 												}
-
 											}
 										}
 									}
 								}
 							}
 						});
-
-
 					}
-
-//					Fin hacer que paguen
-
-
 				}
-
 			}
 		}
 	}
 
 	private void eliminarDeListaGastos(String id) {
-
-
 		ArrayList<Gasto> listaGastos = new ArrayList<>();
-		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
-				listaGastos.clear(); // Clear the list before adding new data
+				listaGastos.clear();
 				for (DataSnapshot data : snapshot.getChildren()) {
 					Gasto gasto = data.getValue(Gasto.class);
 					listaGastos.add(gasto);
 				}
-
-				for(Gasto gasto : listaGastos){
-
+				for (Gasto gasto : listaGastos) {
 					ArrayList<String> listaIds = gasto.getListaUsuariosPagan();
-
 					for (int i = 0; i < listaIds.size(); i++) {
-
-						if(listaIds.get(i).equals(id)){
-
+						if (listaIds.get(i).equals(id)) {
 							Map<String, Object> mapId = new HashMap<>();
-
 							mapId.put(String.valueOf(i), String.valueOf(i));
-
 							FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(gasto.getId()).child("listaUsuariosPagan").updateChildren(mapId);
-
 						}
-
 					}
-
 				}
-
 			}
 
 			@Override
 			public void onCancelled(@NonNull DatabaseError error) {
 			}
 		});
-
-
-
 	}
 
 	private void aniadirHistorial() {
-		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get()
-				.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-					@Override
-					public void onComplete(@NonNull Task<DataSnapshot> task) {
-						if (task.isSuccessful()) {
-							if (task.getResult().exists()) {
-								usuarioActual = task.getResult().getValue(Usuario.class);
-
-								String id = FirebaseDatabase.getInstance().getReference("Historial").push().getKey();
-
-								Historial historial = new Historial(id, grupo.getTitulo(),
-										usuarioActual.getNombre(),
-										usuarioActual.getImagenPerfil(), new Date().getTime());
-
-								for (Usuario usuario : listaUsuarios) {
-									FirebaseDatabase.getInstance().getReference("Historial").child(usuario.getId()).child(id)
-											.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
-												@Override
-												public void onComplete(@NonNull Task<Void> task) {
-
-												}
-											});
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+			@Override
+			public void onComplete(@NonNull Task<DataSnapshot> task) {
+				if (task.isSuccessful()) {
+					if (task.getResult().exists()) {
+						usuarioActual = task.getResult().getValue(Usuario.class);
+						String id = FirebaseDatabase.getInstance().getReference("Historial").push().getKey();
+						Historial historial = new Historial(id, grupo.getTitulo(), usuarioActual.getNombre(), usuarioActual.getImagenPerfil(), new Date().getTime());
+						for (Usuario usuario : listaUsuarios) {
+							FirebaseDatabase.getInstance().getReference("Historial").child(usuario.getId()).child(id).setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
+								@Override
+								public void onComplete(@NonNull Task<Void> task) {
 								}
-							}
+							});
 						}
 					}
-				});
+				}
+			}
+		});
 	}
+
 }

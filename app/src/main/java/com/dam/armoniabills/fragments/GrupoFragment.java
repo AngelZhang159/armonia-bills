@@ -213,159 +213,108 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 	private void pagarDeudas() {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
 		FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
 				if (task.isSuccessful()) {
 					if (task.getResult().exists()) {
-
 						DataSnapshot dataSnapshot = task.getResult();
 						usuarioActual = dataSnapshot.getValue(Usuario.class);
-
 						ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
 						for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
 							if (usuarioGrupo.getId().equals(user.getUid())) {
 								usuarioGrupoActual = usuarioGrupo;
 							}
 						}
-
-						//TODO dejar solo si el balance es mayor que la deuda?
-						//TODO alomejor hay que actualizar el balance mas a abajo  ------- ya ta hecho
 						double balance = usuarioActual.getBalance();
 						if (balance > 0) {
 							if (usuarioGrupoActual.getDebes() > 0) {
-
-								//Obtener la lista de gastos en los que estas y que no has pagado tu
-
 								ArrayList<Gasto> listaGastosUsuario = new ArrayList<>();
-								for(Gasto gasto : listaGastos){
-									if(!gasto.getIdUsuario().equals(user.getUid())){
-										for (int i = 0; i < gasto.getListaUsuariosPagan().size(); i++) {
-											if(gasto.getListaUsuariosPagan().get(i).equals(user.getUid()))
+								for (Gasto gasto : listaGastos) {
+									if (!gasto.getIdUsuario().equals(user.getUid())) {
+										for (String userId : gasto.getListaUsuariosPagan()) {
+											if (userId.equals(user.getUid())) {
 												listaGastosUsuario.add(gasto);
+												break;
+											}
 										}
 									}
 								}
-
-
 								for (int i = 0; i < listaGastosUsuario.size(); i++) {
-
 									final int index = i;
-
 									String idUsuarioAPagar = listaGastosUsuario.get(i).getIdUsuario();
-
-									double deudaPorUsuario = (listaGastosUsuario.get(i).getPrecio() / listaGastosUsuario.get(i).getListaUsuariosPagan().size());
+									double deudaPorUsuario = listaGastosUsuario.get(i).getPrecio() / listaGastosUsuario.get(i).getListaUsuariosPagan().size();
 									double balanceMenosDeuda = balance - deudaPorUsuario;
 									balance = balanceMenosDeuda;
 									Map<String, Object> mapBalance = new HashMap<>();
 									mapBalance.put("balance", balanceMenosDeuda);
-
-									// Actualizar tu balance
 									FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).updateChildren(mapBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
 										@Override
 										public void onComplete(@NonNull Task<Void> task) {
-											if(task.isSuccessful()){
-
-												//Actualizar el balance del que ha pagado
+											if (task.isSuccessful()) {
 												FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 													@Override
 													public void onComplete(@NonNull Task<DataSnapshot> task) {
-														if(task.isSuccessful()){
-															if(task.getResult().exists()){
+														if (task.isSuccessful()) {
+															if (task.getResult().exists()) {
 																DataSnapshot snapshot = task.getResult();
 																Usuario usuarioAPagar = snapshot.getValue(Usuario.class);
 																double balanceUsuarioAPagar = usuarioAPagar.getBalance();
-
 																mapBalance.clear();
-																mapBalance.put("balance", (balanceUsuarioAPagar + deudaPorUsuario));
+																mapBalance.put("balance", balanceUsuarioAPagar + deudaPorUsuario);
 																FirebaseDatabase.getInstance().getReference("Usuarios").child(idUsuarioAPagar).updateChildren(mapBalance);
 															}
 														}
 													}
 												});
-
-												//cambiar el id del usuario del gasto a 0 cuando lo pague para que cuando obtenga la lista de gastos no lo tenga qeu pagar otra vez
-
 												int posicionUsuarioListaUsuariosPagan = 0;
-												for (int j = 0; j <listaGastosUsuario.get(index).getListaUsuariosPagan().size(); j++) {
-													if(listaGastosUsuario.get(index).getListaUsuariosPagan().get(j).equals(user.getUid())){
+												for (int j = 0; j < listaGastosUsuario.get(index).getListaUsuariosPagan().size(); j++) {
+													if (listaGastosUsuario.get(index).getListaUsuariosPagan().get(j).equals(user.getUid())) {
 														posicionUsuarioListaUsuariosPagan = j;
 													}
-
 												}
-
 												mapBalance.clear();
-												mapBalance.put(String.valueOf(posicionUsuarioListaUsuariosPagan), String.valueOf(posicionUsuarioListaUsuariosPagan));
-
+												mapBalance.put(String.valueOf(posicionUsuarioListaUsuariosPagan), null);
 												FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(String.valueOf(listaGastosUsuario.get(index).getId())).child("listaUsuariosPagan").updateChildren(mapBalance);
-
-
-												// Actualizar debes y deben
-
-
 												for (int k = 0; k < listaUsuariosGrupo.size(); k++) {
-
-													if(listaUsuariosGrupo.get(k).getId().equals(user.getUid())){
-
+													if (listaUsuariosGrupo.get(k).getId().equals(user.getUid())) {
 														mapBalance.clear();
 														double debesAcutalizado = listaUsuariosGrupo.get(k).getDebes() - deudaPorUsuario;
 														mapBalance.put("debes", debesAcutalizado);
-														System.out.println("debes actualozado: " + debesAcutalizado);
 														FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
 														listaUsuariosGrupo.get(k).setDebes(debesAcutalizado);
-
-													} else if(listaUsuariosGrupo.get(k).getId().equals(idUsuarioAPagar)){
-
+													} else if (listaUsuariosGrupo.get(k).getId().equals(idUsuarioAPagar)) {
 														double debenAcutalizado = listaUsuariosGrupo.get(k).getDeben() - deudaPorUsuario;
-
-														// Si debes y deben son iguales se cambian a 0 los dos
-														if(listaUsuariosGrupo.get(k).getDebes() == debenAcutalizado){
-
+														if (listaUsuariosGrupo.get(k).getDebes() == debenAcutalizado) {
 															mapBalance.clear();
 															mapBalance.put("deben", 0);
 															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
-
 															mapBalance.clear();
 															mapBalance.put("debes", 0);
 															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
-
 														} else {
 															mapBalance.clear();
 															mapBalance.put("deben", debenAcutalizado);
 															FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios").child(String.valueOf(k)).updateChildren(mapBalance);
 														}
-
-
 													}
-
 												}
-
 											}
-
-
 										}
 									});
-
-
-
 								}
-
-
-
 							} else {
 								Toast.makeText(getContext(), "No tienes deudas", Toast.LENGTH_SHORT).show();
 							}
 						} else {
 							Toast.makeText(getContext(), "No tienes suficiente saldo para pagar tus deudas", Toast.LENGTH_SHORT).show();
 						}
-
 					}
 				}
-
 			}
 		});
 	}
+
 
 
 	private void conseguirListaUsuarios() {
