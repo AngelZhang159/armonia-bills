@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.NuevoGastoActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Gasto;
@@ -47,14 +46,14 @@ import java.util.Map;
 public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 	private static final String ARG_PARAM1 = "param1";
-	
+
 	TextView tvTitulo, tvDescripcion, tvDeuda, tvTotal;
 	Button btnPagar;
 	MaterialButton btnPers;
 	ExtendedFloatingActionButton efab;
 	RecyclerView rv;
 	AdapterGastos adapter;
-	
+
 	ArrayList<Gasto> listaGastos;
 	Usuario usuarioActual;
 	UsuarioGrupo usuarioGrupoActual;
@@ -104,7 +103,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 		listaGastos = new ArrayList<>();
 		listaUsuarioGrupo = new ArrayList<>();
-		
+
 		rellenarListaGastos();
 
 		efab.setOnClickListener(this);
@@ -120,7 +119,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 	}
 
 	private void rellenarListaGastos() {
-		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("gastos").addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaGastos.clear(); // Clear the list before adding new data
@@ -146,7 +145,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-		db.getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).addValueEventListener(new ValueEventListener() {
+		db.getReference("Grupos").child(grupo.getId()).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				grupo = snapshot.getValue(Grupo.class);
@@ -176,12 +175,12 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 							if (usuarioGrupoActual.getDeben() > usuarioGrupoActual.getDebes()) {
 
 								pago = usuarioGrupoActual.getDeben() - usuarioGrupoActual.getDebes();
-								deudaStr = String.format(getString(R.string.te_deben_g), pago);
+								deudaStr = String.format("Te deben: %.2f€", pago);
 								tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.verde));
 							} else {
 
 								pago = usuarioGrupoActual.getDebes() - usuarioGrupoActual.getDeben();
-								deudaStr = String.format(getString(R.string.debes_g), pago);
+								deudaStr = String.format("Debes: %.2f€", pago);
 								tvDeuda.setTextColor(ContextCompat.getColor(getContext(), R.color.rojo));
 							}
 							tvDeuda.setText(deudaStr);
@@ -215,7 +214,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 	private void pagarDeudas() {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+		FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 			@Override
 			public void onComplete(@NonNull Task<DataSnapshot> task) {
 				if (task.isSuccessful()) {
@@ -263,7 +262,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 									mapBalance.put("balance", balanceMenosDeuda);
 
 									// Actualizar tu balance
-
 									FirebaseDatabase.getInstance().getReference("Usuarios").child(user.getUid()).updateChildren(mapBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
 										@Override
 										public void onComplete(@NonNull Task<Void> task) {
@@ -295,14 +293,15 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 														posicionUsuarioListaUsuariosPagan = j;
 													}
 
+												}
+
 												mapBalance.clear();
 												mapBalance.put(String.valueOf(posicionUsuarioListaUsuariosPagan), String.valueOf(posicionUsuarioListaUsuariosPagan));
 
 												FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(String.valueOf(listaGastosUsuario.get(index).getId())).child("listaUsuariosPagan").updateChildren(mapBalance);
 
-                          
-                     
-                        // Actualizar debes y deben
+
+												// Actualizar debes y deben
 
 
 												for (int k = 0; k < listaUsuariosGrupo.size(); k++) {
@@ -351,6 +350,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 
 								}
+
 
 
 							} else {
@@ -407,25 +407,22 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
 				AdapterUsuariosGrupo adapter = new AdapterUsuariosGrupo(listaUsuario);
 
-
 				usuariosRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 				usuariosRecyclerView.setAdapter(adapter);
-        
-        materialAlertDialogBuilder
-				  .setTitle(R.string.tit_dialog_users)
-				  .setView(dialogView)
-				  .setNegativeButton(R.string.btn_aceptar_d, new DialogInterface.OnClickListener() {
-					  @Override
-					  public void onClick(DialogInterface dialog, int which) {
-						  dialog.cancel();
-					  }
-				  });
 
+				materialAlertDialogBuilder
+						.setTitle("Usuarios")
+						.setView(dialogView)
+						.setNegativeButton("Aceptar", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+							}
+						});
 
 				materialAlertDialogBuilder.show();
 			}
 		}
-
 
 
 	}
