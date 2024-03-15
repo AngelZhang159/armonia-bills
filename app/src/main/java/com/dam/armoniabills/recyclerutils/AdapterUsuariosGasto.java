@@ -48,6 +48,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 		return new AdapterUsuariosGasto.UsuarioVH(v);
 	}
 
+	/*
 	@Override
 	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
 
@@ -56,6 +57,27 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 			@Override
 			public void onClick(View v) {
 				String userId = listaUsuario.get(holder.getAdapterPosition()).getId();
+				if (idsPagan.contains(userId)) {
+					idsPagan.remove(userId);
+				} else {
+					idsPagan.add(userId);
+				}
+			}
+		});
+	}*/
+
+	@Override
+	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
+		Usuario usuario = listaUsuario.get(position);
+		holder.bindUsuario(usuario);
+
+		// Obtener el ID del usuario desde el ViewHolder
+		String userId = usuario.getId();
+
+		holder.btnCheck.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Agregar o eliminar el ID del usuario seleccionado
 				if (idsPagan.contains(userId)) {
 					idsPagan.remove(userId);
 				} else {

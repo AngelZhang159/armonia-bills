@@ -170,7 +170,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 					DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("usuarios");
 
-					for (int i = 0; i < idsPagan.size(); i++) {
+					for (int i = 0; i < grupo.getUsuarios().size(); i++) {
 
 						final int index = i;
 
@@ -182,23 +182,113 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										DataSnapshot dataSnapshot = task.getResult();
 										UsuarioGrupo usuarioGrupo = dataSnapshot.getValue(UsuarioGrupo.class);
 
-										double debes;
-										double deben;
+										double debesActualizado;
+										double debenActualizado;
 										for (int j = 0; j < idsPagan.size(); j++) {
 
 											if (usuarioGrupo.getId().equals(user.getUid())) {
 
-												deben = usuarioGrupo.getDeben() + teDeben;
 												Map<String, Object> mapDeben = new HashMap<>();
-												mapDeben.put("deben", deben);
-												reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+												//Si el usuario que ha pagado no está en la lista de ids que han pagado, se le suma el precio a lo que le deben en vez de el precio menos su parte
+
+												if(usuarioGrupo.getId().equals(user.getUid()) && idsPagan.contains(user.getUid())){
+
+													debenActualizado = usuarioGrupo.getDeben() + teDeben;
+
+												} else {
+
+													debenActualizado = usuarioGrupo.getDeben() + precio;
+												}
+
+												if(usuarioGrupo.getDebes() == debenActualizado){
+
+													// Si debes y deben son iguales se cambian a 0 los dos
+
+													mapDeben.put("deben", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+													mapDeben.clear();
+													mapDeben.put("debes", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+												} else if(debenActualizado > usuarioGrupo.getDebes()){
+
+													//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
+
+													debenActualizado = debenActualizado - usuarioGrupo.getDebes();
+													mapDeben.put("deben", debenActualizado);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+													mapDeben.clear();
+													mapDeben.put("debes", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+													//TODO borrar id del usuario en todos los gastos
+													eliminarDeListaGastos(user.getUid());
+
+												} else {
+
+													//Si lo que debes ahora es mayor a lo que deben entonces lo que debes es la diferencia
+
+													debesActualizado = usuarioGrupo.getDebes() - debenActualizado;
+													mapDeben.put("debes", debesActualizado);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+													mapDeben.clear();
+													mapDeben.put("deben", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDeben);
+
+												}
+
 
 											} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
 
-												debes = usuarioGrupo.getDebes() + deuda;
+												//TODO se ha bugueao
+
+												debesActualizado = usuarioGrupo.getDebes() + deuda;
 												Map<String, Object> mapDebes = new HashMap<>();
-												mapDebes.put("debes", debes);
-												reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+												if(usuarioGrupo.getDeben() == debesActualizado){
+
+													// Si debes y deben son iguales se cambian a 0 los dos
+
+													mapDebes.put("deben", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+													mapDebes.clear();
+													mapDebes.put("debes", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+												} else if(debesActualizado > usuarioGrupo.getDeben()){
+
+													//Si lo que debes ahora es mayor a lo que te deben entonces lo que debes es la diferencia
+
+													debesActualizado = debesActualizado - usuarioGrupo.getDeben();
+													mapDebes.put("debes", debesActualizado);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+													mapDebes.clear();
+													mapDebes.put("deben", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+												} else {
+
+													//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
+
+													//TODO borrar id del usuario en todos los gastos
+													eliminarDeListaGastos(idsPagan.get(j));
+
+
+													debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
+													mapDebes.put("deben", debesActualizado);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+													mapDebes.clear();
+													mapDebes.put("debes", 0);
+													reference.child(String.valueOf(index)).updateChildren(mapDebes);
+
+												}
 
 											}
 										}
@@ -217,6 +307,34 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 			}
 		}
+	}
+
+	private void eliminarDeListaGastos(String id) {
+
+
+		ArrayList<Gasto> listaGastos = grupo.getListaGastos();
+
+		for(Gasto gasto : listaGastos){
+
+			ArrayList<String> listaIds = gasto.getListaUsuariosPagan();
+
+			for (int i = 0; i < listaIds.size(); i++) {
+
+				if(listaIds.get(i).equals(id)){
+
+					Map<String, Object> mapId = new HashMap<>();
+
+					mapId.put(String.valueOf(i), String.valueOf(i));
+
+					FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(gasto.getId()).child("listaUsuariosPagan").updateChildren(mapId);
+
+				}
+
+			}
+
+		}
+
+
 	}
 
 	private void añadirHistorial() {
