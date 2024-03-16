@@ -69,7 +69,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 		listaId = new ArrayList<>();
 
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, user.getUid()));
+		listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, user.getUid()));
 		listaNombres.add(String.format(getString(R.string.yo), user.getEmail()));
 		listaId.add(user.getUid());
 
@@ -230,7 +230,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 						}
 
 						if (!usuarioEncontrado) {
-							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, idUsuario));
+							listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, idUsuario));
 							listaNombres.add(nombre);
 							listaId.add(idUsuario);
 							adapter.notifyDataSetChanged();

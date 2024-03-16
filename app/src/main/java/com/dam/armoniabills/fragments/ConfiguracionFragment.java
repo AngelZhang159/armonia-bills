@@ -141,7 +141,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
                         }
 
                         if (!usuarioEncontrado) {
-                            listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, 0, usuarioAniadir.getId()));
+                            listaUsuarioGrupo.add(new UsuarioGrupo(0, 0, usuarioAniadir.getId()));
                             aniadirUsuario();
                         } else {
                             Toast.makeText(getContext(), getString(R.string.usuario_grupo), Toast.LENGTH_SHORT).show();
