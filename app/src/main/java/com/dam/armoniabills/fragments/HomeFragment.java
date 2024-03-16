@@ -80,50 +80,53 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		FirebaseDatabase db = FirebaseDatabase.getInstance();
 
-		db.getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-			@Override
-			public void onComplete(@NonNull Task<DataSnapshot> task) {
-				if (task.isSuccessful()) {
-					if (task.getResult().exists()) {
-						DataSnapshot dataSnapshot = task.getResult();
+		if(user != null){
+			db.getReference(MainActivity.DB_PATH_USUARIOS).child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+				@Override
+				public void onComplete(@NonNull Task<DataSnapshot> task) {
+					if (task.isSuccessful()) {
+						if (task.getResult().exists()) {
+							DataSnapshot dataSnapshot = task.getResult();
 
-						Usuario usuario = dataSnapshot.getValue(Usuario.class);
+							Usuario usuario = dataSnapshot.getValue(Usuario.class);
 
-						listaGruposUsuario = usuario.getGrupos();
+							listaGruposUsuario = usuario.getGrupos();
 
-						if (listaGruposUsuario != null) {
-							db.getReference(MainActivity.DB_PATH_GRUPOS).addValueEventListener(new ValueEventListener() {
-								@Override
-								public void onDataChange(@NonNull DataSnapshot snapshot) {
-									lista.clear();
+							if (listaGruposUsuario != null) {
+								db.getReference(MainActivity.DB_PATH_GRUPOS).addValueEventListener(new ValueEventListener() {
+									@Override
+									public void onDataChange(@NonNull DataSnapshot snapshot) {
+										lista.clear();
 
-									for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+										for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-										Grupo grupo = dataSnapshot.getValue(Grupo.class);
+											Grupo grupo = dataSnapshot.getValue(Grupo.class);
 
-										for (int i = 0; i < listaGruposUsuario.size(); i++) {
-											if (grupo.getId().equals(listaGruposUsuario.get(i))) {
-												lista.add(grupo);
+											for (int i = 0; i < listaGruposUsuario.size(); i++) {
+												if (grupo.getId().equals(listaGruposUsuario.get(i))) {
+													lista.add(grupo);
+												}
 											}
+
 										}
+
+										configurarRV();
 
 									}
 
-									configurarRV();
+									@Override
+									public void onCancelled(@NonNull DatabaseError error) {
+										//TODO
+									}
+								});
 
-								}
-
-								@Override
-								public void onCancelled(@NonNull DatabaseError error) {
-									//TODO
-								}
-							});
-
+							}
 						}
 					}
 				}
-			}
-		});
+			});
+		}
+
 
 
 	}

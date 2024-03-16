@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 	public static final String DB_PATH_USUARIOS = "Usuarios";
 	public static final String DB_PATH_GRUPOS = "Grupos";
 
+	private int itemMenuSeleccionado = R.id.botNavVarHome;
 	NavigationBarView navBarView;
 
 	@Override
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
 	@Override
 	public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+		itemMenuSeleccionado = menuItem.getItemId();
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -65,7 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 	@Override
 	protected void onResume() {
 		super.onResume();
-		navBarView.setSelectedItemId(R.id.botNavVarHome);
+
+		if(itemMenuSeleccionado == R.id.botNavVarPerfil){
+			navBarView.setSelectedItemId(R.id.botNavVarHome);
+		} else {
+			navBarView.setSelectedItemId(itemMenuSeleccionado);
+
+		}
 	}
 
 }

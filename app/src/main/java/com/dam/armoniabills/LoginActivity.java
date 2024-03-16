@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,6 +39,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 		btnReg.setOnClickListener(this);
 
 		mAuth = FirebaseAuth.getInstance();
+
+		OnBackPressedDispatcher dispatcher = getOnBackPressedDispatcher();
+
+		dispatcher.addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+
+			}
+		});
 	}
 
 	@Override
@@ -67,5 +78,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 			Intent i = new Intent(this, RegistroActivity.class);
 			startActivity(i);
 		}
+
 	}
+
+
 }

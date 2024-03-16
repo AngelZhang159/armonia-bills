@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -93,6 +95,7 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 		btnCambiar.setOnClickListener(this);
 		btnCerrarSesion.setOnClickListener(this);
 		ivPerfil.setOnClickListener(this);
+
 	}
 
 	@Override
@@ -243,4 +246,5 @@ public class MiPerfilActivity extends AppCompatActivity implements View.OnClickL
 			}
 		});
 	}
+
 }
