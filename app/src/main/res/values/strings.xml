@@ -117,4 +117,6 @@
     <string name="no_tienes_dinero">No tienes suficiente dinero para pagar tu deuda</string>
     <string name="no_deudas">No tienes deudas</string>
     <string name="no_saldo">No tienes suficiente saldo para pagar tus deudas</string>
+    <string name="err_un_centimo">No puedes añadir un gasto de 1 céntimo</string>
+    <string name="un_centimo">0.01</string>
 </resources>

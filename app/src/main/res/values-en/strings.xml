@@ -118,4 +118,5 @@
     <string name="no_tienes_dinero">You don\'t have enough money to pay your debt</string>
     <string name="no_deudas">You have no debts</string>
     <string name="no_saldo">You do not have enough balance to pay your debts</string>
+    <string name="un_centimo">0.01</string>
 </resources>

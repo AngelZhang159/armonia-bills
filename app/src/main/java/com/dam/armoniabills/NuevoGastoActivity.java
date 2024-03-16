@@ -152,19 +152,24 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 //				Algun campo vacio - Error
 				Toast.makeText(NuevoGastoActivity.this, R.string.campos_obligatorios, Toast.LENGTH_SHORT).show();
 			} else {
+				if (!precioString.equals(getString(R.string.un_centimo))) {
 //				Están rellenos titulo y precio
-				ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
-				user = FirebaseAuth.getInstance().getCurrentUser();
+					ArrayList<String> idsPagan = adapterUsuariosGasto.getIdsPagan();
+					user = FirebaseAuth.getInstance().getCurrentUser();
 
-				if (idsPagan.isEmpty()) {
+					if (idsPagan.isEmpty()) {
 //					No hay una persona seleccionada - Error
-					Toast.makeText(this, R.string.una_persona, Toast.LENGTH_SHORT).show();
-				} else if (idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())) {
+						Toast.makeText(this, R.string.una_persona, Toast.LENGTH_SHORT).show();
+					} else if (idsPagan.size() == 1 && idsPagan.get(0).equals(user.getUid())) {
 //					Solo una persona y es el propio usuario - Error
-					Toast.makeText(this, R.string.pagar_solo, Toast.LENGTH_SHORT).show();
-				} else {
+						Toast.makeText(this, R.string.pagar_solo, Toast.LENGTH_SHORT).show();
+					} else {
 //					Continuar
-					guardarNuevoGasto(titulo, descripcion, idsPagan);
+						guardarNuevoGasto(titulo, descripcion, idsPagan);
+					}
+
+				} else {
+					Toast.makeText(this, R.string.err_un_centimo, Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
@@ -222,7 +227,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 							double falta = faltanCents;
 							for (int j = 0; j < idsPagan.size(); j++) {
 
-								if (falta > 0) {
+								if (falta > 0 && !(usuarioGrupo.getId().equals(user.getUid()))) {
 									deuda = deudaTruncFin + .01;
 									falta = (Math.round((falta) * 100) / 100.0) - 0.01;
 								} else {
@@ -235,12 +240,23 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 									//Si el usuario que ha pagado no está en la lista de ids que han pagado, se le suma el precio a lo que le deben en vez de el precio menos su parte
 
-									if (usuarioGrupo.getId().equals(user.getUid()) && idsPagan.contains(user.getUid())) {
+									if (idsPagan.contains(user.getUid())) {
 
-										debenActualizado = (Math.round((usuarioGrupo.getDeben() + totalTeDeben) * 100) / 100.0);
+										if (index == 0 && falta != 0) {
+											debenActualizado = usuarioGrupo.getDeben() + totalTeDeben - 0.01;
+										} else {
+											debenActualizado = usuarioGrupo.getDeben() + totalTeDeben;
+										}
 
 									} else {
-										debenActualizado = (Math.round((usuarioGrupo.getDeben() + precio) * 100) / 100.0);
+
+										if (index == 0) {
+											debenActualizado = usuarioGrupo.getDeben() + precio;
+										} else {
+											debenActualizado = usuarioGrupo.getDeben() + precio;
+										}
+
+										debenActualizado = (Math.round((debenActualizado) * 100) / 100.0);
 									}
 
 									if (usuarioGrupo.getDebes() == debenActualizado) {
@@ -260,7 +276,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 									} else if (debenActualizado > usuarioGrupo.getDebes()) {
 
 										//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
-										debenActualizado = (Math.round((debenActualizado - usuarioGrupo.getDebes()) * 100) / 100.0);
+
+										debenActualizado = debenActualizado - usuarioGrupo.getDebes();
+										debenActualizado = (Math.round((debenActualizado) * 100) / 100.0);
 										mapDeben.put("deben", debenActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
@@ -268,14 +286,13 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										mapDeben.put("debes", 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
-										//TODO borrar id del usuario en todos los gastos
 										eliminarDeListaGastos(user.getUid());
 
 									} else {
 
 										//Si lo que debes ahora es mayor a lo que deben entonces lo que debes es la diferencia
 
-										debesActualizado = (Math.round((usuarioGrupo.getDebes() - debenActualizado) * 100) / 100.0);
+										debesActualizado = usuarioGrupo.getDebes() - debenActualizado;
 										mapDeben.put("debes", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
@@ -288,9 +305,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 								} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
 
-									//TODO se ha bugueao
-									debesActualizado = (Math.round((usuarioGrupo.getDebes() + deuda) * 100) / 100.0);
-
+									debesActualizado = usuarioGrupo.getDebes() + deuda;
 									Map<String, Object> mapDebes = new HashMap<>();
 
 									if (usuarioGrupo.getDeben() == debesActualizado) {
@@ -310,7 +325,9 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 									} else if (debesActualizado > usuarioGrupo.getDeben()) {
 
 										//Si lo que debes ahora es mayor a lo que te deben entonces lo que debes es la diferencia
-										debesActualizado = (Math.round((debesActualizado - usuarioGrupo.getDeben()) * 100) / 100.0);
+
+										debesActualizado = debesActualizado - usuarioGrupo.getDeben();
+										//
 
 										mapDebes.put("debes", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
@@ -323,10 +340,10 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										//Si lo que te deben ahora es mayor a lo que debes entonces lo que te deben es la diferencia
 
-										//TODO borrar id del usuario en todos los gastos
 										eliminarDeListaGastos(idsPagan.get(j));
 
-										debesActualizado = (Math.round((usuarioGrupo.getDeben() - debesActualizado) * 100) / 100.0);
+
+										debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
 
 										mapDebes.put("deben", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
