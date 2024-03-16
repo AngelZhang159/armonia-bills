@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,8 +131,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 					Toast.makeText(this, R.string.pagar_solo, Toast.LENGTH_SHORT).show();
 
 				} else {
-					double precio = Double.parseDouble(etPrecio.getText().toString());
+					double precioAnt = Double.parseDouble(etPrecio.getText().toString());
+					BigDecimal bd = new BigDecimal(precioAnt);
+					bd = bd.setScale(2, RoundingMode.HALF_UP);
 
+					double precio = bd.doubleValue();
 
 //					Introducir datos en grupos/grupo/gastos
 
@@ -156,7 +161,13 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 					//Actualizar total
 
-					double total = grupo.getTotal() + precio;
+					double precioFrm = grupo.getTotal() + precio;
+
+					BigDecimal bdt = new BigDecimal(precioFrm);
+					bdt = bdt.setScale(2, RoundingMode.HALF_UP);
+
+					double total = bdt.doubleValue();
+
 					Map<String, Object> mapaTotal = new HashMap<>();
 					mapaTotal.put("total", total);
 					databaseReference.child(grupo.getId()).updateChildren(mapaTotal);
@@ -165,7 +176,12 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 //					Hacer que paguen
 
 					double deuda = precio / idsPagan.size();
-					double teDeben = precio - deuda;
+					double totalp = precio - deuda;
+
+					BigDecimal bdp = new BigDecimal(totalp);
+					bdp = bdp.setScale(2, RoundingMode.HALF_UP);
+
+					double teDeben = bdp.doubleValue();
 
 					DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("usuarios");
 
@@ -270,7 +286,14 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 													//Si lo que debes ahora es mayor a lo que te deben entonces lo que debes es la diferencia
 
 													debesActualizado = debesActualizado - usuarioGrupo.getDeben();
-													mapDebes.put("debes", debesActualizado);
+													//
+
+													BigDecimal bdda = new BigDecimal(debesActualizado);
+													bdda = bdda.setScale(2, RoundingMode.HALF_UP);
+
+													double debesActualizadoF = bdda.doubleValue();
+
+													mapDebes.put("debes", debesActualizadoF);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 													mapDebes.clear();
@@ -286,7 +309,13 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 
 													debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
-													mapDebes.put("deben", debesActualizado);
+
+													BigDecimal bdda = new BigDecimal(debesActualizado);
+													bdda = bdda.setScale(2, RoundingMode.HALF_UP);
+
+													double debesActualizadoF = bdda.doubleValue();
+
+													mapDebes.put("deben", debesActualizadoF);
 													reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 													mapDebes.clear();
