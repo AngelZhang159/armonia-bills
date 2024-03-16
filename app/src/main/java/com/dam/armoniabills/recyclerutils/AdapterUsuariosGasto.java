@@ -28,6 +28,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 	ArrayList<Usuario> listaUsuario;
 	View.OnClickListener listener;
 
+	Context context;
 
 	public AdapterUsuariosGasto(ArrayList<Usuario> listaUsuario, View.OnClickListener listener) {
 		this.listaUsuario = listaUsuario;
@@ -39,6 +40,7 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 	public UsuarioVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_usuario, parent, false);
 
+		context = parent.getContext();
 		idsPagan = new ArrayList<>();
 		for (Usuario usuario : listaUsuario) {
 			idsPagan.add(usuario.getId());
@@ -119,22 +121,29 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 
 		public void bindUsuario(Usuario usuario) {
 
-			db.getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-				@Override
-				public void onComplete(@NonNull Task<DataSnapshot> task) {
-					if (task.isSuccessful()) {
-						if (task.getResult().exists()) {
+			context = itemView.getContext();
+			if(context != null){
+				db.getReference(MainActivity.DB_PATH_USUARIOS).child(usuario.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+					@Override
+					public void onComplete(@NonNull Task<DataSnapshot> task) {
+						if (task.isSuccessful()) {
+							if (task.getResult().exists()) {
 
 
-							String nombre = String.valueOf(usuario.getNombre());
-							String imageUrl = (String.valueOf(usuario.getImagenPerfil()));
-							tv.setText(nombre);
-							Glide.with(itemView.getContext()).load(imageUrl).into(iv);
+								String nombre = String.valueOf(usuario.getNombre());
+								String imageUrl = (String.valueOf(usuario.getImagenPerfil()));
+								tv.setText(nombre);
 
+								Glide.with(itemView.getContext().getApplicationContext()).load(imageUrl).into(iv);
+
+							}
 						}
 					}
-				}
-			});
+				});
+
+
+			}
+
 		}
 
 	}

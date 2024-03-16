@@ -60,6 +60,9 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
     UsuarioGrupo usuarioGrupoActual;
     ArrayList<Usuario> listaUsuario;
     ArrayList<UsuarioGrupo> listaUsuarioGrupo;
+
+    FirebaseUser user;
+
     private Grupo grupo;
 
     int posicionUsuarioActual;
@@ -109,6 +112,8 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
         rellenarListaGastos();
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         efab.setOnClickListener(this);
         return v;
     }
@@ -119,6 +124,12 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        rv.setAdapter(null);
+        super.onDestroy();
     }
 
     private void rellenarListaGastos() {
@@ -223,11 +234,12 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
         listaUsuarioGrupo = grupo.getUsuarios();
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         //TODO alomejor da null
 
-        double dineroDebes = usuarioGrupoActual.getDebes();
+        final double[] dineroDebes = {usuarioGrupoActual.getDebes()};
+        double dineroLeDeben;
         double debenUsuarioAPagar;
 
         //para obtener el id de la lista de usuariosGrupo
@@ -235,8 +247,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
         Map<String, Object> map = new HashMap<>();
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios");
-
+        DatabaseReference referenceGrupos = FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios");
 
         if (usuarioActual.getBalance() >= usuarioGrupoActual.getDebes()) {
 
@@ -244,52 +255,66 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
                 if (!usuarioAPagar.getId().equals(user.getUid())) {
 
-                    if (dineroDebes > 0) {
+                    if (dineroDebes[0] > 0) {
 
                         if (usuarioAPagar.getDeben() > 0) {
 
                             // usuarioAPagar no es el usuario logueado y le deben dinero
 
+                            dineroLeDeben = usuarioAPagar.getDeben();
 
-                            if (dineroDebes > usuarioAPagar.getDeben()) {
 
-                                dineroDebes -= usuarioAPagar.getDeben();
+                            if (dineroDebes[0] > dineroLeDeben) {
 
                                 // actualizar el getDeben del usuarioAPagar y su balance
+
+                                dineroDebes[0] -= dineroLeDeben;
 
                                 map.clear();
                                 map.put("deben", 0);
                                 usuarioAPagar.setDeben(0);
-                                reference.child(String.valueOf(i)).updateChildren(map);
+                                referenceGrupos.child(String.valueOf(i)).updateChildren(map);
+
+                                // Actualizar el balances
+
+                                actualizarBalances(usuarioAPagar, dineroLeDeben, dineroLeDeben);
 
 
-                            } else if(usuarioAPagar.getDeben() > dineroDebes){
+                            } else if(dineroLeDeben > dineroDebes[0]){
 
-                                debenUsuarioAPagar = usuarioAPagar.getDeben() - dineroDebes;
-                                dineroDebes = 0;
+                                debenUsuarioAPagar = dineroLeDeben - dineroDebes[0];
+
                                 usuarioGrupoActual.setDebes(0);
-                                //actualizar
+
+
+                                //actualizar deben del usuario a pagar
 
                                 map.clear();
                                 map.put("deben", debenUsuarioAPagar);
 
-                                reference.child(String.valueOf(i)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                referenceGrupos.child(String.valueOf(i)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
+
+                                        // Actualizar debes de tu usuario
+
                                         map.clear();
                                         map.put("debes", 0);
 
-                                        reference.child(String.valueOf(posicionUsuarioActual)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        referenceGrupos.child(String.valueOf(posicionUsuarioActual)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Toast.makeText(getContext(), "culos", Toast.LENGTH_SHORT).show();
+
+                                                actualizarBalances(usuarioAPagar, dineroDebes[0], dineroDebes[0]);
+                                                dineroDebes[0] = 0;
+
                                             }
                                         });
                                     }
                                 });
 
 
-                            } else if(usuarioAPagar.getDeben() == dineroDebes) {
+                            } else if(dineroLeDeben == dineroDebes[0]) {
 
                                 // los dos a cero
 
@@ -297,14 +322,17 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
                                 map.put("deben", 0);
                                 usuarioAPagar.setDeben(0);
 
-                                reference.child(String.valueOf(i)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                double finalDineroLeDeben = dineroLeDeben;
+                                referenceGrupos.child(String.valueOf(i)).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         map.clear();
                                         map.put("debes", 0);
                                         usuarioGrupoActual.setDebes(0);
 
-                                        reference.child(String.valueOf(posicionUsuarioActual)).updateChildren(map);
+                                        referenceGrupos.child(String.valueOf(posicionUsuarioActual)).updateChildren(map);
+
+                                        actualizarBalances(usuarioAPagar, finalDineroLeDeben, dineroDebes[0]);
 
                                     }
                                 });
@@ -331,6 +359,53 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getContext(), "No tienes suficiente dinero para pagar tu deuda", Toast.LENGTH_SHORT).show();
         }
 
+
+    }
+
+    private void actualizarBalances(UsuarioGrupo usuarioAPagar, double dineroLeDeben, double dineroDebes) {
+
+        DatabaseReference referenceUsuarios = FirebaseDatabase.getInstance().getReference("Usuarios");
+
+        Map<String, Object> map = new HashMap<>();
+
+
+        //Actualizar balance del usuarioAPagar
+        referenceUsuarios.child(usuarioAPagar.getId()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if(task.isSuccessful()){
+                    if(task.getResult().exists()){
+                        DataSnapshot dataSnapshot = task.getResult();
+                        double balanceActualizado = dataSnapshot.getValue(Usuario.class).getBalance() + dineroLeDeben;
+
+                        map.clear();
+                        map.put("balance", balanceActualizado);
+                        referenceUsuarios.child(usuarioAPagar.getId()).updateChildren(map);
+
+
+                        //Actualizar tu balance
+                        referenceUsuarios.child(user.getUid()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if(task.isSuccessful()){
+                                    if(task.getResult().exists()){
+                                        DataSnapshot dataSnapshot = task.getResult();
+                                        double balanceActualizado = dataSnapshot.getValue(Usuario.class).getBalance() - dineroDebes;
+
+                                        map.clear();
+                                        map.put("balance", balanceActualizado);
+                                        referenceUsuarios.child(user.getUid()).updateChildren(map);
+
+                                    }
+                                }
+                            }
+                        });
+
+
+                    }
+                }
+            }
+        });
 
     }
 
