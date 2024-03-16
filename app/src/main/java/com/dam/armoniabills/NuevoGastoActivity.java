@@ -224,7 +224,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 								if (falta > 0) {
 									deuda = deudaTruncFin + .01;
-									falta -= .01;
+									falta = (Math.round((falta) * 100) / 100.0) - 0.01;
 								} else {
 									deuda = deudaTruncFin;
 								}
