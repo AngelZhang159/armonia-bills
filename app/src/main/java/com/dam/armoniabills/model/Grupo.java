@@ -9,17 +9,7 @@ import java.util.ArrayList;
 
 public class Grupo implements Parcelable {
 
-	public static final Creator<Grupo> CREATOR = new Creator<Grupo>() {
-		@Override
-		public Grupo createFromParcel(Parcel in) {
-			return new Grupo(in);
-		}
 
-		@Override
-		public Grupo[] newArray(int size) {
-			return new Grupo[size];
-		}
-	};
 	private String id, titulo, descripcion;
 	private ArrayList<UsuarioGrupo> usuarios;
 	private double total;
@@ -38,6 +28,18 @@ public class Grupo implements Parcelable {
 		this.total = total;
 		this.listaGastos = listaGastos;
 	}
+
+	public static final Creator<Grupo> CREATOR = new Creator<Grupo>() {
+		@Override
+		public Grupo createFromParcel(Parcel in) {
+			return new Grupo(in);
+		}
+
+		@Override
+		public Grupo[] newArray(int size) {
+			return new Grupo[size];
+		}
+	};
 
 	protected Grupo(Parcel in) {
 		id = in.readString();
@@ -60,40 +62,16 @@ public class Grupo implements Parcelable {
 		return titulo;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
 	public String getDescripcion() {
 		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public ArrayList<UsuarioGrupo> getUsuarios() {
 		return usuarios;
 	}
 
-	public void setUsuarios(ArrayList<UsuarioGrupo> usuarios) {
-		this.usuarios = usuarios;
-	}
-
 	public double getTotal() {
 		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	public ArrayList<Gasto> getListaGastos() {
-		return listaGastos;
-	}
-
-	public void setListaGastos(ArrayList<Gasto> listaGastos) {
-		this.listaGastos = listaGastos;
 	}
 
 	@Override

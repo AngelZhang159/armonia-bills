@@ -180,7 +180,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
                     }
 
                     double pago;
-                    String deudaStr = "";
+                    String deudaStr;
 
                     if (isAdded()) {
                         Context context = getContext();

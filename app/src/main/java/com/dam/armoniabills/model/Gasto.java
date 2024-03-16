@@ -53,40 +53,16 @@ public class Gasto implements Parcelable {
 		return titulo;
 	}
 
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
 	public String getIdUsuario() {
 		return idUsuario;
-	}
-
-	public void setIdUsuario(String idUsuario) {
-		this.idUsuario = idUsuario;
 	}
 
 	public double getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
-
 	public ArrayList<String> getListaUsuariosPagan() {
 		return listaUsuariosPagan;
-	}
-
-	public void setListaUsuariosPagan(ArrayList<String> listaUsuariosPagan) {
-		this.listaUsuariosPagan = listaUsuariosPagan;
 	}
 
 	public String getId() {

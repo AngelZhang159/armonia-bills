@@ -42,12 +42,6 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 	public RetirarFragment() {
 	}
 
-	public static RetirarFragment newInstance() {
-		RetirarFragment fragment = new RetirarFragment();
-		Bundle args = new Bundle();
-		return fragment;
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

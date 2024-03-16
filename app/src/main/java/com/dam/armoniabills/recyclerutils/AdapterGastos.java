@@ -37,8 +37,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 	public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gasto, parent, false);
 
-		MyViewHolder mvh = new MyViewHolder(v);
-		return mvh;
+        return new MyViewHolder(v);
 	}
 
 	@Override

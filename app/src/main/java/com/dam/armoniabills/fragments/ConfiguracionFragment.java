@@ -85,7 +85,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
         etTitulo.setText(grupo.getTitulo());
         etDescripcion.setText(grupo.getDescripcion());
 
-        listaUsuarios = new ArrayList();
+        listaUsuarios = new ArrayList<>();
         listaUsuarioGrupo = new ArrayList<>();
 
         btnEliminar.setOnClickListener(this);
@@ -162,7 +162,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
     }
 
     private void aniadirUsuario() {
-        ArrayList<String> listaGrupos = new ArrayList<>();
+        ArrayList<String> listaGrupos;
         listaGrupos = usuarioAniadir.getGrupos();
 
         if (listaGrupos == null) {
@@ -249,7 +249,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
                     listaUsuario.add(usuario);
                 }
 
-                ArrayList<String> listaGruposUsuario = new ArrayList<>();
+                ArrayList<String> listaGruposUsuario;
                 for (Usuario usuario : listaUsuario) {
                     if (usuario.getGrupos() != null) {
                         listaGruposUsuario = usuario.getGrupos();

@@ -52,32 +52,16 @@ public class Historial implements Parcelable {
 		return nombreGrupo;
 	}
 
-	public void setNombreGrupo(String nombreGrupo) {
-		this.nombreGrupo = nombreGrupo;
-	}
-
 	public String getDescripcion() {
 		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public String getImagenPerfil() {
 		return imagenPerfil;
 	}
 
-	public void setImagenPerfil(String imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
-	}
-
 	public long getTiempo() {
 		return tiempo;
-	}
-
-	public void setTiempo(long tiempo) {
-		this.tiempo = tiempo;
 	}
 
 	@Override

@@ -8,17 +8,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 public class Usuario implements Parcelable {
-	public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
-		@Override
-		public Usuario createFromParcel(Parcel in) {
-			return new Usuario(in);
-		}
 
-		@Override
-		public Usuario[] newArray(int size) {
-			return new Usuario[size];
-		}
-	};
 	double balance;
 	ArrayList<String> grupos;
 	private String id, nombre, email, tlf, imagenPerfil;
@@ -35,6 +25,18 @@ public class Usuario implements Parcelable {
 
 	public Usuario() {
 	}
+
+	public static final Creator<Usuario> CREATOR = new Creator<Usuario>() {
+		@Override
+		public Usuario createFromParcel(Parcel in) {
+			return new Usuario(in);
+		}
+
+		@Override
+		public Usuario[] newArray(int size) {
+			return new Usuario[size];
+		}
+	};
 
 	protected Usuario(Parcel in) {
 		id = in.readString();
@@ -58,40 +60,20 @@ public class Usuario implements Parcelable {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
 	public String getEmail() {
 		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(double balance) {
-		this.balance = balance;
-	}
-
 	public String getTlf() {
 		return tlf;
 	}
 
-	public void setTlf(String tlf) {
-		this.tlf = tlf;
-	}
-
 	public String getImagenPerfil() {
 		return imagenPerfil;
-	}
-
-	public void setImagenPerfil(String imagenPerfil) {
-		this.imagenPerfil = imagenPerfil;
 	}
 
 	public ArrayList<String> getGrupos() {

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/item_config"
-        android:title="Configuración del grupo"
+        android:title="@string/configuraci_n_del_grupo"
         android:icon="@drawable/baseline_settings_24"
         app:showAsAction="always"/>
 

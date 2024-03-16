@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 public class UsuarioGrupo implements Parcelable {
 
-
 	String id;
 	private double deben, debes;
 

@@ -51,24 +51,6 @@ public class AdapterUsuariosGasto extends RecyclerView.Adapter<AdapterUsuariosGa
 		return new AdapterUsuariosGasto.UsuarioVH(v);
 	}
 
-	/*
-	@Override
-	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
-
-		holder.bindUsuario(listaUsuario.get(position));
-		holder.btnCheck.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String userId = listaUsuario.get(holder.getAdapterPosition()).getId();
-				if (idsPagan.contains(userId)) {
-					idsPagan.remove(userId);
-				} else {
-					idsPagan.add(userId);
-				}
-			}
-		});
-	}*/
-
 	@Override
 	public void onBindViewHolder(@NonNull UsuarioVH holder, int position) {
 		Usuario usuario = listaUsuario.get(position);

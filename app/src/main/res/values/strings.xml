@@ -120,4 +120,5 @@
     <string name="err_un_centimo">No puedes añadir un gasto de 1 céntimo</string>
     <string name="un_centimo">0.01</string>
     <string name="tv_pagan">Pagan</string>
+    <string name="configuraci_n_del_grupo">Configuración del grupo</string>
 </resources>
