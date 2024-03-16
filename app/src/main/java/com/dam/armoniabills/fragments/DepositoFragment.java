@@ -14,9 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
-import com.dam.armoniabills.model.Historial;
 import com.dam.armoniabills.model.HistorialBalance;
-import com.dam.armoniabills.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 public class DepositoFragment extends Fragment implements View.OnClickListener {
 
@@ -96,14 +94,17 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 			if (!etCantidad.getText().toString().isEmpty()) {
 				Double cantidad = Double.parseDouble(etCantidad.getText().toString());
 
-				Double cantidadFinal = cantidad + balanceCuenta;
+				BigDecimal bd = new BigDecimal(cantidad);
+				bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+				double cantidadFormateada = bd.doubleValue();
 				String uid = currentUser.getUid();
 				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
 
-				balanceRef.setValue(cantidadFinal).addOnCompleteListener(new OnCompleteListener<Void>() {
+				balanceRef.setValue(cantidadFormateada).addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
-						aniadirHistorial();
+						aniadirHistorial(cantidadFormateada);
 					}
 				});
 
@@ -113,12 +114,12 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 		}
 	}
 
-	private void aniadirHistorial() {
+	private void aniadirHistorial(double cantidadFormateada) {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 		String id = FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).push().getKey();
 
-		HistorialBalance historialBalance = new HistorialBalance(id, "ingresado", Double.parseDouble(etCantidad.getText().toString()));
+		HistorialBalance historialBalance = new HistorialBalance(id, "ingresado", cantidadFormateada);
 
 		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).child(id).setValue(historialBalance)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {

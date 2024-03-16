@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.math.BigDecimal;
+
 public class RetirarFragment extends Fragment implements View.OnClickListener {
 
 	Button btnRetirar;
@@ -110,15 +112,20 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 
 		Double nuevoBalance = balanceCuenta - cantidad;
 
+		BigDecimal bd = new BigDecimal(nuevoBalance);
+		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+		double roundedNum = bd.doubleValue();
+
 		if (currentUser != null) {
 
 			String uid = currentUser.getUid();
 			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
 
-			balanceRef.setValue(nuevoBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
+			balanceRef.setValue(roundedNum).addOnCompleteListener(new OnCompleteListener<Void>() {
 				@Override
 				public void onComplete(@NonNull Task<Void> task) {
-					aniadirHistorial();
+					aniadirHistorial(roundedNum);
 				}
 			});
 
@@ -126,12 +133,12 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 
 	}
 
-	private void aniadirHistorial() {
+	private void aniadirHistorial(double cantidadFormateada) {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 		String id = FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).push().getKey();
 
-		HistorialBalance historialBalance = new HistorialBalance(id, "retirado", Double.parseDouble(etCantidadRetirar.getText().toString()));
+		HistorialBalance historialBalance = new HistorialBalance(id, "retirado", cantidadFormateada);
 
 		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).child(id).setValue(historialBalance)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
