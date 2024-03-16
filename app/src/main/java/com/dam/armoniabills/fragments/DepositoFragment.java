@@ -1,6 +1,8 @@
 package com.dam.armoniabills.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.math.BigDecimal;
-
 public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 	Button btnDepositar;
@@ -36,6 +36,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	Double balanceCuenta;
 	private FirebaseAuth mAuth;
 	private FirebaseDatabase mDatabase;
+	private String current;
 
 	public DepositoFragment() {
 	}
@@ -52,6 +53,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 
 		btnDepositar = v.findViewById(R.id.btnDepositarDinero);
 		etCantidad = v.findViewById(R.id.etCantidadDineroDepositar);
+
 		tvCantidad = v.findViewById(R.id.tvDineroDisponibleDep);
 
 		btnDepositar.setOnClickListener(this);
@@ -59,6 +61,37 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
 		currentUser = mAuth.getCurrentUser();
+		current = "";
+
+		etCantidad.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (!s.toString().equals(current)) {
+					// Enforce two decimal places without Euro symbol
+					int decimalIndex = s.toString().indexOf(".");
+					if (decimalIndex > 0) {
+						if (s.toString().length() - decimalIndex - 1 > 2) {
+							String newText = s.toString().substring(0, decimalIndex + 3);
+							current = newText;
+							etCantidad.setText(newText);
+							etCantidad.setSelection(newText.length());
+						} else {
+							current = s.toString();
+						}
+					} else {
+						current = s.toString();
+					}
+				}
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 		rellenarDinero();
 
@@ -91,28 +124,30 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnDepositarDinero) {
-			if (!etCantidad.getText().toString().isEmpty()) {
-				Double cantidad = Double.parseDouble(etCantidad.getText().toString());
-
-				BigDecimal bd = new BigDecimal(cantidad);
-				bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-				double cantidadFormateada = bd.doubleValue();
+			if (!current.isEmpty()) {
 				String uid = currentUser.getUid();
 				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
-
-				balanceRef.setValue(cantidadFormateada).addOnCompleteListener(new OnCompleteListener<Void>() {
+				balanceRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 					@Override
-					public void onComplete(@NonNull Task<Void> task) {
-						aniadirHistorial(cantidadFormateada);
+					public void onComplete(@NonNull Task<DataSnapshot> task) {
+						double cantidad = task.getResult().getValue(Double.class) + Double.parseDouble(current);
+
+						balanceRef.setValue(cantidad).addOnCompleteListener(new OnCompleteListener<Void>() {
+							@Override
+							public void onComplete(@NonNull Task<Void> task) {
+								aniadirHistorial(cantidad);
+							}
+						});
 					}
 				});
+
 
 			} else {
 				Toast.makeText(getContext(), R.string.cantidad_obligatoria, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
+
 
 	private void aniadirHistorial(double cantidadFormateada) {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

@@ -1,6 +1,8 @@
 package com.dam.armoniabills.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +39,8 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 	private FirebaseAuth mAuth;
 	private FirebaseDatabase mDatabase;
 
+	private String current;
+
 	public RetirarFragment() {
 	}
 
@@ -62,6 +66,36 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
 		currentUser = mAuth.getCurrentUser();
+
+		etCantidadRetirar.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (!s.toString().equals(current)) {
+					// Enforce two decimal places
+					int decimalIndex = s.toString().indexOf(".");
+					if (decimalIndex > 0) {
+						if (s.toString().length() - decimalIndex - 1 > 2) {
+							String newText = s.toString().substring(0, decimalIndex + 3);
+							current = newText;
+							etCantidadRetirar.setText(newText);
+							etCantidadRetirar.setSelection(newText.length());
+						} else {
+							current = s.toString();
+						}
+					} else {
+						current = s.toString();
+					}
+				}
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 
 		rellenarDinero();
 
@@ -94,16 +128,31 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.btnRetirarDinero) {
-			if (!etCantidadRetirar.getText().toString().isEmpty()) {
-				Double cantidad = Double.parseDouble(etCantidadRetirar.getText().toString());
+			if (!current.isEmpty()) {
+				String uid = currentUser.getUid();
+				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
+				balanceRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+					@Override
+					public void onComplete(@NonNull Task<DataSnapshot> task) {
+						if (task.getResult().getValue(Double.class) >= Double.parseDouble(current)){
 
-				if (cantidad > balanceCuenta) {
-					Toast.makeText(getContext(), R.string.error_retiro, Toast.LENGTH_SHORT).show();
-				} else {
-					retirar(cantidad);
-				}
+							double cantidad = task.getResult().getValue(Double.class) - Double.parseDouble(current);
+
+							balanceRef.setValue(cantidad).addOnCompleteListener(new OnCompleteListener<Void>() {
+								@Override
+								public void onComplete(@NonNull Task<Void> task) {
+									aniadirHistorial(cantidad);
+								}
+							});
+						} else {
+							Toast.makeText(getContext(), R.string.error_retiro, Toast.LENGTH_SHORT).show();
+						}
+					}
+				});
+
+
 			} else {
-				Toast.makeText(getContext(), R.string.campos_obligatorios, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getContext(), R.string.cantidad_obligatoria, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

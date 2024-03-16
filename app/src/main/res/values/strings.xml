@@ -111,4 +111,7 @@
     <string name="cambiar_datos">Cambiar datos</string>
     <string name="editar_grupo">Editar grupo</string>
     <string name="aniadir_persona">Añadir persona</string>
+    <string name="eliminar_hist">Borrar historial</string>
+    <string name="seguro_borrar">¿Estás seguro de que quieres borrar todo el historial?</string>
+    <string name="historial_borrado_con_xito">Historial borrado con éxito</string>
 </resources>
