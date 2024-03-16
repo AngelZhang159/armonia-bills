@@ -292,7 +292,8 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										//Si lo que debes ahora es mayor a lo que deben entonces lo que debes es la diferencia
 
-										debesActualizado = usuarioGrupo.getDebes() - debenActualizado;
+
+										debesActualizado = Math.round((usuarioGrupo.getDebes() - debenActualizado) * 100) / 100.0;
 										mapDeben.put("debes", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
@@ -305,7 +306,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 								} else if (usuarioGrupo.getId().equals(idsPagan.get(j))) {
 
-									debesActualizado = usuarioGrupo.getDebes() + deuda;
+									debesActualizado = Math.round((usuarioGrupo.getDebes() + deuda) * 100) / 100.0;
 									Map<String, Object> mapDebes = new HashMap<>();
 
 									if (usuarioGrupo.getDeben() == debesActualizado) {
@@ -326,9 +327,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										//Si lo que debes ahora es mayor a lo que te deben entonces lo que debes es la diferencia
 
-										debesActualizado = debesActualizado - usuarioGrupo.getDeben();
-										//
-
+										debesActualizado = Math.round((debesActualizado - usuarioGrupo.getDeben()) * 100) / 100.0;
 										mapDebes.put("debes", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
@@ -342,9 +341,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										eliminarDeListaGastos(idsPagan.get(j));
 
-
-										debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
-
+										debesActualizado = Math.round((usuarioGrupo.getDeben() - debesActualizado) * 100) / 100.0;
 										mapDebes.put("deben", debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
@@ -457,9 +454,5 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 						}
 					}
 				});
-	}
-	public static boolean acaba99(double number) {
-		int multiplied = (int) (number * 100);
-		return multiplied % 100 == 99;
 	}
 }
