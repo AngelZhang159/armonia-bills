@@ -114,4 +114,7 @@
     <string name="eliminar_hist">Borrar historial</string>
     <string name="seguro_borrar">¿Estás seguro de que quieres borrar todo el historial?</string>
     <string name="historial_borrado_con_xito">Historial borrado con éxito</string>
+    <string name="no_tienes_dinero">No tienes suficiente dinero para pagar tu deuda</string>
+    <string name="no_deudas">No tienes deudas</string>
+    <string name="no_saldo">No tienes suficiente saldo para pagar tus deudas</string>
 </resources>

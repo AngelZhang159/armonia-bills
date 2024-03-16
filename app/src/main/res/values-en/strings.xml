@@ -112,4 +112,10 @@
     <string name="cambiar_datos">Change data</string>
     <string name="editar_grupo">Edit group</string>
     <string name="aniadir_persona">Add person</string>
+    <string name="eliminar_hist">Delete record</string>
+    <string name="seguro_borrar">Are you sure you want to delete all record?</string>
+    <string name="historial_borrado_con_xito">Successfully deleted record</string>
+    <string name="no_tienes_dinero">You don\'t have enough money to pay your debt</string>
+    <string name="no_deudas">You have no debts</string>
+    <string name="no_saldo">You do not have enough balance to pay your debts</string>
 </resources>
