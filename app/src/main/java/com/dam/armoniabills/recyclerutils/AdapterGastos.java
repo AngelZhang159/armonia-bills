@@ -12,6 +12,7 @@ import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
 import com.dam.armoniabills.model.Gasto;
 import com.dam.armoniabills.model.Usuario;
+import com.dam.armoniabills.model.UsuarioGrupo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,9 +25,11 @@ import java.util.ArrayList;
 public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHolder> {
 
 	private ArrayList<Gasto> listaGastos;
+	private ArrayList<UsuarioGrupo> listaUsuariosGrupo;
 
-	public AdapterGastos(ArrayList<Gasto> listaGastos) {
+	public AdapterGastos(ArrayList<Gasto> listaGastos, ArrayList<UsuarioGrupo> listaUsuariosGrupo) {
 		this.listaGastos = listaGastos;
+		this.listaUsuariosGrupo = listaUsuariosGrupo;
 	}
 
 	@NonNull
@@ -40,7 +43,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 
 	@Override
 	public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-		holder.bindIncidencia(listaGastos.get(position));
+		holder.bindGasto(listaGastos.get(position), listaUsuariosGrupo);
 	}
 
 	@Override
@@ -60,7 +63,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 			tvGastoUsuario = itemView.findViewById(R.id.tvGastoUsuario);
 		}
 
-		public void bindIncidencia(Gasto gasto) {
+		public void bindGasto(Gasto gasto, ArrayList<UsuarioGrupo> listaUsuariosGrupo) {
 
 			FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -85,16 +88,9 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 						}
 					});
 
-			double deuda = 0;
-			if (user.getUid().equals(gasto.getIdUsuario())) {
-				deuda = gasto.getPrecio() - (gasto.getPrecio() / gasto.getListaUsuariosPagan().size());
-				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), itemView.getContext().getString(R.string.te_deben), deuda));
-				tvGastoUsuario.setTextColor(itemView.getContext().getColor(R.color.verde));
-			} else {
-				deuda = gasto.getPrecio() / gasto.getListaUsuariosPagan().size();
-				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), itemView.getContext().getString(R.string.debes), deuda));
-				tvGastoUsuario.setTextColor(itemView.getContext().getColor(R.color.rojo));
-			}
+			String deudores = gasto.getListaUsuariosPagan().size() + "/" + listaUsuariosGrupo.size();
+			tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), itemView.getContext().getString(R.string.tv_pagan), deudores));
+
 
 		}
 	}

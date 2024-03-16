@@ -41,6 +41,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +122,9 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void configurarRV() {
-        adapter = new AdapterGastos(listaGastos);
+
+        Collections.reverse(listaGastos);
+        adapter = new AdapterGastos(listaGastos, grupo.getUsuarios());
 
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rv.setAdapter(adapter);

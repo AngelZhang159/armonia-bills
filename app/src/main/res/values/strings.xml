@@ -68,7 +68,7 @@
     <string name="registro_correcto">Se ha registrado correctamente</string>
     <string name="mi_balance">Mi balance</string>
     <string name="minimo_personas">Debe haber mínimo 2 personas en el grupo</string>
-    <string name="tv_gasto_usuario">%1$s\n%2$.2f€</string>
+    <string name="tv_gasto_usuario">%1$s\n%2$s</string>
     <string name="euros">%1$.2f€</string>
     <string name="tv_grupo_tu_pagas">Deuda: %1$.2f€</string>
     <string name="tv_grupo_total_pagar">Total: %1$.2f€</string>
@@ -119,4 +119,5 @@
     <string name="no_saldo">No tienes suficiente saldo para pagar tus deudas</string>
     <string name="err_un_centimo">No puedes añadir un gasto de 1 céntimo</string>
     <string name="un_centimo">0.01</string>
+    <string name="tv_pagan">Pagan</string>
 </resources>
