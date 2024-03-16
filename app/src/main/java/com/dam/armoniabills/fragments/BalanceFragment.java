@@ -19,6 +19,9 @@ import com.dam.armoniabills.R;
 import com.dam.armoniabills.TopBarActivity;
 import com.dam.armoniabills.model.HistorialBalance;
 import com.dam.armoniabills.recyclerutils.AdapterBalance;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +42,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 	RecyclerView rv;
 	ArrayList<HistorialBalance> listaHistorialBalance;
 	AdapterBalance adapterBalance;
-
+	MaterialButton btnElim;
 	public BalanceFragment() {
 	}
 
@@ -60,6 +63,8 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 		btnDepositar.setOnClickListener(this);
 		btnRetirar.setOnClickListener(this);
+		btnElim = v.findViewById(R.id.btnBorrarHistBal);
+		btnElim.setOnClickListener(this);
 
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
@@ -127,6 +132,13 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 			Intent i = new Intent(getContext(), TopBarActivity.class);
 			i.putExtra("rellenar", "fragmentoBalanceRetirar");
 			startActivity(i);
+		} else if (v.getId() == R.id.btnBorrarHistBal) {
+			mDatabase.getReference("HistorialBalance").child(mAuth.getCurrentUser().getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+				@Override
+				public void onComplete(@NonNull Task<Void> task) {
+					Toast.makeText(getContext(), getString(R.string.historial_borrado_con_xito), Toast.LENGTH_SHORT).show();
+				}
+			});
 		}
 	}
 

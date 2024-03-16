@@ -1,6 +1,5 @@
 package com.dam.armoniabills.recyclerutils;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,6 +95,7 @@ public class AdapterGastos extends RecyclerView.Adapter<AdapterGastos.MyViewHold
 				tvGastoUsuario.setText(String.format(itemView.getContext().getString(R.string.tv_gasto_usuario), itemView.getContext().getString(R.string.debes), deuda));
 				tvGastoUsuario.setTextColor(itemView.getContext().getColor(R.color.rojo));
 			}
+
 		}
 	}
 }
