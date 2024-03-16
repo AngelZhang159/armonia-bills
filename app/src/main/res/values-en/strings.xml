@@ -121,6 +121,6 @@
     <string name="err_un_centimo">You cannot add an expense of 1 cent</string>
     <string name="un_centimo">0.01</string>
     <string name="tv_pagan">Payers</string>
-    <string name="configuraci_n_del_grupo">Configuración del grupo</string>
+    <string name="configuraci_n_del_grupo">Group settings</string>
 
 </resources>
