@@ -135,7 +135,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 						balanceRef.setValue(cantidad).addOnCompleteListener(new OnCompleteListener<Void>() {
 							@Override
 							public void onComplete(@NonNull Task<Void> task) {
-								aniadirHistorial(cantidad);
+								aniadirHistorial(Double.parseDouble(current));
 							}
 						});
 					}

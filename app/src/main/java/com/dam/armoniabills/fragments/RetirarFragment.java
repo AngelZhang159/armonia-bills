@@ -27,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.math.BigDecimal;
-
 public class RetirarFragment extends Fragment implements View.OnClickListener {
 
 	Button btnRetirar;
@@ -141,7 +139,7 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 							balanceRef.setValue(cantidad).addOnCompleteListener(new OnCompleteListener<Void>() {
 								@Override
 								public void onComplete(@NonNull Task<Void> task) {
-									aniadirHistorial(cantidad);
+									aniadirHistorial(Double.parseDouble(current));
 								}
 							});
 						} else {
@@ -155,31 +153,6 @@ public class RetirarFragment extends Fragment implements View.OnClickListener {
 				Toast.makeText(getContext(), R.string.cantidad_obligatoria, Toast.LENGTH_SHORT).show();
 			}
 		}
-	}
-
-	private void retirar(Double cantidad) {
-
-		Double nuevoBalance = balanceCuenta - cantidad;
-
-		BigDecimal bd = new BigDecimal(nuevoBalance);
-		bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
-
-		double roundedNum = bd.doubleValue();
-
-		if (currentUser != null) {
-
-			String uid = currentUser.getUid();
-			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
-
-			balanceRef.setValue(roundedNum).addOnCompleteListener(new OnCompleteListener<Void>() {
-				@Override
-				public void onComplete(@NonNull Task<Void> task) {
-					aniadirHistorial(roundedNum);
-				}
-			});
-
-		}
-
 	}
 
 	private void aniadirHistorial(double cantidadFormateada) {

@@ -269,7 +269,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
                                 // actualizar el getDeben del usuarioAPagar y su balance
 
-                                dineroDebes[0] -= dineroLeDeben;
+                                dineroDebes[0] = (Math.round((dineroDebes[0] -= dineroLeDeben) * 100) / 100.0);
 
                                 map.clear();
                                 map.put("deben", 0);
@@ -283,7 +283,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
 
                             } else if(dineroLeDeben > dineroDebes[0]){
 
-                                debenUsuarioAPagar = dineroLeDeben - dineroDebes[0];
+                                debenUsuarioAPagar = (Math.round((dineroLeDeben - dineroDebes[0]) * 100) / 100.0);
 
                                 usuarioGrupoActual.setDebes(0);
 
