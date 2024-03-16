@@ -74,7 +74,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 
 	private void rellenarHistorial() {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference(getString(R.string.historialbalance)).child(user.getUid()).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaHistorialBalance.clear();
@@ -97,7 +97,7 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 		FirebaseUser currentUser = mAuth.getCurrentUser();
 		if (currentUser != null) {
 			String uid = currentUser.getUid();
-			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
+			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child(getString(R.string.balancee));
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -120,12 +120,12 @@ public class BalanceFragment extends Fragment implements View.OnClickListener {
 		if (v.getId() == R.id.btnDepositarBalance) {
 
 			Intent i = new Intent(getContext(), TopBarActivity.class);
-			i.putExtra("rellenar", "fragmentoBalanceDepositar");
+			i.putExtra(getString(R.string.rellenar), getString(R.string.fragDep));
 			startActivity(i);
 
 		} else if (v.getId() == R.id.btnRetirarBalance) {
 			Intent i = new Intent(getContext(), TopBarActivity.class);
-			i.putExtra("rellenar", "fragmentoBalanceRetirar");
+			i.putExtra(getString(R.string.rellenar), getString(R.string.fragRet));
 			startActivity(i);
 		}
 	}

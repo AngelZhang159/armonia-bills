@@ -68,7 +68,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (!s.toString().equals(current)) {
 					// Enforce two decimal places
-					int decimalIndex = s.toString().indexOf(".");
+					int decimalIndex = s.toString().indexOf(getString(R.string.punto));
 					if (decimalIndex > 0) {
 						if (s.toString().length() - decimalIndex - 1 > 2) {
 							String newText = s.toString().substring(0, decimalIndex + 3);
@@ -91,7 +91,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 		btnAniadir.setOnClickListener(this);
 
-		grupo = getIntent().getParcelableExtra("grupo");
+		grupo = getIntent().getParcelableExtra(getString(R.string.grupo));
 		consultaUsuarios();
 	}
 
@@ -201,7 +201,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 		int deudaTruncInt = (int) (deudaCadaUno * 100);
 		double deudaTruncFin = (double) deudaTruncInt / 100;
 
-		DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child("usuarios");
+		DatabaseReference reference = FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).child(getString(R.string.usuarios));
 
 //		Actualizar debes de los demas
 		double faltanCents = (precio - (deudaTruncFin * idsPagan.size()));
@@ -263,11 +263,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										// Si debes y deben son iguales se cambian a 0 los dos
 
-										mapDeben.put("deben", 0);
+										mapDeben.put(getString(R.string.deben), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 										mapDeben.clear();
-										mapDeben.put("debes", 0);
+										mapDeben.put(getString(R.string.debes), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 										eliminarDeListaGastos(user.getUid());
@@ -279,11 +279,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										debenActualizado = debenActualizado - usuarioGrupo.getDebes();
 										debenActualizado = (Math.round((debenActualizado) * 100) / 100.0);
-										mapDeben.put("deben", debenActualizado);
+										mapDeben.put(getString(R.string.deben), debenActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 										mapDeben.clear();
-										mapDeben.put("debes", 0);
+										mapDeben.put(getString(R.string.debes), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 										eliminarDeListaGastos(user.getUid());
@@ -293,11 +293,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										//Si lo que debes ahora es mayor a lo que deben entonces lo que debes es la diferencia
 
 										debesActualizado = usuarioGrupo.getDebes() - debenActualizado;
-										mapDeben.put("debes", debesActualizado);
+										mapDeben.put(getString(R.string.debes), debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 										mapDeben.clear();
-										mapDeben.put("deben", 0);
+										mapDeben.put(getString(R.string.deben), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDeben);
 
 									}
@@ -312,11 +312,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										// Si debes y deben son iguales se cambian a 0 los dos
 
-										mapDebes.put("deben", 0);
+										mapDebes.put(getString(R.string.deben), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 										mapDebes.clear();
-										mapDebes.put("debes", 0);
+										mapDebes.put(getString(R.string.debes), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 										eliminarDeListaGastos(idsPagan.get(j));
@@ -329,11 +329,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 										debesActualizado = debesActualizado - usuarioGrupo.getDeben();
 										//
 
-										mapDebes.put("debes", debesActualizado);
+										mapDebes.put(getString(R.string.debes), debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 										mapDebes.clear();
-										mapDebes.put("deben", 0);
+										mapDebes.put(getString(R.string.deben), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 									} else {
@@ -345,11 +345,11 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 										debesActualizado = usuarioGrupo.getDeben() - debesActualizado;
 
-										mapDebes.put("deben", debesActualizado);
+										mapDebes.put(getString(R.string.deben), debesActualizado);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 										mapDebes.clear();
-										mapDebes.put("debes", 0);
+										mapDebes.put(getString(R.string.debes), 0);
 										reference.child(String.valueOf(index)).updateChildren(mapDebes);
 
 									}
@@ -367,12 +367,12 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 		double total = grupo.getTotal() + precio;
 
 		Map<String, Object> mapaTotal = new HashMap<>();
-		mapaTotal.put("total", total);
+		mapaTotal.put(getString(R.string.total), total);
 		databaseReference.child(grupo.getId()).updateChildren(mapaTotal);
 	}
 
 	private void guardarEnBaseDatos(Gasto gasto, DatabaseReference databaseReference, String id) {
-		databaseReference.child(grupo.getId()).child("gastos").child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
+		databaseReference.child(grupo.getId()).child(getString(R.string.gastos)).child(id).setValue(gasto).addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				if (task.isSuccessful()) {
@@ -390,7 +390,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 
 		ArrayList<Gasto> listaGastos = new ArrayList<>();
-		FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").addValueEventListener(new ValueEventListener() {
+		FirebaseDatabase.getInstance().getReference(getString(R.string.gruposs)).child(grupo.getId()).child(getString(R.string.gastos)).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaGastos.clear(); // Clear the list before adding new data
@@ -411,7 +411,7 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 
 							mapId.put(String.valueOf(i), String.valueOf(i));
 
-							FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("gastos").child(gasto.getId()).child("listaUsuariosPagan").updateChildren(mapId);
+							FirebaseDatabase.getInstance().getReference(getString(R.string.gruposs)).child(grupo.getId()).child(getString(R.string.gastos)).child(gasto.getId()).child(getString(R.string.listausuariospagan)).updateChildren(mapId);
 
 						}
 
@@ -438,14 +438,14 @@ public class NuevoGastoActivity extends AppCompatActivity implements View.OnClic
 							if (task.getResult().exists()) {
 								usuarioActual = task.getResult().getValue(Usuario.class);
 
-								String id = FirebaseDatabase.getInstance().getReference("Historial").push().getKey();
+								String id = FirebaseDatabase.getInstance().getReference(getString(R.string.historial)).push().getKey();
 
 								Historial historial = new Historial(id, grupo.getTitulo(),
 										usuarioActual.getNombre(),
 										usuarioActual.getImagenPerfil(), new Date().getTime());
 
 								for (Usuario usuario : listaUsuarios) {
-									FirebaseDatabase.getInstance().getReference("Historial").child(usuario.getId()).child(id)
+									FirebaseDatabase.getInstance().getReference(getString(R.string.historial)).child(usuario.getId()).child(id)
 											.setValue(historial).addOnCompleteListener(new OnCompleteListener<Void>() {
 												@Override
 												public void onComplete(@NonNull Task<Void> task) {

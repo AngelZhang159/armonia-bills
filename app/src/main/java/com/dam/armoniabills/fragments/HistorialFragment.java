@@ -61,12 +61,12 @@ public class HistorialFragment extends Fragment {
 				MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
 				builder.setTitle(R.string.eliminar_hist);
 				builder.setMessage(R.string.seguro_borrar);
-				builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+				builder.setPositiveButton(getString(R.string.aceptar), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						borrarHist();
 					}
-				}).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+				}).setNegativeButton(getString(R.string.cancelar), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
@@ -76,7 +76,7 @@ public class HistorialFragment extends Fragment {
 			}
 		});
 
-		db.getReference("Historial").child(user.getUid()).addValueEventListener(new ValueEventListener() {
+		db.getReference(getString(R.string.historial)).child(user.getUid()).addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot snapshot) {
 				listaHistorial.clear();
@@ -97,7 +97,7 @@ public class HistorialFragment extends Fragment {
 	}
 
 	private void borrarHist() {
-		db.getReference("Historial").child(user.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+		db.getReference(getString(R.string.historial)).child(user.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
 			@Override
 			public void onComplete(@NonNull Task<Void> task) {
 				Toast.makeText(getContext(), getString(R.string.historial_borrado_con_xito), Toast.LENGTH_SHORT).show();

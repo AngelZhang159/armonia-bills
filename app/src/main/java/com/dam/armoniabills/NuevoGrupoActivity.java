@@ -148,7 +148,7 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 	}
 
 	private void aniadirGrupoUsuario(String id) {
-		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(id).child("grupos").setValue(listaIdGrupos)
+		FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(id).child(getString(R.string.grupos)).setValue(listaIdGrupos)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
@@ -204,8 +204,8 @@ public class NuevoGrupoActivity extends AppCompatActivity implements View.OnClic
 				}
 
 				String email = etEmail.getText().toString();
-				String nombre = "";
-				String idUsuario = "";
+				String nombre = getString(R.string.vacio);
+				String idUsuario = getString(R.string.vacio);
 
 				if (!email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
 					boolean usuarioEncontrado = false;

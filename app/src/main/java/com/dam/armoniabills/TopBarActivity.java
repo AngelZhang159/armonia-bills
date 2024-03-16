@@ -1,12 +1,10 @@
 package com.dam.armoniabills;
 
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -51,17 +49,17 @@ public class TopBarActivity extends AppCompatActivity {
 			}
 		});
 
-		String i = getIntent().getStringExtra("rellenar");
+		String i = getIntent().getStringExtra(getString(R.string.rellenar));
 
-		if (i.equals("fragmentoHome")) {
+		if (i.equals(getString(R.string.fragHome))) {
 
 			cargarGrupo();
 
-		} else if (i.equals("fragmentoBalanceDepositar")) {
+		} else if (i.equals(getString(R.string.fragDep))) {
 
 			cargarDepositar();
 
-		} else if (i.equals("fragmentoBalanceRetirar")) {
+		} else if (i.equals(getString(R.string.fragRet))) {
 
 			cargarRetirar();
 

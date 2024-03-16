@@ -114,11 +114,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 									}
 
-									@Override
-									public void onCancelled(@NonNull DatabaseError error) {
-										//TODO
-									}
-								});
+								@Override
+								public void onCancelled(@NonNull DatabaseError error) {
+								}
+							});
 
 							}
 						}
@@ -147,7 +146,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 		Intent i = new Intent(getContext(), TopBarActivity.class);
 		i.putExtra(GRUPO_SELECCIONADO, grupo);
-		i.putExtra("rellenar", "fragmentoHome");
+		i.putExtra(getString(R.string.rellenar), getString(R.string.fragHome));
 		startActivity(i);
 	}
 }

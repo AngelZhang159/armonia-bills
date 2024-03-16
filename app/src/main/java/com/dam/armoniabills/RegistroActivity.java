@@ -69,7 +69,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
 		listaUsuarios = new ArrayList<>();
 
-		String fotoPerfil = "android.resource://" + getPackageName() + "/" + R.drawable.perfil;
+		String fotoPerfil = getString(R.string.android_resource) + getPackageName() + getString(R.string.barra) + R.drawable.perfil;
 		imageUri = Uri.parse(fotoPerfil);
 
 		imvPerfil.setOnClickListener(this);

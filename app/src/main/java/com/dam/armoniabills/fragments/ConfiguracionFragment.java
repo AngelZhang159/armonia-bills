@@ -1,16 +1,7 @@
 package com.dam.armoniabills.fragments;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.dam.armoniabills.MainActivity;
 import com.dam.armoniabills.R;
-import com.dam.armoniabills.TopBarActivity;
 import com.dam.armoniabills.model.Grupo;
 import com.dam.armoniabills.model.Usuario;
 import com.dam.armoniabills.model.UsuarioGrupo;
-import com.dam.armoniabills.recyclerutils.AdapterUsuariosGrupo;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -172,7 +164,7 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
             listaGrupos.add(grupo.getId());
         }
 
-        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(usuarioAniadir.getId()).child("grupos").setValue(listaGrupos)
+        FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_USUARIOS).child(usuarioAniadir.getId()).child(getString(R.string.grupos)).setValue(listaGrupos)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -183,13 +175,13 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
 
     private void updateGrupoUsuario() {
         Map<String, Object> mapa = new HashMap<>();
-        mapa.put("usuarios", listaUsuarioGrupo);
+        mapa.put(getString(R.string.usuarios), listaUsuarioGrupo);
 
         FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).updateChildren(mapa)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        etPersona.setText("");
+                        etPersona.setText(R.string.vacio);
                         Toast.makeText(getContext(), R.string.usuario_aniadido_correcto, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -226,8 +218,8 @@ public class ConfiguracionFragment extends Fragment implements View.OnClickListe
             Toast.makeText(getContext(), R.string.campos_obligatorios, Toast.LENGTH_SHORT).show();
         } else {
             Map<String, Object> mapa = new HashMap<>();
-            mapa.put("titulo", titulo);
-            mapa.put("descripcion", descripcion);
+            mapa.put(getString(R.string.titulo), titulo);
+            mapa.put(getString(R.string.descripcion), descripcion);
 
             FirebaseDatabase.getInstance().getReference(MainActivity.DB_PATH_GRUPOS).child(grupo.getId()).updateChildren(mapa)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {

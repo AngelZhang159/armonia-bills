@@ -61,7 +61,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 		mAuth = FirebaseAuth.getInstance();
 		mDatabase = FirebaseDatabase.getInstance();
 		currentUser = mAuth.getCurrentUser();
-		current = "";
+		current = getString(R.string.vacio);
 
 		etCantidad.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -72,7 +72,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (!s.toString().equals(current)) {
 					// Enforce two decimal places without Euro symbol
-					int decimalIndex = s.toString().indexOf(".");
+					int decimalIndex = s.toString().indexOf(getString(R.string.punto));
 					if (decimalIndex > 0) {
 						if (s.toString().length() - decimalIndex - 1 > 2) {
 							String newText = s.toString().substring(0, decimalIndex + 3);
@@ -103,7 +103,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	private void rellenarDinero() {
 		if (currentUser != null) {
 			String uid = currentUser.getUid();
-			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
+			DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child(getString(R.string.balancee));
 			balanceRef.addValueEventListener(new ValueEventListener() {
 				@Override
 				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -126,7 +126,7 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 		if (v.getId() == R.id.btnDepositarDinero) {
 			if (!current.isEmpty()) {
 				String uid = currentUser.getUid();
-				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child("balance");
+				DatabaseReference balanceRef = mDatabase.getReference(MainActivity.DB_PATH_USUARIOS).child(uid).child(getString(R.string.balancee));
 				balanceRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
 					@Override
 					public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -152,11 +152,11 @@ public class DepositoFragment extends Fragment implements View.OnClickListener {
 	private void aniadirHistorial(double cantidadFormateada) {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-		String id = FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).push().getKey();
+		String id = FirebaseDatabase.getInstance().getReference(getString(R.string.historialbalance)).child(user.getUid()).push().getKey();
 
-		HistorialBalance historialBalance = new HistorialBalance(id, "ingresado", cantidadFormateada);
+		HistorialBalance historialBalance = new HistorialBalance(id, getString(R.string.ingresado), cantidadFormateada);
 
-		FirebaseDatabase.getInstance().getReference("HistorialBalance").child(user.getUid()).child(id).setValue(historialBalance)
+		FirebaseDatabase.getInstance().getReference(getString(R.string.historialbalance)).child(user.getUid()).child(id).setValue(historialBalance)
 				.addOnCompleteListener(new OnCompleteListener<Void>() {
 					@Override
 					public void onComplete(@NonNull Task<Void> task) {
