@@ -238,7 +238,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Grupos").child(grupo.getId()).child("usuarios");
 
 
-        if (usuarioActual.getBalance() > 0) {
+        if (usuarioActual.getBalance() >= usuarioGrupoActual.getDebes()) {
 
             for (UsuarioGrupo usuarioAPagar : listaUsuarioGrupo) {
 
@@ -321,8 +321,6 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
                     }
 
 
-                } else {
-                    posicionUsuarioActual = i;
                 }
 
                 i++;
@@ -330,7 +328,7 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
             }
 
         } else {
-            Toast.makeText(getContext(), "No tienes dinero en la cuenta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "No tienes suficiente dinero para pagar tu deuda", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -351,11 +349,13 @@ public class GrupoFragment extends Fragment implements View.OnClickListener {
                         usuarioActual = dataSnapshot.getValue(Usuario.class);
 
                         ArrayList<UsuarioGrupo> listaUsuariosGrupo = grupo.getUsuarios();
+                        posicionUsuarioActual = 0;
                         for (UsuarioGrupo usuarioGrupo : listaUsuariosGrupo) {
                             if (usuarioGrupo.getId().equals(user.getUid())) {
                                 usuarioGrupoActual = usuarioGrupo;
-
+                                break;
                             }
+                            posicionUsuarioActual++;
                         }
 
                     }
